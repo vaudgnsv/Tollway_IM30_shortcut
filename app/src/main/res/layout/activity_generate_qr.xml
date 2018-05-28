@@ -110,15 +110,39 @@
                 android:textSize="35sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/generatorBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/pressed_menu"
-            android:padding="8dp"
-            android:text="Generator"
-            android:textColor="@android:color/white" />
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:id="@+id/generatorBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/pressed_menu"
+                android:padding="8dp"
+                android:text="Generator"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:id="@+id/qrSuccessBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/pressed_menu_success"
+                android:padding="8dp"
+                android:text="ชำระเงินสำเร็จ"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/qrImage"
@@ -127,6 +151,21 @@
 
     </LinearLayout>
 
-    <include layout="@layout/content_exit" />
+    <LinearLayout
+        android:id="@+id/linearLayoutPrint"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="#aadddddd">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="ปริ้นใบเสร็จ"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+    </LinearLayout>
 
 </LinearLayout>

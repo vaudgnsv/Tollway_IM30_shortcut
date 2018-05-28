@@ -164,7 +164,7 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onClickSave(Dialog dialog, String sEt) {
                     merchantL3Label.setText(sEt);
-//                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_MERCHANT,sEt);
+//                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_MERCHANT_NAME,sEt);
                     dialog.dismiss();
                 }
 

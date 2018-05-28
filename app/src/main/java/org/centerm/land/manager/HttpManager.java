@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import org.centerm.land.manager.api.KtbAPI;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -14,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HttpManager {
 
     private static HttpManager instance;
-    private final String BASE_URL = "http://imsu.co/u/13570368/Eldercare_v2/";
+    private final String BASE_URL = "https://172.22.0.251:3840/transaction/services/v.2/";
     public static HttpManager getInstance() {
         if (instance == null)
             instance = new HttpManager();
@@ -25,6 +26,8 @@ public class HttpManager {
 
     private HttpManager() {
         mContext = Contextor.getInstance().getContext();
+
+        OkHttpClient okHttpClient = UnsafeOkHttpClient.getUnsafeOkHttpClient();
 
         /*OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
@@ -51,6 +54,7 @@ public class HttpManager {
                 .baseUrl(BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
 //                .client(client)
                 .build();
         service = retrofit.create(KtbAPI.class);

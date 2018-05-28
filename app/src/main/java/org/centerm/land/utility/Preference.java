@@ -66,8 +66,9 @@ public class Preference {
 
     public static final String KEY_QR_AID = Preference.class.getName() + "key_qr_aid";
     public static final String KEY_QR_BILLER_ID = Preference.class.getName() + "key_qr_biller_id";
-    public static final String KEY_QR_MERCHANT = Preference.class.getName() + "key_qr_merchant";
+    public static final String KEY_QR_MERCHANT_NAME = Preference.class.getName() + "key_qr_merchant_name";
     public static final String KEY_QR_TERMINAL_ID = Preference.class.getName() + "key_qr_terminal_id";
+    public static final String KEY_QR_TRACE_NO = Preference.class.getName() + "key_qr_trace_no";
 
     public static final String KEY_REF_2 = Preference.class.getName() + "key_ref_2";
 

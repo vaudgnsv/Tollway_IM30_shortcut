@@ -51,9 +51,9 @@ public class MenuQrActivity extends SettingToolbarActivity {
                         startActivity(intent);
                         overridePendingTransition(0,0);
                     } if (position == 1) {
-
-
-
+                        Intent intent = new Intent(MenuQrActivity.this,CheckQrActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0,0);
                     }
                 }
             });

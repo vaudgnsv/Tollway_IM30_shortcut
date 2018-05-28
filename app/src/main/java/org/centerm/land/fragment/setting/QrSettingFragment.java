@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import org.centerm.land.R;
@@ -80,7 +79,7 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
         billerIdBtn = rootView.findViewById(R.id.billerIdBtn);
 
         merchantNameLabel = rootView.findViewById(R.id.merchantNameLabel);
-        merchantNameLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_QR_MERCHANT));
+        merchantNameLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_QR_MERCHANT_NAME));
         merchantNameBtn = rootView.findViewById(R.id.merchantNameBtn);
 
         qrTerminalIdLabel = rootView.findViewById(R.id.qrTerminalIdLabel);
@@ -200,7 +199,7 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
                 @Override
                 public void onClickSave(Dialog dialog, String sEt) {
                     merchantNameLabel.setText(sEt);
-                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_MERCHANT,sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_MERCHANT_NAME,sEt);
                     dialog.dismiss();
                 }
 

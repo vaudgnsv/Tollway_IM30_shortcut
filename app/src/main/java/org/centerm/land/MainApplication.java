@@ -26,7 +26,7 @@ public class MainApplication extends Application {
 
         setFee();
 
-        setQrAid();
+        setQr();
 
         setTransactionCode();
 
@@ -72,10 +72,15 @@ public class MainApplication extends Application {
         }
     }
 
-    private void setQrAid() {
+    private void setQr() {
         String qrAid = Preference.getInstance(this).getValueString(Preference.KEY_QR_AID);
+        String traceId = Preference.getInstance(this).getValueString(Preference.KEY_QR_TRACE_NO);
         if (qrAid.isEmpty()) {
             Preference.getInstance(this).setValueString(Preference.KEY_QR_AID, "A000000677010112");
+        }
+
+        if (traceId.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_QR_TRACE_NO, "1");
         }
     }
 
