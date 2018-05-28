@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/color_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="@font/timeburnerbold"
+        android:gravity="center"
+        android:text="SETUP"
+        android:textColor="@android:color/black"
+        android:textSize="32sp" />
+
+    <LinearLayout
+        android:background="@drawable/setting_background"
+        android:layout_margin="8dp"
+        android:padding="22dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/nmxBtn"
+            android:fontFamily="@font/timeburnernormal"
+            android:textSize="22sp"
+            android:text="NMX Setup"
+            android:textAllCaps="false"
+            android:background="@drawable/pressed_nmx_info"
+            android:layout_margin="28dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/clearReverBtn"
+            android:fontFamily="@font/timeburnernormal"
+            android:textSize="22sp"
+            android:text="Clear Reversal"
+            android:textAllCaps="false"
+            android:background="@drawable/pressed_nmx_info"
+            android:layout_margin="28dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/clearBatchBtn"
+            android:fontFamily="@font/timeburnernormal"
+            android:textSize="22sp"
+            android:text="Clear Batch"
+            android:textAllCaps="false"
+            android:background="@drawable/pressed_nmx_info"
+            android:layout_margin="28dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

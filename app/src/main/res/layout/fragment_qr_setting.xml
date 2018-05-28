@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:fontFamily="@font/microsoft_sans_serif"
+        android:gravity="center"
+        android:text="QR"
+        android:textColor="@android:color/black"
+        android:textSize="32sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:background="@drawable/setting_background"
+        android:orientation="vertical"
+        android:padding="22dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <CheckBox
+                android:id="@+id/ref1CB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Ref 1" />
+
+            <CheckBox
+                android:id="@+id/ref2CB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="Ref 2" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:textStyle="bold"
+            android:text="AID :"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/aidLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1.7"
+                android:background="@drawable/under_line_text_view"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:gravity="center"
+                android:maxLength="16"
+                android:minHeight="45dp"
+                android:textColor="@android:color/black"
+                android:textSize="22sp" />
+
+            <Button
+                android:id="@+id/aidBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:textStyle="bold"
+            android:text="Biller ID :"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/billerIdLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1.7"
+                android:background="@drawable/under_line_text_view"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:gravity="center"
+                android:maxLength="15"
+                android:minHeight="45dp"
+                android:textColor="@android:color/black"
+                android:textSize="22sp" />
+
+            <Button
+                android:id="@+id/billerIdBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:textStyle="bold"
+            android:text="Merchant Name :"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/merchantNameLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1.7"
+                android:background="@drawable/under_line_text_view"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:maxLength="99"
+                android:minHeight="45dp"
+                android:textColor="@android:color/black"
+                android:textSize="22sp" />
+
+            <Button
+                android:id="@+id/merchantNameBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:textStyle="bold"
+            android:text="QR TerminalID :"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/qrTerminalIdLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_weight="1.7"
+                android:background="@drawable/under_line_text_view"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:maxLength="20"
+                android:minHeight="45dp"
+                android:textColor="@android:color/black"
+                android:textSize="22sp" />
+
+            <Button
+                android:id="@+id/qrTerminalIdBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

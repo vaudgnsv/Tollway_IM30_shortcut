@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/voidLinearLayout"
+        android:layout_width="@dimen/void_layout_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="0.8">
+
+            <TextView
+                android:id="@+id/traceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Trace"
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@android:color/black" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@android:color/black" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1.8">
+
+            <TextView
+                android:id="@+id/cardNoLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Card no."
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@android:color/black" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/amountLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Amount"
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@android:color/black" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="0.6">
+
+            <TextView
+                android:id="@+id/typeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Type"
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@android:color/black" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="0.8">
+
+            <TextView
+                android:id="@+id/timeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Time"
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@android:color/black" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="@dimen/void_layout_width"
+        android:layout_height="1.5dp"
+        android:layout_gravity="center"
+        android:background="@android:color/black" />
+
+</LinearLayout>

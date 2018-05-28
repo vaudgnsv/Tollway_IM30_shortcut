@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="2"
+    android:orientation="vertical"
+    tools:context=".activity.MenuServiceActivity">
+
+    <include layout="@layout/content_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/viewPagerMenu"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.7"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="จำนวนเงิน"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/amountBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/btn_edit_text_background"
+            android:fontFamily="@font/digital_7"
+            android:gravity="center"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:minHeight="60dp"
+            android:padding="8dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/black"
+            android:textSize="35sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:text="REF 1"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/ref1Box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/btn_edit_text_background"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                android:minHeight="60dp"
+                android:maxLength="20"
+                android:padding="8dp"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ref2LinearLayout"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:text="REF 2"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/ref2Box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/btn_edit_text_background"
+                android:gravity="center"
+                android:inputType="number"
+                android:minHeight="60dp"
+                android:padding="8dp"
+                android:textColor="@android:color/black"
+                android:textColorHint="@android:color/black"
+                android:textSize="35sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/generatorBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/pressed_menu"
+            android:padding="8dp"
+            android:text="Generator"
+            android:textColor="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/qrImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <include layout="@layout/content_exit" />
+
+</LinearLayout>

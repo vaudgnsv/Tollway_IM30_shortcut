@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:background="@drawable/setting_background"
+        android:layout_margin="8dp"
+        android:padding="22dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/fsBtn"
+                android:fontFamily="@font/timeburnerbold"
+                android:textColor="@android:color/white"
+                android:text="First Settlement"
+                android:background="@drawable/pressed_menu"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/padBtn"
+                android:fontFamily="@font/timeburnerbold"
+                android:textColor="@android:color/white"
+                android:text="Parameter Download"
+                android:background="@drawable/pressed_menu"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Terminal ID :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:clickable="false"
+                android:id="@+id/terminalLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/terminalBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Application ID :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:clickable="false"
+                android:id="@+id/applicationLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/applicationBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Merchant ID :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:clickable="false"
+                android:id="@+id/merchantLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7"
+                android:inputType="number" />
+
+            <Button
+                android:id="@+id/merchantBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trace Number :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:id="@+id/traceLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7" />
+
+            <Button
+                android:id="@+id/traceBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Batch Number :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:id="@+id/batchLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7" />
+
+            <Button
+                android:id="@+id/batchBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TPDU :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:id="@+id/tpduLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7"/>
+
+            <Button
+                android:id="@+id/tpduBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NII :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:id="@+id/niiLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7" />
+
+            <Button
+                android:id="@+id/niiBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Terminal Version :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:id="@+id/terminalVersionLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7" />
+
+            <Button
+                android:id="@+id/terminalVersionBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+        <TextView
+            android:fontFamily="@font/timeburnerbold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message Version :" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/timeburnernormal"
+                android:gravity="center"
+                android:textSize="22sp"
+                android:layout_marginEnd="2dp"
+                android:minHeight="45dp"
+                android:background="@drawable/under_line_text_view"
+                android:id="@+id/messageVersionLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7" />
+
+            <Button
+                android:id="@+id/messageVersionBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:background="@drawable/pressed_btn_edit"
+                android:text="แก้ไข"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

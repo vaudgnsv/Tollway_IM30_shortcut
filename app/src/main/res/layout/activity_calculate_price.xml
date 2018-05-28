@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#003968"
+    android:orientation="vertical"
+    tools:context=".activity.CalculatePriceActivity">
+
+    <TextView
+        android:id="@+id/cardNoLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="555-55XX-XXXX-2265"
+        android:textColor="#5a8444"
+        android:textSize="30sp" />
+
+    <TextView
+        android:textColor="#a6a6a6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:gravity="center_horizontal"
+        android:text="กรุณาระบุจำนวนเงิน"
+        android:textSize="35sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00bfff"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/priceLabel"
+            android:maxLength="8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="18dp"
+            android:layout_marginStart="18dp"
+            android:background="@drawable/calculate_background"
+            android:fontFamily="@font/digital_7"
+            android:gravity="center"
+            android:paddingBottom="13dp"
+            android:paddingTop="8dp"
+            android:text="0.00"
+            android:textSize="55sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/sevenClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="7"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/eightClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="8"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/nineClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="9"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/fourClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="4"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/fiveClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="5"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/sixClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="6"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/oneClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/twoClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="2"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/threeClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="3"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/zeroClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="0"
+                android:textSize="55sp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/dotClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/pressed_calculate">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/digital_7"
+                android:gravity="center"
+                android:text="."
+                android:textSize="55sp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/exitClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/calculate_circle_red_drawable">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/deleteClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginEnd="13dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/calculate_circle_yellow_drawable">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/sureClickFrameLayout"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/calculate_circle_green_drawable">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/correct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
+
+    </LinearLayout>
+</LinearLayout>

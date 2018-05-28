@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MenuServiceListActivity">
+
+    <include
+        android:id="@+id/contentToolbar"
+        layout="@layout/content_toolbar_setting"/>
+
+    <LinearLayout
+        android:background="@color/color_background"
+        android:id="@+id/linearLayoutMenuList"
+        android:orientation="vertical"
+        android:layout_below="@+id/contentToolbar"
+        android:layout_above="@+id/linearLayoutToolbarBottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ktb_logo5"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
+        <android.support.v7.widget.RecyclerView
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:id="@+id/recyclerViewMenuList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayoutToolbarBottom"
+        android:layout_alignParentBottom="true"
+        android:background="#aadddddd"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <TextView
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Exit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

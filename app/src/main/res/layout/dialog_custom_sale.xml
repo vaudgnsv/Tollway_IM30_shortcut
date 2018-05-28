@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#8d000000"
+    android:paddingBottom="20dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/closeImage"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:src="@drawable/cancel2_128x128"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+<LinearLayout
+    android:layout_below="@+id/closeImage"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/cardInsertImage"
+        android:layout_centerInParent="true"
+        android:background="@drawable/card_inaset_animation"
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="35sp"
+        android:text="Insert/Swipe card..."
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+
+</RelativeLayout>

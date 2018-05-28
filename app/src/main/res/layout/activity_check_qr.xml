@@ -17,6 +17,41 @@
         android:layout_weight="2.7"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="TRACE : "
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/traceBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/btn_edit_text_background"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:gravity="center"
+            android:inputType="number"
+            android:minHeight="60dp"
+            android:padding="8dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/black"
+            android:textSize="35sp" />
+
+        <Button
+            android:id="@+id/checkBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/pressed_menu"
+            android:padding="8dp"
+            android:text="Check"
+            android:textColor="@android:color/white" />
+
 
     </LinearLayout>
 

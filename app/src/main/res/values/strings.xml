@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Land</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialog_trace_number">Trace Number : %1$s</string>
+    <string name="dialog_void_amount">จำนวนเงิน : %1$s บาท</string>
+    <string name="slip_tid">TID : 619000007</string>
+    <string name="slip_mid">MID : 0000001030100007</string>
+    <string name="slip_host">HOST XXXX AAA</string>
+    <string name="slip_date">MAY 07, 2018</string>
+    <string name="slip_time">12:06</string>
+    <string name="slip_name_card">AAA Card</string>
+    <string name="slip_type">SALE</string>
+    <string name="slip_number_card">525667XXXXXXXXX2651</string>
+    <string name="slip_endcard_date">XX/XX</string>
+    <string name="slip_full_name">FULL OF FIRSTANME LASTNAME/</string>
+    <string name="slip_trace">TRACE # 00000011</string>
+    <string name="slip_stan">STAN # 000XXX</string>
+    <string name="slip_batch">BATCH # 000XXX</string>
+    <string name="slip_ref_no">REF NO: 2430287966224</string>
+    <string name="slip_approval_code">APPROVAL CODE: 249942</string>
+    <string name="slip_aid">AID: A000000000651010</string>
+    <string name="slip_tc">TC: 65E645035F5805D1</string>
+    <string name="slip_tvr">TVR: 080800E000</string>
+    <string name="slip_tsi">TSI: F800</string>
+    <string name="slip_sale">SALE</string>
+    <string name="slip_amount_thb">THB * 1223333123.00</string>
+    <string name="slip_signature">SIGNATURE :</string>
+    <string name="slip_merchant_copy">*MERCHANT COPY*</string>
+    <string name="slip_original_copy_signed_b_customer">ORIGINAL COPY SIGNED B CUSTOMER</string>
+    <string name="slip_signature_required">SIGNATURE REQUIRED</string>
+    <string name="slip_no_refund">** NO REFUND **</string>
+    <string name="slip_print">พิมพ์ ใบเสร็จรับเงิน</string>
+    <string name="slip_pattern_amount">* %1$s</string>
+    <string name="slip_pattern_amount_void"> * - %1$s</string>
+</resources>
