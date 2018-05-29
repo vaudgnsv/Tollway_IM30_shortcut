@@ -108,14 +108,16 @@ public class VoidActivity extends SettingToolbarActivity {
         cardManager.setInsertOrUpdateDatabase(new CardManager.InsertOrUpdateDatabase() {
             @Override
             public void onUpdateVoidSuccess(int id) {
-                if (dialogWaiting != null)
-                    dialogWaiting.dismiss();
-                Intent intent = new Intent(VoidActivity.this, SlipTemplateActivity.class);
-                intent.putExtra(CalculatePriceActivity.KEY_CALCUATE_ID,id);
-                intent.putExtra(CalculatePriceActivity.KEY_TYPE_SALE_OR_VOID,CalculatePriceActivity.TypeVoid);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-                Log.d(TAG, "onUpdateVoidSuccess: ");
+                if (!isFinishing()) {
+                    if (dialogWaiting != null)
+                        dialogWaiting.dismiss();
+                    Intent intent = new Intent(VoidActivity.this, SlipTemplateActivity.class);
+                    intent.putExtra(CalculatePriceActivity.KEY_CALCUATE_ID, id);
+                    intent.putExtra(CalculatePriceActivity.KEY_TYPE_SALE_OR_VOID, CalculatePriceActivity.TypeVoid);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    Log.d(TAG, "onUpdateVoidSuccess: ");
+                }
             }
 
             @Override
@@ -127,30 +129,34 @@ public class VoidActivity extends SettingToolbarActivity {
             public void onConnectTimeOut() {
                 if (dialogWaiting != null)
                     dialogWaiting.dismiss();
-                Utility.customDialogAlert(VoidActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                    @Override
-                    public void onClickImage(Dialog dialog) {
-                        Intent intent = new Intent(VoidActivity.this, MenuServiceListActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(0,0);
-                        finish();
-                    }
-                });
+                if (!isFinishing()) {
+                    Utility.customDialogAlert(VoidActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            Intent intent = new Intent(VoidActivity.this, MenuServiceListActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
+                            finish();
+                        }
+                    });
+                }
             }
 
             @Override
             public void onTransactionTimeOut() {
                 if (dialogWaiting != null)
                     dialogWaiting.dismiss();
-                Utility.customDialogAlert(VoidActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                    @Override
-                    public void onClickImage(Dialog dialog) {
-                        Intent intent = new Intent(VoidActivity.this, MenuServiceListActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(0,0);
-                        finish();
-                    }
-                });
+                if (!isFinishing()) {
+                    Utility.customDialogAlert(VoidActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            Intent intent = new Intent(VoidActivity.this, MenuServiceListActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
+                            finish();
+                        }
+                    });
+                }
             }
         });
 
@@ -162,7 +168,7 @@ public class VoidActivity extends SettingToolbarActivity {
             if (realm == null) {
                 realm = Realm.getDefaultInstance();
             }
-            ReversalTemp reversalTemp = realm.where(ReversalTemp.class).equalTo("hostTypeCard",typeHost).findFirst();
+            ReversalTemp reversalTemp = realm.where(ReversalTemp.class).equalTo("hostTypeCard", typeHost).findFirst();
             if (reversalTemp != null) {
                 dialogWaiting.dismiss();
                 cardManager.setDataReversalAndSendHost(reversalTemp);
@@ -225,7 +231,7 @@ public class VoidActivity extends SettingToolbarActivity {
                 if (realm == null) {
                     realm = Realm.getDefaultInstance();
                 }
-                transTemp = realm.where(TransTemp.class).equalTo("traceNo", traceNoAddZero).equalTo("hostTypeCard",typeHost).findAll();
+                transTemp = realm.where(TransTemp.class).equalTo("traceNo", traceNoAddZero).equalTo("hostTypeCard", typeHost).findAll();
                 Log.d(TAG, "searchDataTransTemp: " + transTemp);
                 if (transTemp.size() > 0) {
                     voidAdapter.clear();
@@ -272,7 +278,7 @@ public class VoidActivity extends SettingToolbarActivity {
             if (realm == null) {
                 realm = Realm.getDefaultInstance();
             }
-            transTempList.addAll(realm.copyFromRealm(realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard",typeHost).findAll()));
+            transTempList.addAll(realm.copyFromRealm(realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll()));
             voidAdapter.setItem(transTempList);
             voidAdapter.notifyDataSetChanged();
         } finally {

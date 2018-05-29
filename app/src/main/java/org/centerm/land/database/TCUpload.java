@@ -28,8 +28,11 @@ public class TCUpload extends RealmObject {
 	private String apprvCode;
 	private String transType;
 	private String respCode;
-	private String statusTC; // 1 = ส่งสำเร็จ 2 = ไม่สำเร็จ
+	private String statusTC; // 1 = ส่งสำเร็จ 0 = ไม่สำเร็จ
 	private String hostTypeCard;
+	private String pointServiceEntryMode; // mBlockData 22
+	private String applicationPAN; // mBlockData 23
+	private String fee;
 
 	public int getId() {
 		return id;
@@ -229,5 +232,29 @@ public class TCUpload extends RealmObject {
 
 	public void setHostTypeCard(String hostTypeCard) {
 		this.hostTypeCard = hostTypeCard;
+	}
+
+	public String getPointServiceEntryMode() {
+		return pointServiceEntryMode;
+	}
+
+	public void setPointServiceEntryMode(String pointServiceEntryMode) {
+		this.pointServiceEntryMode = pointServiceEntryMode;
+	}
+
+	public String getApplicationPAN() {
+		return applicationPAN;
+	}
+
+	public void setApplicationPAN(String applicationPAN) {
+		this.applicationPAN = applicationPAN;
+	}
+
+	public String getFee() {
+		return fee;
+	}
+
+	public void setFee(String fee) {
+		this.fee = fee;
 	}
 }

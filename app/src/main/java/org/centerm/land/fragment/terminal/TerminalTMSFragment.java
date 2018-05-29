@@ -139,30 +139,38 @@ public class TerminalTMSFragment extends Fragment implements View.OnClickListene
         cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
             @Override
             public void onResponseCode(String response) {
-                dialogWaiting.dismiss();
-                if (!getActivity().isFinishing())
-                    dialogResponseError(response);
+                if (getActivity() != null) {
+                    dialogWaiting.dismiss();
+                    if (!getActivity().isFinishing())
+                        dialogResponseError(response);
+                }
             }
 
             @Override
             public void onResponseCodeSuccess() {
-                dialogWaiting.dismiss();
-                if (!getActivity().isFinishing())
-                    dialogResponseSuccess();
+                if (getActivity() != null) {
+                    dialogWaiting.dismiss();
+                    if (!getActivity().isFinishing())
+                        dialogResponseSuccess();
+                }
             }
 
             @Override
             public void onConnectTimeOut() {
-                dialogWaiting.dismiss();
-                if (!getActivity().isFinishing())
-                    dialogResponseError(null);
+                if (getActivity() != null) {
+                    dialogWaiting.dismiss();
+                    if (!getActivity().isFinishing())
+                        dialogResponseError(null);
+                }
             }
 
             @Override
             public void onTransactionTimeOut() {
-                dialogWaiting.dismiss();
-                if (!getActivity().isFinishing())
-                    dialogResponseError(null);
+                if (getActivity() != null) {
+                    dialogWaiting.dismiss();
+                    if (!getActivity().isFinishing())
+                        dialogResponseError(null);
+                }
             }
         });
     }

@@ -149,7 +149,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
                     ref2RelativeLayout.setVisibility(View.VISIBLE);
                     ref2Label.setText(qrCode.getRef2());
                 }
-                qrImage.setImageBitmap(Utility.createQRImage(qrCode.getTextQrGenerateAll(), 300, 300));
+//                qrImage.setImageBitmap(Utility.createQRImage(qrCode.getTextQrGenerateAll(), 300, 300));
                 setMeasureSlip();
 
                 check = new Check();
@@ -174,7 +174,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
     public void setViewPrintSlip() {
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        slipView = inflater.inflate(R.layout.dialog_print_qr, null);
+        slipView = inflater.inflate(R.layout.view_slip_qr, null);
 
         bankImage = slipView.findViewById(R.id.bankImage);
         bank1Image = slipView.findViewById(R.id.bank1Image);
@@ -189,7 +189,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
         timeLabel = slipView.findViewById(R.id.timeLabel);
         comCodeLabel = slipView.findViewById(R.id.comCodeLabel);
         amtThbLabel = slipView.findViewById(R.id.amtThbLabel);
-        qrImage = slipView.findViewById(R.id.qrImage);
+//        qrImage = slipView.findViewById(R.id.qrImage);
         ref1RelativeLayout = slipView.findViewById(R.id.ref1RelativeLayout);
         ref1Label = slipView.findViewById(R.id.ref1Label);
         ref2RelativeLayout = slipView.findViewById(R.id.ref2RelativeLayout);

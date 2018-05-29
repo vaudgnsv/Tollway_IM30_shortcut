@@ -222,11 +222,14 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         }
                     } else if (position == 1) {
                         typeHost = "EPS";
-                        selectDataTransTemp("EPS");if (transTemp.size() > 0) {
+                        selectDataTransTemp("EPS");
+                        if (transTemp.size() > 0) {
                             if (transTempVoidFlag.size() != 0) {
-                                cardManager.setDataSettlementAndSendEPS();
+//                                cardManager.setDataSettlementAndSendEPS();
+                                cardManager.setCheckTCUpload("EPS",true);
                             } else {
-                                cardManager.setDataSettlementAndSendEPS();
+//                                cardManager.setDataSettlementAndSendEPS();
+                                cardManager.setCheckTCUpload("EPS", true);
                             }
                             dialogWaiting.show();
                         } else {
