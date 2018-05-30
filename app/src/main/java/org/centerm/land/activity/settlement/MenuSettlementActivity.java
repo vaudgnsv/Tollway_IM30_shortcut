@@ -113,6 +113,67 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
 
             }
         });
+
+        cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
+            @Override
+            public void onResponseCode(final String response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialogWaiting != null) {
+                            dialogWaiting.dismiss();
+                        }
+                        Utility.customDialogAlert(MenuSettlementActivity.this, response, new Utility.OnClickCloseImage() {
+                            @Override
+                            public void onClickImage(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onResponseCodeSuccess() {
+
+            }
+
+            @Override
+            public void onConnectTimeOut() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialogWaiting != null) {
+                            dialogWaiting.dismiss();
+                        }
+                        Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                            @Override
+                            public void onClickImage(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onTransactionTimeOut() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (dialogWaiting != null) {
+                            dialogWaiting.dismiss();
+                        }
+                        Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                            @Override
+                            public void onClickImage(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                });
+            }
+        });
         if (transTemp == null) {
             transTemp = new ArrayList<>();
         } else {
@@ -124,13 +185,6 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
             transTempVoidFlag.clear();
         }
 
-//        LayoutInflater inflater =
-//                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View tagView = inflater.inflate(R.layout.view_slip_settlement, null);
-//        settlementRelativeLayout = tagView.findViewById(R.id.settlementRelativeLayout);
-//        tagView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//        tagView.layout(0, 0, tagView.getMeasuredWidth(), tagView.getMeasuredHeight());
         Dialog tagView = new Dialog(this);
         tagView.setContentView(R.layout.view_slip_settlement);
         tagView.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -207,9 +261,11 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         selectDataTransTemp("POS");
                         if (transTemp.size() > 0) {
                             if (transTempVoidFlag.size() != 0) {
-                                cardManager.setDataSettlementAndSend("POS");
+//                                cardManager.setDataSettlementAndSend("POS");
+                                cardManager.setCheckTCUpload("POS",true);
                             } else {
-                                cardManager.setDataSettlementAndSend("POS");
+//                                cardManager.setDataSettlementAndSend("POS");
+                                cardManager.setCheckTCUpload("POS",true);
                             }
                             dialogWaiting.show();
                         } else {

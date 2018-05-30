@@ -1,5 +1,6 @@
 package org.centerm.land.activity.qr;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -207,77 +209,53 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.generatorBtn:
-                Date date = new Date();
-                dateFormat = new SimpleDateFormat("dd/MM/yyyy").format(date);
-                timeFormat = new SimpleDateFormat("hhMMss").format(date);
-                dateFormatDef = new SimpleDateFormat("yyMMdd").format(date);
-
-                aid = Preference.getInstance(this).getValueString(Preference.KEY_QR_AID);
-                billerId = "010352102131870";
-                qrTid = Preference.getInstance(this).getValueString(Preference.KEY_QR_TERMINAL_ID) +
-                        CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_QR_TRACE_NO), 6) +
-                        dateFormatDef; //"00025068000023180517";  //tid trace yymmdd
-                Log.d(TAG, "onClick: " + qrTid);
-                Log.d(TAG, "onClick: " + billerId);
-                Log.d(TAG, "onClick: " + aid);
-                nameCompany = "NAKHONRATCHASIMA PCG.";
-
-                tagAll = Utility.idValue("", "00", "01");
-                tagAll = Utility.idValue(tagAll, "01", "11");
-                String tagIn30 = Utility.idValue("", "00", aid);
-                tagIn30 = Utility.idValue(tagIn30, "01", billerId);
-                tagIn30 = Utility.idValue(tagIn30, "02", ref1Box.getText().toString());
-                if (!ref2Box.getText().toString().isEmpty()) {
-                    tagIn30 = Utility.idValue(tagIn30, "03", ref2Box.getText().toString());
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//Hide:
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                if (!amountBox.getText().toString().trim().isEmpty()) {
+                    generatorQr();
+                } else {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอกจำนวนเงิน", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
                 }
-                String tag30 = Utility.idValue("", "30", tagIn30);
-                tagAll += tag30;
-                tagAll = Utility.idValue(tagAll, "53", "764");
-                tagAll = Utility.idValue(tagAll, "54", amountBox.getText().toString());
-                tagAll = Utility.idValue(tagAll, "58", "TH");
-                tagAll = Utility.idValue(tagAll, "59", nameCompany);
-                String tagIn62 = Utility.idValue("", "07", qrTid);
-                String tag62 = Utility.idValue("", "62", tagIn62);
-                tagAll += tag62;
-//                tagAll = Utility.idValue(tagAll, "63", "");
-                tagAll += "6304";
-                tagAll += Utility.CheckSumCrcCCITT(tagAll);
-                Log.d(TAG, "initWidget: " + tagAll);
-                qrImage.setImageBitmap(Utility.createQRImage(tagAll, 300, 300));
-                insertGenerateQr();
                 break;
             case R.id.qrSuccessBtn:
-                Check check = new Check();
-                check.setBillerId(billerId);
-                check.setRef1(ref1Box.getText().toString());
-                if (ref2Box.getText().toString().isEmpty()) {
-                    check.setRef2("");
-                } else {
-                    check.setRef2(ref2Box.getText().toString());
-                }
-                check.setTerminalId(qrTid);
-                Log.d(TAG, "billerId: " + billerId + " ref1Box : " + ref1Box.getText().toString()
-                        + " ref2Box :" + ref2Box.getText().toString() +
-                " qrTid : " + qrTid);
-                HttpManager.getInstance().getService().checkQr(check)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<Response<JsonElement>>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
+                if (!tagAll.isEmpty()) {
+                    Check check = new Check();
+                    check.setBillerId(billerId);
+                    check.setRef1(ref1Box.getText().toString());
+                    if (ref2Box.getText().toString().isEmpty()) {
+                        check.setRef2("");
+                    } else {
+                        check.setRef2(ref2Box.getText().toString());
+                    }
+                    check.setTerminalId(qrTid);
+                    Log.d(TAG, "billerId: " + billerId + " ref1Box : " + ref1Box.getText().toString()
+                            + " ref2Box :" + ref2Box.getText().toString() +
+                            " qrTid : " + qrTid);
+                    HttpManager.getInstance().getService().checkQr(check)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<Response<JsonElement>>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onNext(Response<JsonElement> jsonElementResponse) {
-                                Log.d(TAG, "onNext: " + jsonElementResponse);
-                                Log.d(TAG, "onNext: " + jsonElementResponse.body());
-                                Toast.makeText(GenerateQrActivity.this, "" + jsonElementResponse.body(), Toast.LENGTH_SHORT).show();
-                                Toast.makeText(GenerateQrActivity.this, "" + jsonElementResponse, Toast.LENGTH_SHORT).show();
-                                try {
-                                    JSONObject object = new JSONObject(jsonElementResponse.body().toString());
-                                    String code = object.getString("code");
-                                    if (code.equalsIgnoreCase("00000")) {
+                                @Override
+                                public void onNext(Response<JsonElement> jsonElementResponse) {
+                                    Log.d(TAG, "onNext: " + jsonElementResponse);
+                                    Log.d(TAG, "onNext: " + jsonElementResponse.body());
+                                    Toast.makeText(GenerateQrActivity.this, "" + jsonElementResponse.body(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(GenerateQrActivity.this, "" + jsonElementResponse, Toast.LENGTH_SHORT).show();
+                                    try {
+                                        JSONObject object = new JSONObject(jsonElementResponse.body().toString());
+                                        String code = object.getString("code");
+                                        if (code.equalsIgnoreCase("00000")) {
 //                                        slipSuccessLinearLayout.post(new Runnable() {
 //                                            @Override
 //                                            public void run() {
@@ -285,30 +263,110 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
 //                                                doPrinting(getBitmapFromView(slipSuccessLinearLayout));
 //                                            }
 //                                        });
-                                        selectQrSlip();
-                                    } else {
+                                            selectQrSlip();
+                                        } else {
 
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.d(TAG, "onError: " + e.getMessage());
-                                Toast.makeText(GenerateQrActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                                @Override
+                                public void onError(Throwable e) {
+                                    Log.d(TAG, "onError: " + e.getMessage());
+                                    Toast.makeText(GenerateQrActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onComplete() {
+                                @Override
+                                public void onComplete() {
 
-                            }
-                        });
+                                }
+                            });
+                } else {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณา Generator QR ก่อน", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
                 break;
             case R.id.linearLayoutPrint:
                 selectQr();
                 break;
+        }
+    }
+
+    private void generatorQr() {
+        if (!ref1Box.getText().toString().trim().isEmpty() && ref2SlipRelativeLayout.getVisibility() == View.GONE
+                || ref2SlipRelativeLayout.getVisibility() == View.VISIBLE && !ref1Box.getText().toString().trim().isEmpty() && !ref2Box.getText().toString().trim().isEmpty()) {
+            Date date = new Date();
+            dateFormat = new SimpleDateFormat("dd/MM/yyyy").format(date);
+            timeFormat = new SimpleDateFormat("hhMMss").format(date);
+            dateFormatDef = new SimpleDateFormat("yyMMdd").format(date);
+
+            aid = Preference.getInstance(this).getValueString(Preference.KEY_QR_AID);
+            billerId = "010352102131870";
+            qrTid = Preference.getInstance(this).getValueString(Preference.KEY_QR_TERMINAL_ID) +
+                    CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_QR_TRACE_NO), 6) +
+                    dateFormatDef; //"00025068000023180517";  //tid trace yymmdd
+            Log.d(TAG, "onClick: " + qrTid);
+            Log.d(TAG, "onClick: " + billerId);
+            Log.d(TAG, "onClick: " + aid);
+            nameCompany = "NAKHONRATCHASIMA PCG.";
+
+            tagAll = Utility.idValue("", "00", "01");
+            tagAll = Utility.idValue(tagAll, "01", "11");
+            String tagIn30 = Utility.idValue("", "00", aid);
+            tagIn30 = Utility.idValue(tagIn30, "01", billerId);
+            tagIn30 = Utility.idValue(tagIn30, "02", ref1Box.getText().toString());
+            if (!ref2Box.getText().toString().isEmpty()) {
+                tagIn30 = Utility.idValue(tagIn30, "03", ref2Box.getText().toString());
+            }
+            String tag30 = Utility.idValue("", "30", tagIn30);
+            tagAll += tag30;
+            tagAll = Utility.idValue(tagAll, "53", "764");
+            tagAll = Utility.idValue(tagAll, "54", amountBox.getText().toString());
+            tagAll = Utility.idValue(tagAll, "58", "TH");
+            tagAll = Utility.idValue(tagAll, "59", nameCompany);
+            String tagIn62 = Utility.idValue("", "07", qrTid);
+            String tag62 = Utility.idValue("", "62", tagIn62);
+            tagAll += tag62;
+//                tagAll = Utility.idValue(tagAll, "63", "");
+            tagAll += "6304";
+            tagAll += Utility.CheckSumCrcCCITT(tagAll);
+            Log.d(TAG, "initWidget: " + tagAll);
+            qrImage.setImageBitmap(Utility.createQRImage(tagAll, 300, 300));
+            insertGenerateQr();
+        } else {
+
+            if (ref1Box.getText().toString().trim().isEmpty()) {
+                Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref1 ", new Utility.OnClickCloseImage() {
+                    @Override
+                    public void onClickImage(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+            } else if (ref2SlipRelativeLayout.getVisibility() == View.VISIBLE && ref1Box.getText().toString().trim().isEmpty()
+                    || ref2Box.getText().toString().trim().isEmpty()) {
+                if (ref1Box.getText().toString().trim().isEmpty()) {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref1 ", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref2 ", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            }
+
         }
     }
 

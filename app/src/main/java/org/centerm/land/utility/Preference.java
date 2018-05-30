@@ -75,6 +75,9 @@ public class Preference {
     public static final String KEY_TAX_INVOICE_NO = Preference.class.getName() + "key_tax_invoice_no";
     public static final String KEY_TAX_ID = Preference.class.getName() + "key_tax_id";
 
+    public static final String KEY_BILLER_KEY = Preference.class.getName() + "key_biller_key";
+    public static final String KEY_QR_PORT = Preference.class.getName() + "key_qr_port";
+
     private static Preference settingPreference = null;
     private final String preferenceName = BuildConfig.APPLICATION_ID + "Setting";
     private SharedPreferences preference = null;

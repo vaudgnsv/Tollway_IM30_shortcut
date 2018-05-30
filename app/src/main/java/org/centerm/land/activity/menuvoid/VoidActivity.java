@@ -160,6 +160,71 @@ public class VoidActivity extends SettingToolbarActivity {
             }
         });
 
+        cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
+            @Override
+            public void onResponseCode(final String response) {
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utility.customDialogAlert(VoidActivity.this, response, new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onResponseCodeSuccess() {
+                if (!isFinishing()) {
+                    if (dialogWaiting != null) {
+                        dialogWaiting.dismiss();
+                    }
+                }
+            }
+
+            @Override
+            public void onConnectTimeOut() {
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utility.customDialogAlert(VoidActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onTransactionTimeOut() {
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utility.customDialogAlert(VoidActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+
         checkReversal();
     }
 

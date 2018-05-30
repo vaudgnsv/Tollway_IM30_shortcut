@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.centerm.land.manager.api.KtbAPI;
+import org.centerm.land.utility.Preference;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -14,15 +15,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HttpManager {
 
+    private Context mContext;
+    private KtbAPI service;
     private static HttpManager instance;
-    private final String BASE_URL = "https://172.22.0.251:3840/transaction/services/v.2/";
+    private String ip = Preference.getInstance(Contextor.getInstance().getContext()).getValueString(Preference.KEY_PRIMARY_IP);
+    private String port = Preference.getInstance(Contextor.getInstance().getContext()).getValueString(Preference.KEY_QR_PORT);
+    private String ipAndPort = "https://" + ip +":"+ port+"/";
+    private final String BASE_URL = ipAndPort + "transaction/services/v.2/" ;//"https://172.22.0.251:3840/transaction/services/v.2/";
     public static HttpManager getInstance() {
         if (instance == null)
             instance = new HttpManager();
         return instance;
     }
-    private Context mContext;
-    private KtbAPI service;
 
     private HttpManager() {
         mContext = Contextor.getInstance().getContext();

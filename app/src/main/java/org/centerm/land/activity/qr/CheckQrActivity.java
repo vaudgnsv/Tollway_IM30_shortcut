@@ -107,9 +107,11 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
             RealmResults<QrCode> allTransactions = realm.where(QrCode.class).findAll();
 
 //If you have an incrementing id column, do this
-            qrCode = allTransactions.last();
-            if (qrCode != null) {
-                traceBox.setText(qrCode.getTrace());
+            if (allTransactions.size() > 0) {
+                qrCode = allTransactions.last();
+                if (qrCode != null) {
+                    traceBox.setText(qrCode.getTrace());
+                }
             }
         } finally {
             if (realm != null) {

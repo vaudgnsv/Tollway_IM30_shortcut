@@ -29,6 +29,10 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
     private Button merchantNameBtn = null;
     private TextView qrTerminalIdLabel = null;
     private Button qrTerminalIdBtn = null;
+    private TextView billerKeyLabel = null;
+    private Button billerKeyBtn = null;
+    private TextView qrPortLabel = null;
+    private Button qrPortBtn = null;
     private CustomDialog customDialog;
 
     public QrSettingFragment() {
@@ -86,10 +90,20 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
         qrTerminalIdLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_QR_TERMINAL_ID));
         qrTerminalIdBtn = rootView.findViewById(R.id.qrTerminalIdBtn);
 
+        billerKeyLabel = rootView.findViewById(R.id.billerKeyLabel);
+        billerKeyLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_BILLER_KEY));
+        billerKeyBtn = rootView.findViewById(R.id.billerKeyBtn);
+
+        qrPortLabel = rootView.findViewById(R.id.qrPortLabel);
+        qrPortLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_QR_PORT));
+        qrPortBtn = rootView.findViewById(R.id.qrPortBtn);
+
         aidBtn.setOnClickListener(this);
         billerIdBtn.setOnClickListener(this);
         merchantNameBtn.setOnClickListener(this);
         qrTerminalIdBtn.setOnClickListener(this);
+        billerKeyBtn.setOnClickListener(this);
+        qrPortBtn.setOnClickListener(this);
 
         if (ref1CB.isChecked()) {
 
@@ -222,6 +236,50 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
                 public void onClickSave(Dialog dialog, String sEt) {
                     qrTerminalIdLabel.setText(sEt);
                     Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_TERMINAL_ID,sEt);
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onClickCancel(Dialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+            customDialog.show();
+        }else if (v == billerKeyBtn) {
+            if (customDialog != null) {
+                customDialog = null;
+            }
+            customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
+            customDialog.setInitWidgetDialog(billerKeyLabel.getText().toString());
+            customDialog.setMaxLength(20);
+            customDialog.setCancelable(false);
+            customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
+                @Override
+                public void onClickSave(Dialog dialog, String sEt) {
+                    qrTerminalIdLabel.setText(sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_BILLER_KEY,sEt);
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onClickCancel(Dialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+            customDialog.show();
+        }else if (v == qrPortBtn) {
+            if (customDialog != null) {
+                customDialog = null;
+            }
+            customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
+            customDialog.setInitWidgetDialog(qrPortLabel.getText().toString());
+            customDialog.setMaxLength(20);
+            customDialog.setCancelable(false);
+            customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
+                @Override
+                public void onClickSave(Dialog dialog, String sEt) {
+                    qrTerminalIdLabel.setText(sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_PORT,sEt);
                     dialog.dismiss();
                 }
 

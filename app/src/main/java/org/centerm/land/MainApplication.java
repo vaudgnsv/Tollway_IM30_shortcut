@@ -75,12 +75,21 @@ public class MainApplication extends Application {
     private void setQr() {
         String qrAid = Preference.getInstance(this).getValueString(Preference.KEY_QR_AID);
         String traceId = Preference.getInstance(this).getValueString(Preference.KEY_QR_TRACE_NO);
+        String billerKey = Preference.getInstance(this).getValueString(Preference.KEY_BILLER_KEY);
+        String qrPort = Preference.getInstance(this).getValueString(Preference.KEY_QR_PORT);
         if (qrAid.isEmpty()) {
             Preference.getInstance(this).setValueString(Preference.KEY_QR_AID, "A000000677010112");
         }
 
         if (traceId.isEmpty()) {
             Preference.getInstance(this).setValueString(Preference.KEY_QR_TRACE_NO, "1");
+        }
+
+        if (billerKey.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_BILLER_KEY, "gov");
+        }
+        if (qrPort.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_QR_PORT, "3840");
         }
     }
 

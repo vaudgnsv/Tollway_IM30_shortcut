@@ -1707,13 +1707,15 @@ public class CardManager {
 
     public void setImportAmountEPS(String amount, String pin, String ref1, String ref2, String ref3, String comCode) {
         try {
+            float fee = Preference.getInstance(context).getValueFloat(Preference.KEY_FEE);
+            float amountFee = (Float.valueOf(amount) * fee) / 100;
             String keyPin = OffUsEPSPinblock(card.getNo(), pin);
             COMCODE = comCode;
             REF1 = ref1;
             REF2 = ref2;
             REF3 = ref3;
-            pboc2.importAmount(amount);
-            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(amount);
+            pboc2.importAmount(String.valueOf(amountFee));
+            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(String.valueOf(amountFee));
             mBlockDataSend[52 - 1] = keyPin;
             AMOUNT = amount;
 
@@ -1824,7 +1826,7 @@ public class CardManager {
         mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
         mBlockDataSend[62 - 1] = getLength62(String.valueOf(calNumTraceNo(invoiceNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber));
         onLineNow = true;
-        TPDU = CardPrefix.getTPDU(context,HOST_CARD);
+        TPDU = CardPrefix.getTPDU(context, HOST_CARD);
         packageAndSend(TPDU, MESSAGE_SALE, mBlockDataSend);
     }
 
@@ -1904,7 +1906,8 @@ public class CardManager {
         mBlockDataSend[2 - 1] = transTemp.getCardNo().length() + transTemp.getCardNo();
         mBlockDataSend[3 - 1] = VOID_PROCESSING_CODE;
         PROCESSING_CODE = mBlockDataSend[3 - 1];    // Paul_20180523
-        mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(transTemp.getAmount());
+        String amountAll = String.valueOf(Float.valueOf(transTemp.getAmount()) + Float.valueOf(transTemp.getFee()));
+        mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(amountAll);
         AMOUNT = transTemp.getAmount();
         mBlockDataSend[11 - 1] = transTemp.getTraceNo();
         mBlockDataSend[14 - 1] = transTemp.getExpiry();
@@ -2525,58 +2528,60 @@ public class CardManager {
         timeCount = transTemp.size();
         TPDU = CardPrefix.getTPDU(context, HOST_CARD);
         if (transTemp.size() > 0) {
-            for (int i = 0; i < transTemp.size(); i++) {
-                traceIdNo = CardPrefix.geTraceIdPlus(context, HOST_CARD);
-                Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
-                amountAll += Float.valueOf(transTemp.get(i).getAmount());
-                mBlockDataSend = new String[64];
-                mBlockDataSend[2 - 1] = transTemp.get(i).getCardNo().length() + transTemp.get(i).getCardNo();
-                mBlockDataSend[3 - 1] = "003000";
-                mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(transTemp.get(i).getAmount());
-                mBlockDataSend[11 - 1] = calNumTraceNo(transTemp.get(i).getTraceNo());
-                mBlockDataSend[12 - 1] = transTemp.get(i).getTransTime().replace(":", "");
-                mBlockDataSend[13 - 1] = transTemp.get(i).getTransDate().substring(4, 8);
-                mBlockDataSend[14 - 1] = transTemp.get(i).getExpiry();
-                mBlockDataSend[22 - 1] = transTemp.get(i).getPointServiceEntryMode();
-                if (transTemp.get(i).getApplicationPAN() != null) {
-                    mBlockDataSend[23 - 1] = transTemp.get(i).getApplicationPAN();
-                }
-                mBlockDataSend[24 - 1] = CardPrefix.getNii(transTemp.get(i).getCardNo(), context);
-                mBlockDataSend[25 - 1] = "05";
-                mBlockDataSend[37 - 1] = BlockCalculateUtil.getHexString(transTemp.get(i).getRefNo());
-                mBlockDataSend[38 - 1] = BlockCalculateUtil.getHexString(transTemp.get(i).getApprvCode());
-                mBlockDataSend[39 - 1] = BlockCalculateUtil.getHexString(transTemp.get(i).getRespCode());
-                mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
-                mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
-                mBlockDataSend[55 - 1] = transTemp.get(i).getIccData();
-//                String s60 = "0320" + transTemp.get(i).getRefNo() + transTemp.get(i).getTraceNo();
-                String s60 = "0200" + transTemp.get(i).getTraceNo() + transTemp.get(i).getRefNo();
-                mBlockDataSend[60 - 1] = getLength62(String.valueOf(s60.length())) + BlockCalculateUtil.getHexString(s60);
-                mBlockDataSend[62 - 1] = getLength62(String.valueOf(transTemp.get(i).getEcr().length())) + BlockCalculateUtil.getHexString(transTemp.get(i).getEcr());
-
-                Log.d(TAG, "BatchUpload mBlockDataSend[2 - 1]: " + transTemp.get(i).getCardNo().length() + transTemp.get(i).getCardNo()
-                        + "\n BatchUpload mBlockDataSend[3 - 1]: 003000"
-                        + "\n BatchUpload mBlockDataSend[4 - 1]:" + BlockCalculateUtil.getAmount(transTemp.get(i).getAmount())
-                        + "\n BatchUpload mBlockDataSend[11 - 1]:" + calNumTraceNo(transTemp.get(i).getTraceNo())
-                        + "\n BatchUpload mBlockDataSend[12 - 1]:" + transTemp.get(i).getTransTime().replace(":", "")
-                        + "\n BatchUpload mBlockDataSend[13 - 1]:" + transTemp.get(i).getTransDate().substring(4, 8)
-                        + "\n BatchUpload mBlockDataSend[14 - 1]:" + transTemp.get(i).getExpiry()
-                        + "\n BatchUpload mBlockDataSend[22 - 1]:" + transTemp.get(i).getPointServiceEntryMode()
-                        + "\n BatchUpload mBlockDataSend[23 - 1]:" + transTemp.get(i).getApplicationPAN()
-                        + "\n BatchUpload mBlockDataSend[24 - 1]: 0245"
-                        + "\n BatchUpload mBlockDataSend[25 - 1]: 05"
-                        + "\n BatchUpload mBlockDataSend[37 - 1]:" + transTemp.get(i).getRefNo()
-                        + "\n BatchUpload mBlockDataSend[38 - 1]:" + transTemp.get(i).getApprvCode()
-                        + "\n BatchUpload mBlockDataSend[39 - 1]:" + transTemp.get(i).getRespCode()
-                        + "\n BatchUpload mBlockDataSend[41 - 1]:" + BlockCalculateUtil.getHexString(TERMINAL_ID)
-                        + "\n BatchUpload mBlockDataSend[42 - 1]:" + BlockCalculateUtil.getHexString(MERCHANT_NUMBER)
-                        + "\n BatchUpload mBlockDataSend[55 - 1]:" + transTemp.get(i).getIccData()
-                        + "\n BatchUpload mBlockDataSend[60 - 1]:" + getLength62(String.valueOf(s60.length())) + BlockCalculateUtil.getHexString(s60)
-                        + "\n BatchUpload mBlockDataSend[62 - 1]:" + transTemp.get(i).getEcr());
-
-                onLineNow = true;
-                packageAndSend(TPDU, "0320", mBlockDataSend);
+            batchUploadSize = transTemp.size();
+//            for (int i = 0; i < transTemp.size(); i++) {
+            traceIdNo = CardPrefix.geTraceIdPlus(context, HOST_CARD);
+            Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
+            amountAll += Float.valueOf(transTemp.get(batchUpload).getAmount());
+            mBlockDataSend = new String[64];
+            mBlockDataSend[2 - 1] = transTemp.get(batchUpload).getCardNo().length() + transTemp.get(batchUpload).getCardNo();
+            mBlockDataSend[3 - 1] = "003000";
+            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(transTemp.get(batchUpload).getAmount());
+            mBlockDataSend[11 - 1] = calNumTraceNo(transTemp.get(batchUpload).getTraceNo());
+            mBlockDataSend[12 - 1] = transTemp.get(batchUpload).getTransTime().replace(":", "");
+            mBlockDataSend[13 - 1] = transTemp.get(batchUpload).getTransDate().substring(4, 8);
+            mBlockDataSend[14 - 1] = transTemp.get(batchUpload).getExpiry();
+            mBlockDataSend[22 - 1] = transTemp.get(batchUpload).getPointServiceEntryMode();
+            if (transTemp.get(batchUpload).getApplicationPAN() != null) {
+                mBlockDataSend[23 - 1] = transTemp.get(batchUpload).getApplicationPAN();
             }
+            mBlockDataSend[24 - 1] = CardPrefix.getNii(transTemp.get(batchUpload).getCardNo(), context);
+            mBlockDataSend[25 - 1] = "05";
+            mBlockDataSend[37 - 1] = BlockCalculateUtil.getHexString(transTemp.get(batchUpload).getRefNo());
+            mBlockDataSend[38 - 1] = BlockCalculateUtil.getHexString(transTemp.get(batchUpload).getApprvCode());
+            mBlockDataSend[39 - 1] = BlockCalculateUtil.getHexString(transTemp.get(batchUpload).getRespCode());
+            mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+            mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+            mBlockDataSend[55 - 1] = transTemp.get(batchUpload).getIccData();
+//                String s60 = "0320" + transTemp.get(batchUpload).getRefNo() + transTemp.get(batchUpload).getTraceNo();
+            String s60 = "0200" + transTemp.get(batchUpload).getTraceNo() + transTemp.get(batchUpload).getRefNo();
+            mBlockDataSend[60 - 1] = getLength62(String.valueOf(s60.length())) + BlockCalculateUtil.getHexString(s60);
+            mBlockDataSend[62 - 1] = getLength62(String.valueOf(transTemp.get(batchUpload).getEcr().length())) + BlockCalculateUtil.getHexString(transTemp.get(batchUpload).getEcr());
+
+            Log.d(TAG, "BatchUpload mBlockDataSend[2 - 1]: " + transTemp.get(batchUpload).getCardNo().length() + transTemp.get(batchUpload).getCardNo()
+                    + "\n BatchUpload mBlockDataSend[3 - 1]: 003000"
+                    + "\n BatchUpload mBlockDataSend[4 - 1]:" + BlockCalculateUtil.getAmount(transTemp.get(batchUpload).getAmount())
+                    + "\n BatchUpload mBlockDataSend[11 - 1]:" + calNumTraceNo(transTemp.get(batchUpload).getTraceNo())
+                    + "\n BatchUpload mBlockDataSend[12 - 1]:" + transTemp.get(batchUpload).getTransTime().replace(":", "")
+                    + "\n BatchUpload mBlockDataSend[13 - 1]:" + transTemp.get(batchUpload).getTransDate().substring(4, 8)
+                    + "\n BatchUpload mBlockDataSend[14 - 1]:" + transTemp.get(batchUpload).getExpiry()
+                    + "\n BatchUpload mBlockDataSend[22 - 1]:" + transTemp.get(batchUpload).getPointServiceEntryMode()
+                    + "\n BatchUpload mBlockDataSend[23 - 1]:" + transTemp.get(batchUpload).getApplicationPAN()
+                    + "\n BatchUpload mBlockDataSend[24 - 1]: 0245"
+                    + "\n BatchUpload mBlockDataSend[25 - 1]: 05"
+                    + "\n BatchUpload mBlockDataSend[37 - 1]:" + transTemp.get(batchUpload).getRefNo()
+                    + "\n BatchUpload mBlockDataSend[38 - 1]:" + transTemp.get(batchUpload).getApprvCode()
+                    + "\n BatchUpload mBlockDataSend[39 - 1]:" + transTemp.get(batchUpload).getRespCode()
+                    + "\n BatchUpload mBlockDataSend[41 - 1]:" + BlockCalculateUtil.getHexString(TERMINAL_ID)
+                    + "\n BatchUpload mBlockDataSend[42 - 1]:" + BlockCalculateUtil.getHexString(MERCHANT_NUMBER)
+                    + "\n BatchUpload mBlockDataSend[55 - 1]:" + transTemp.get(batchUpload).getIccData()
+                    + "\n BatchUpload mBlockDataSend[60 - 1]:" + getLength62(String.valueOf(s60.length())) + BlockCalculateUtil.getHexString(s60)
+                    + "\n BatchUpload mBlockDataSend[62 - 1]:" + transTemp.get(batchUpload).getEcr());
+
+            onLineNow = true;
+            packageAndSend(TPDU, "0320", mBlockDataSend);
+            batchUpload++;
+//            }
 
         } else {
             traceIdNo = String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS)) + 1);
@@ -2805,7 +2810,7 @@ public class CardManager {
         mBlockDataSend = new String[64];
         mBlockDataSend[2 - 1] = card.getNo().length() + card.getNo();
         mBlockDataSend[3 - 1] = "490000";
-        mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(String.valueOf(Float.valueOf(AMOUNT )+ amountFee));
+        mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(String.valueOf(Float.valueOf(AMOUNT) + amountFee));
         mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceIdPlus(context, "TMS"));
         mBlockDataSend[12 - 1] = time;
         mBlockDataSend[13 - 1] = dateTime;
@@ -2889,6 +2894,7 @@ public class CardManager {
         TPDU = CardPrefix.getTPDU(context, "TMS");
         packageAndSend(TPDU, "0320", mBlockDataSend);
     }
+
     private void setOnlineUploadCreditVoid(String mBlock55,
                                            String mBlock22, String amountFee) {
         Log.d(TAG, "setTCUpload: " + HOST_CARD);
@@ -3400,7 +3406,15 @@ public class CardManager {
                     Log.d(TAG, "SALE WITH PBOC Process");
 // Paul_20180522 Question
                     System.out.printf("utility:: dealWithTheResponse KKK001 \n");
-                    pboc2.importOnlineResp(true, resultToLoadStr, mBlockDataReceived[55 - 1]);
+                    //pboc2.importOnlineResp(true, resultToLoadStr, mBlockDataReceived[55 - 1]);
+                    if (mBlockDataReceived[55 - 1].length() > 0) {
+
+                        String online_data = mBlockDataReceived[55 - 1].substring(4, mBlockDataReceived[55 - 1].length());
+
+                        pboc2.importOnlineResp(true, resultToLoadStr, online_data.trim());
+                    } else {
+                        pboc2.importOnlineResp(true, resultToLoadStr, "");
+                    }
                     System.out.printf("utility:: dealWithTheResponse KKK002 \n");
 // Paul_20180522 Question
 
@@ -3475,6 +3489,8 @@ public class CardManager {
                     if (connectStatusSocket != null) {
                         connectStatusSocket.onReceived();
                     }
+                } else {
+                    deleteReversal();
                 }
             } else if (mBlockDataSend[3 - 1].equals(TC_ADVICE_CODE)) { // TCUpload
                 Log.d(TAG, "tcUploadPosition : " + tcUploadPosition + " tcUploadSize : " + tcUploadSize);
@@ -3578,7 +3594,7 @@ public class CardManager {
                     Preference.getInstance(context).setValueString(Preference.KEY_BATCH_NUMBER_TMS, String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_BATCH_NUMBER_TMS)) + 1));
                 }
                 Log.d(TAG, "response_code: " + receivedMessageType);
-            } else if (receivedMessageType.equals("0410")) {
+            } else if (response_code.trim().equals("00") && receivedMessageType.equals("0410")) {
                 if (reversalListener != null) {
                     reversalListener.onReversalSuccess();
                 }
@@ -3669,7 +3685,6 @@ public class CardManager {
                     deleteReversal();
                     processCallback(PROCESS_TRANS_RESULT_APPROVE);
                 } else {
-                    deleteReversal();
                     processCallback(PROCESS_TRANS_RESULT_UNKNOW);
                 }
                 MTI = "";
@@ -3879,7 +3894,7 @@ public class CardManager {
         transTemp.setTransTime(tTime);
         String amountAll = String.valueOf(Float.valueOf(AMOUNT) + amountFee);
         Log.d(TAG, "insertTransaction: " + amountAll);
-        transTemp.setAmount(amountAll);
+        transTemp.setAmount(AMOUNT);
         transTemp.setCardNo(CARD_NO);
         transTemp.setCardType("0"); //cardType == REFUND ? "1" : "0"
         transTemp.setTrack1(TRACK1); //TODO ถ้าไม่มีต้องทำยังไง เซตค่าว่าง ?
@@ -3924,7 +3939,7 @@ public class CardManager {
         if (!MAG_TRX_RECV) {
             insertTCUploadTransaction(traceIdNo, tTime, fDate, mBlockDataSend[55 - 1],
                     invoiceNumber.length() + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber)),
-                    mBlockDataSend[23 - 1], mBlockDataSend[52 - 1], mBlockDataSend[22 - 1],amountFee);
+                    mBlockDataSend[23 - 1], mBlockDataSend[52 - 1], mBlockDataSend[22 - 1], amountFee);
 //            setTCUpload(traceIdNo, tTime, fDate, mBlockDataSend[55 - 1],
 //                    invoiceNumber.length() + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber)),
 //                    mBlockDataSend[23 - 1], mBlockDataSend[52 - 1], mBlockDataSend[22 - 1]);
