@@ -54,6 +54,49 @@ public class CardPrefix {
         return "POS";
     }
 
+    public static String getTypeCardTMS(String cardNo) {
+        String cardSubstring;
+        cardSubstring = cardNo.substring(0, 4);
+        if (cardSubstring.equals("0060")) {
+            Log.d(TAG, "getTypeCard: TMS");
+            return "TMS";
+        }
+        cardSubstring = cardNo.substring(0, 6);
+        if (cardSubstring.equals("449932") ||
+                cardSubstring.equals("453215") ||
+                cardSubstring.equals("453216") ||
+                cardSubstring.equals("473252") ||
+                cardSubstring.equals("473254") ||
+                cardSubstring.equals("473256") ||
+                cardSubstring.equals("484830") ||
+                cardSubstring.equals("484831") ||
+                cardSubstring.equals("621654") ||
+                cardSubstring.equals("931006")) {
+            Log.d(TAG, "getTypeCard: TMS");
+            return "TMS";
+        }
+
+        cardSubstring = cardNo.substring(0, 8);
+        if (cardSubstring.equals("50436709")) {
+            Log.d(TAG, "getTypeCard: TMS");
+            return "TMS";
+        }
+
+        cardSubstring = cardNo.substring(0, 6);
+        if (cardSubstring.equals("504367") || cardSubstring.equals("990006")) {
+            Log.d(TAG, "getTypeCard: TMS");
+            return "TMS";
+        }
+
+        cardSubstring = cardNo.substring(0, 7);
+        if (cardSubstring.equals("9310061")) {
+            Log.d(TAG, "getTypeCard: TMS");
+            return "TMS";
+        }
+        Log.d(TAG, "getTypeCard: POS");
+        return null;
+    }
+
     public static String getInvoice(Context context, String typeCard) {
         String invoiceNumber;
         if (typeCard.equalsIgnoreCase("POS")) {

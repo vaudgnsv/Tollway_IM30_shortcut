@@ -827,11 +827,12 @@ public class CardManager {
                     Log.d(TAG, "----> CardInfoData ==> Tag_4f " + Tag_4f);
                     if (Tag_4f.equalsIgnoreCase("4F08A000000677010100") || Tag_4f.equalsIgnoreCase("4F08A000000677010101") ||
                             Tag_4f.equalsIgnoreCase("4F08A000000333010103") || Tag_4f.equalsIgnoreCase("4F08A000000677010109")) {
-                        HOST_CARD = "EPS";
+
+                        HOST_CARD = CardPrefix.getTypeCardTMS(card.getNo()) == null ? "EPS" : CardPrefix.getTypeCardTMS(card.getNo());
+
                     } else {
                         HOST_CARD = CardPrefix.getTypeCard(card.getNo());
                     }
-
 
                     Log.d(TAG, "----> CardInfoData ==> Tag_4f " + Tag_4f);
                     String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
@@ -1714,8 +1715,9 @@ public class CardManager {
             REF1 = ref1;
             REF2 = ref2;
             REF3 = ref3;
-            pboc2.importAmount(String.valueOf(amountFee));
-            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(String.valueOf(amountFee));
+            float ampuntAll = Float.valueOf(amount) + amountFee;
+            pboc2.importAmount(String.valueOf(ampuntAll));
+            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(String.valueOf(ampuntAll));
             mBlockDataSend[52 - 1] = keyPin;
             AMOUNT = amount;
 
