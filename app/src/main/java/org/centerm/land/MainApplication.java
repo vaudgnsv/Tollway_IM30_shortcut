@@ -77,6 +77,9 @@ public class MainApplication extends Application {
         String traceId = Preference.getInstance(this).getValueString(Preference.KEY_QR_TRACE_NO);
         String billerKey = Preference.getInstance(this).getValueString(Preference.KEY_BILLER_KEY);
         String qrPort = Preference.getInstance(this).getValueString(Preference.KEY_QR_PORT);
+        String billerId = Preference.getInstance(this).getValueString(Preference.KEY_QR_BILLER_ID);
+        String merchantName = Preference.getInstance(this).getValueString(Preference.KEY_QR_MERCHANT_NAME);
+        String terminalId = Preference.getInstance(this).getValueString(Preference.KEY_QR_TERMINAL_ID);
         if (qrAid.isEmpty()) {
             Preference.getInstance(this).setValueString(Preference.KEY_QR_AID, "A000000677010112");
         }
@@ -90,6 +93,15 @@ public class MainApplication extends Application {
         }
         if (qrPort.isEmpty()) {
             Preference.getInstance(this).setValueString(Preference.KEY_QR_PORT, "3840");
+        }
+        if (billerId.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_QR_BILLER_ID, "010352102131870");
+        }
+        if (merchantName.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_QR_MERCHANT_NAME, "NAKHONRATCHASIMA PCG.");
+        }
+        if (terminalId.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_QR_TERMINAL_ID, "00025120");
         }
     }
 

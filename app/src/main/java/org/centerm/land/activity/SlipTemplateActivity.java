@@ -109,8 +109,14 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         bankImage = findViewById(R.id.bankImage);
         bank1Image = findViewById(R.id.bank1Image);
         merchantName1Label = findViewById(R.id.merchantName1Label);
+        merchantName1Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+
         merchantName2Label = findViewById(R.id.merchantName2Label);
+        merchantName2Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+
         merchantName3Label = findViewById(R.id.merchantName3Label);
+        merchantName3Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+
         tidLabel = findViewById(R.id.tidLabel);
         midLabel = findViewById(R.id.midLabel);
         traceLabel = findViewById(R.id.traceLabel);

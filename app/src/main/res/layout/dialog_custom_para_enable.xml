@@ -70,7 +70,7 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/menu_service_white"
                 android:gravity="center"
-                android:inputType="text"
+                android:inputType="number"
                 android:minWidth="145dp"
                 android:padding="8dp"
                 android:textSize="25sp" />
@@ -101,7 +101,7 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/menu_service_white"
                 android:gravity="center"
-                android:inputType="text"
+                android:inputType="number"
                 android:minWidth="145dp"
                 android:padding="8dp"
                 android:textSize="25sp" />
@@ -132,7 +132,7 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/menu_service_white"
                 android:gravity="center"
-                android:inputType="text"
+                android:inputType="number"
                 android:minWidth="145dp"
                 android:padding="8dp"
                 android:textSize="25sp" />

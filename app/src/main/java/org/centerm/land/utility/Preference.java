@@ -78,6 +78,10 @@ public class Preference {
     public static final String KEY_BILLER_KEY = Preference.class.getName() + "key_biller_key";
     public static final String KEY_QR_PORT = Preference.class.getName() + "key_qr_port";
 
+    public static final String KEY_MERCHANT_1 = Preference.class.getName() + "key_merchant_1";
+    public static final String KEY_MERCHANT_2 = Preference.class.getName() + "key_merchant_2";
+    public static final String KEY_MERCHANT_3 = Preference.class.getName() + "key_merchant_3";
+
     private static Preference settingPreference = null;
     private final String preferenceName = BuildConfig.APPLICATION_ID + "Setting";
     private SharedPreferences preference = null;

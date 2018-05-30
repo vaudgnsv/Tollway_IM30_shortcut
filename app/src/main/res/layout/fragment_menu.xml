@@ -81,6 +81,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/settingLinearLayout"
                 android:layout_margin="8dp"
                 android:gravity="center"
                 android:orientation="vertical"

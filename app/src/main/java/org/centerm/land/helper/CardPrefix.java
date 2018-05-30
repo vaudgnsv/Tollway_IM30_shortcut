@@ -46,7 +46,12 @@ public class CardPrefix {
         }
 
         cardSubstring = cardNo.substring(0, 7);
-        if (cardSubstring.equals("9310061") || cardSubstring.equals("6210948")) {
+        if (cardSubstring.equals("9310061")) {
+            Log.d(TAG, "getTypeCard: TMS");
+            return "TMS";
+        }
+        cardSubstring = cardNo.substring(0, 7);
+        if (cardSubstring.equals("6210948")) {
             Log.d(TAG, "getTypeCard: EPS");
             return "EPS";
         }

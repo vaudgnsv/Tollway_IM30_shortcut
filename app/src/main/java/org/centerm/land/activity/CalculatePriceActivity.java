@@ -363,21 +363,24 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final DecimalFormat decimalFormat = new DecimalFormat("###0.00");
-                dialogParaEndble.dismiss();
-                dialogWaiting.show();
-                if (cardManager.getHostCard().equalsIgnoreCase("EPS")) {
-                    cardManager.setImportAmountEPS(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
-                } else if (cardManager.getHostCard().equalsIgnoreCase("TMS")){
-                    cardManager.setDataSalePIN(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
-                } else {
-                    if (typeCard.equalsIgnoreCase(MenuServiceListActivity.IC_CARD)) {
-                        cardManager.setImportAmount(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())));
+                if (!ref1Box.getText().toString().isEmpty()) {
+                    final DecimalFormat decimalFormat = new DecimalFormat("###0.00");
+                    dialogParaEndble.dismiss();
+                    dialogWaiting.show();
+                    if (cardManager.getHostCard().equalsIgnoreCase("EPS")) {
+                        cardManager.setImportAmountEPS(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
+                    } else if (cardManager.getHostCard().equalsIgnoreCase("TMS")) {
+                        cardManager.setDataSalePIN(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                     } else {
-                        cardManager.setDataSaleFallBack(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())));
+                        if (typeCard.equalsIgnoreCase(MenuServiceListActivity.IC_CARD)) {
+                            cardManager.setImportAmount(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())));
+                        } else {
+                            cardManager.setDataSaleFallBack(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())));
+                        }
                     }
+                } else {
+                    ref1Box.setError("กรุณากรอกร Ref1");
                 }
-
 
             }
         });

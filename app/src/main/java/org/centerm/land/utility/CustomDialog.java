@@ -47,6 +47,10 @@ public class CustomDialog {
         dataBox.setFilters(new InputFilter[] {new InputFilter.LengthFilter(maxLength)});
     }
 
+    public void setInputText(int type) {
+        dataBox.setInputType(type);
+    }
+
     public void setInputFilter() {
         InputFilter[] filters = new InputFilter[1];
         filters[0] = new InputFilter() {

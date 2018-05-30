@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
         merchantL3Label = rootView.findViewById(R.id.merchantL3Label);
         merchantL3Btn = rootView.findViewById(R.id.merchantL3Btn);
         feeLabel = rootView.findViewById(R.id.feeLabel);
+        feeLabel.setText(Preference.getInstance(getContext()).getValueFloat(Preference.KEY_FEE)+"");
         feeBtn = rootView.findViewById(R.id.feeBtn);
 
         merchantL1Btn.setOnClickListener(this);
@@ -114,13 +116,14 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
             }
             customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(merchantL1Label.getText().toString());
-            customDialog.setMaxLength(16);
+            customDialog.setMaxLength(50);
+            customDialog.setInputText(InputType.TYPE_CLASS_TEXT);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override
                 public void onClickSave(Dialog dialog, String sEt) {
                     merchantL1Label.setText(sEt);
-                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_AID,sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_MERCHANT_1,sEt);
                     dialog.dismiss();
                 }
 
@@ -136,13 +139,14 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
             }
             customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(merchantL2Label.getText().toString());
-            customDialog.setMaxLength(15);
+            customDialog.setMaxLength(50);
+            customDialog.setInputText(InputType.TYPE_CLASS_TEXT);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override
                 public void onClickSave(Dialog dialog, String sEt) {
                     merchantL2Label.setText(sEt);
-//                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_BILLER_ID,sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_MERCHANT_2,sEt);
                     dialog.dismiss();
                 }
 
@@ -158,13 +162,14 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
             }
             customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(merchantL3Label.getText().toString());
-            customDialog.setMaxLength(99);
+            customDialog.setMaxLength(50);
+            customDialog.setInputText(InputType.TYPE_CLASS_TEXT);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override
                 public void onClickSave(Dialog dialog, String sEt) {
                     merchantL3Label.setText(sEt);
-//                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_MERCHANT_NAME,sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_MERCHANT_3,sEt);
                     dialog.dismiss();
                 }
 

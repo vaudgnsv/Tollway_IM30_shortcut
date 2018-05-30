@@ -81,8 +81,8 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
         nameMenuList.add("Sale");
         nameMenuList.add("Void");
         nameMenuList.add("Settlement");
-        nameMenuList.add("Batch Upload");
-        nameMenuList.add("TC Upload");
+//        nameMenuList.add("Batch Upload");
+//        nameMenuList.add("TC Upload");
         nameMenuList.add("Detail Report");
         nameMenuList.add("Summary Report");
         recyclerViewMenuList = findViewById(R.id.recyclerViewMenuList);

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -208,6 +209,7 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
             customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(merchantNameLabel.getText().toString());
             customDialog.setMaxLength(99);
+            customDialog.setInputText(InputType.TYPE_CLASS_TEXT);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override

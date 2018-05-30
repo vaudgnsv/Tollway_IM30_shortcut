@@ -51,6 +51,9 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
     private TextView voidSaleAmountLabel = null;
     private TextView cardCountLabel = null;
     private TextView cardAmountLabel = null;
+    private TextView merchantName1Label = null;
+    private TextView merchantName2Label = null;
+    private TextView merchantName3Label = null;
     private ImageView bank1Image = null;
     private ImageView bankImage = null;
 
@@ -99,6 +102,16 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
         cardAmountLabel = findViewById(R.id.cardAmountLabel);
         bank1Image = findViewById(R.id.bank1Image);
         bankImage = findViewById(R.id.bankImage);
+
+        merchantName1Label = findViewById(R.id.merchantName1Label);
+        merchantName1Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+
+        merchantName2Label = findViewById(R.id.merchantName2Label);
+        merchantName2Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+
+        merchantName3Label = findViewById(R.id.merchantName3Label);
+        merchantName3Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+
         customDialogAlertLoading();
 
         setViewSlip();

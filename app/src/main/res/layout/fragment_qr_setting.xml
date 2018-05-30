@@ -87,7 +87,7 @@
                     android:maxLength="16"
                     android:minHeight="45dp"
                     android:textColor="@android:color/black"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/aidBtn"
@@ -128,7 +128,7 @@
                     android:maxLength="15"
                     android:minHeight="45dp"
                     android:textColor="@android:color/black"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/billerIdBtn"
@@ -164,12 +164,12 @@
                     android:layout_marginEnd="2dp"
                     android:layout_weight="1.7"
                     android:background="@drawable/under_line_text_view"
-                    android:fontFamily="@font/timeburnernormal"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:gravity="center"
                     android:maxLength="99"
                     android:minHeight="45dp"
                     android:textColor="@android:color/black"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/merchantNameBtn"
@@ -205,12 +205,12 @@
                     android:layout_marginEnd="2dp"
                     android:layout_weight="1.7"
                     android:background="@drawable/under_line_text_view"
-                    android:fontFamily="@font/timeburnernormal"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:gravity="center"
                     android:maxLength="20"
                     android:minHeight="45dp"
                     android:textColor="@android:color/black"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/qrTerminalIdBtn"
@@ -246,12 +246,12 @@
                     android:layout_marginEnd="2dp"
                     android:layout_weight="1.7"
                     android:background="@drawable/under_line_text_view"
-                    android:fontFamily="@font/timeburnernormal"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:gravity="center"
                     android:maxLength="20"
                     android:minHeight="45dp"
                     android:textColor="@android:color/black"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/billerKeyBtn"
@@ -287,12 +287,12 @@
                     android:layout_marginEnd="2dp"
                     android:layout_weight="1.7"
                     android:background="@drawable/under_line_text_view"
-                    android:fontFamily="@font/timeburnernormal"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:gravity="center"
                     android:maxLength="20"
                     android:minHeight="45dp"
                     android:textColor="@android:color/black"
-                    android:textSize="22sp" />
+                    android:textSize="16sp" />
 
                 <Button
                     android:id="@+id/qrPortBtn"

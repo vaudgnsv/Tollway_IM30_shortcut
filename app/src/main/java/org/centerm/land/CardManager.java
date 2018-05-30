@@ -831,7 +831,7 @@ public class CardManager {
                         HOST_CARD = CardPrefix.getTypeCardTMS(card.getNo()) == null ? "EPS" : CardPrefix.getTypeCardTMS(card.getNo());
 
                     } else {
-                        HOST_CARD = CardPrefix.getTypeCard(card.getNo());
+                        HOST_CARD = CardPrefix.getTypeCard(card.getNo()) == null ? "POS" : CardPrefix.getTypeCard(card.getNo());
                     }
 
                     Log.d(TAG, "----> CardInfoData ==> Tag_4f " + Tag_4f);
@@ -1834,7 +1834,7 @@ public class CardManager {
 
     public void setDataVoid(TransTemp temp) {
         transTemp = temp;
-        HOST_CARD = CardPrefix.getTypeCard(transTemp.getCardNo());
+        HOST_CARD = transTemp.getHostTypeCard();
         if (HOST_CARD.equalsIgnoreCase("TMS")) {
             setDataVoidTMS();
         } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
@@ -3602,7 +3602,7 @@ public class CardManager {
                 }
                 deleteReversal();
             }
-            if (!response_code.equalsIgnoreCase("00")) {
+            if (!response_code.equalsIgnoreCase("00") && !response_code.equalsIgnoreCase("95")) {
                 if (OnUsOffUsFlg == 0) {
                     if (responseCodeListener != null) {
                         responseCodeListener.onResponseCode(RespCode.ResponseMsgPOS(response_code));

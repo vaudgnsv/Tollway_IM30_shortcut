@@ -11,13 +11,16 @@ import android.widget.LinearLayout;
 
 import org.centerm.land.R;
 import org.centerm.land.activity.MenuServiceListActivity;
+import org.centerm.land.activity.SettingActivity;
 import org.centerm.land.activity.qr.MenuQrActivity;
+import org.centerm.land.bassactivity.SettingToolbarActivity;
 
 @SuppressWarnings("unused")
 public class MenuServiceFragment extends Fragment {
 
     private LinearLayout creditLinearLayout = null;
     private LinearLayout qrLinearLayout = null;
+    private LinearLayout settingLinearLayout = null;
 
     public MenuServiceFragment() {
         super();
@@ -69,6 +72,14 @@ public class MenuServiceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MenuQrActivity.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(0,0);
+            }
+        });
+        settingLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SettingActivity.class);
                 startActivity(intent);
                 getActivity().overridePendingTransition(0,0);
             }
