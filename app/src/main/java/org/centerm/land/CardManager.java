@@ -3617,6 +3617,7 @@ public class CardManager {
             }
 
             if (currentTransactionType != REVERSAL) {
+                deleteReversal();       // Paul_20180530
                 if ((MAG_TRX_RECV) || (mBlockDataSend[3 - 1].trim().equals(VOID_PROCESSING_CODE))) {
 // Paul_20180522 Start
 /*
