@@ -102,6 +102,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     public void initWidget() {
         super.initWidget();
         cardManager = MainApplication.getCardManager();
+        cardManager.abortPBOCProcess();
         printDev = cardManager.getInstancesPrint();
         printBtn = findViewById(R.id.printBtn);
         slipNestedScrollView = findViewById(R.id.slipNestedScrollView);
@@ -163,7 +164,8 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
 
     private void setDataView(TransTemp item) {
 
-        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        DecimalFormat decimalFormatShow = new DecimalFormat("#,##0.00");
+        DecimalFormat decimalFormat = new DecimalFormat("###0.00");
         tidLabel.setText(item.getTid());
         midLabel.setText(item.getMid());
         traceLabel.setText(item.getEcr());
@@ -178,41 +180,43 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         dateLabel.setText(item.getTransDate());
         timeLabel.setText(item.getTransTime());
         typeLabel.setText(item.getTransStat());
-        typeCardLabel.setText(item.getCardType());
-        cardNoLabel.setText(item.getCardNo());
+        typeCardLabel.setText(CardPrefix.getTypeCardName(item.getCardNo()));
+        String cutCardStart = item.getCardNo().substring(0,6);
+        String cutCardEnd = item.getCardNo().substring(12,item.getCardNo().length());
+        cardNoLabel.setText(cutCardStart + "XXXXXX" + cutCardEnd);
         apprCodeLabel.setText(item.getApprvCode());
         comCodeLabel.setText(item.getComCode());
         if (typeSlip.equalsIgnoreCase(CalculatePriceActivity.TypeSale)) {
-            amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Float.valueOf(item.getAmount()))));
+            amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView if : " + item.getAmount() + " Fee : " + item.getFee());
             if (item.getFee() != null) {
-                feeThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Float.valueOf(item.getFee()))));
-                float fee = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getFee())));
-                float amount = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getAmount())));
-                totThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format((float) (amount + fee))));
+                feeThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(item.getFee()))));
+                double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(item.getFee())));
+                double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(item.getAmount())));
+                totThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format((float) (amount + fee))));
             } else {
                 feeThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
                 totThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
             }
         } else {
-            amtThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format(Float.valueOf(item.getAmount()))));
+            amtThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView Else : " + item.getAmount() + " Fee : " + item.getFee());
             if (item.getHostTypeCard().equals("TMS")) {
-                if (item.getEmciFree() != null) {
+                if (!item.getEmciFree().isEmpty()) {
                     feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format(Float.valueOf(item.getEmciFree()))));
                     float fee = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getEmciFree())));
                     float amount = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getAmount())));
-                    totThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format((float) (amount + fee))));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format((float) (amount + fee))));
                 } else {
                     feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
                     totThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
                 }
             } else {
                 if (item.getFee() != null) {
-                    feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format(Float.valueOf(item.getFee()))));
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getFee()))));
                     float fee = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getFee())));
                     float amount = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getAmount())));
-                    totThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format((float) (amount + fee))));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format((float) (amount + fee))));
                 } else {
                     feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
                     totThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));

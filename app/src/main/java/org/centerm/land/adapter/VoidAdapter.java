@@ -36,7 +36,7 @@ public class VoidAdapter extends RecyclerView.Adapter<VoidAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-        holder.traceLabel.setText(voidList.get(position).getTraceNo());
+        holder.traceLabel.setText(voidList.get(position).getEcr());
         holder.cardNoLabel.setText(voidList.get(position).getCardNo());
         holder.amountLabel.setText(decimalFormat.format(Float.valueOf(voidList.get(position).getAmount())));
         holder.typeLabel.setText(voidList.get(position).getTransStat());

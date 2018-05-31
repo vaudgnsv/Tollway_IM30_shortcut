@@ -108,9 +108,6 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                             dialogInsertCard.dismiss();
                         }
                     });
-                    if (timer != null) {
-                        timer.cancel();
-                    }
                     cardManager.stopTransaction();
                     Log.d(TAG, "onCardInfoReceived: " + card.toString());
                 }
@@ -267,17 +264,34 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                 Log.d(TAG, "onReversalSuccess: ");
                 dismissDialogAll();
                 cardManager.stopTransaction();
-                if (typeClick.equalsIgnoreCase("SALE")) {
-                    startInsertCard();
-                } else if (typeClick.equalsIgnoreCase("VOID")) {
-                    Intent intent = new Intent(MenuServiceListActivity.this, MenuActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
-                } else if (typeClick.equalsIgnoreCase("SETTLEMENT")) {
-                    Intent intent = new Intent(MenuServiceListActivity.this, MenuSettlementActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0, 0);
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utility.customDialogAlertSuccess(MenuServiceListActivity.this, "Reversal สำเร็จ", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    if (typeClick.equalsIgnoreCase("SALE")) {
+                                        Log.d(TAG, "onReversalSuccess: SALE");
+                                        startInsertCard();
+                                    } else if (typeClick.equalsIgnoreCase("VOID")) {
+                                        Log.d(TAG, "onReversalSuccess: VOID");
+                                        Intent intent = new Intent(MenuServiceListActivity.this, MenuActivity.class);
+                                        startActivity(intent);
+                                        overridePendingTransition(0, 0);
+                                    } else if (typeClick.equalsIgnoreCase("SETTLEMENT")) {
+                                        Log.d(TAG, "onReversalSuccess: SETTLEMENT");
+                                        Intent intent = new Intent(MenuServiceListActivity.this, MenuSettlementActivity.class);
+                                        startActivity(intent);
+                                        overridePendingTransition(0, 0);
+                                    }
+                                }
+                            });
+                        }
+                    });
                 }
+
             }
         });
     }
@@ -433,7 +447,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                 timer = new CountDownTimer(time, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-
+                        Log.d(TAG, "onTick: " + millisUntilFinished);
                     }
 
                     @Override

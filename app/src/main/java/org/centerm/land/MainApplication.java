@@ -6,6 +6,7 @@ import org.centerm.land.manager.Contextor;
 import org.centerm.land.utility.Preference;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 public class MainApplication extends Application {
     private static CardManager cardManager;
@@ -17,6 +18,9 @@ public class MainApplication extends Application {
         cardManager = CardManager.init(getApplicationContext());
         cardManager.bindService();
         Realm.init(this);
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
+        Realm.deleteRealm(realmConfiguration); // Clean slate
+        Realm.setDefaultConfiguration(realmConfiguration); // Make this Realm the default
         setPreference();
 
     }
@@ -66,9 +70,9 @@ public class MainApplication extends Application {
     }
 
     private void setFee() {
-        float fee = Preference.getInstance(this).getValueFloat(Preference.KEY_FEE);
+        Double fee = Preference.getInstance(this).getValueDouble(Preference.KEY_FEE);
         if (fee <= 0) {
-            Preference.getInstance(this).setValueFloat(Preference.KEY_FEE,2.00f);
+            Preference.getInstance(this).setValueDouble(Preference.KEY_FEE,2.00d);
         }
     }
 

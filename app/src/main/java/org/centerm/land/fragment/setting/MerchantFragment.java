@@ -66,10 +66,16 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
     private void initInstances(View rootView, Bundle savedInstanceState) {
         // Init 'View' instance(s) with rootView.findViewById here
         merchantL1Label = rootView.findViewById(R.id.merchantL1Label);
+        merchantL1Label.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_MERCHANT_1));
+
         merchantL1Btn = rootView.findViewById(R.id.merchantL1Btn);
         merchantL2Label = rootView.findViewById(R.id.merchantL2Label);
+        merchantL2Label.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_MERCHANT_2));
+
         merchantL2Btn = rootView.findViewById(R.id.merchantL2Btn);
         merchantL3Label = rootView.findViewById(R.id.merchantL3Label);
+        merchantL3Label.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_MERCHANT_3));
+
         merchantL3Btn = rootView.findViewById(R.id.merchantL3Btn);
         feeLabel = rootView.findViewById(R.id.feeLabel);
         feeLabel.setText(Preference.getInstance(getContext()).getValueFloat(Preference.KEY_FEE)+"");

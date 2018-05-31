@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,6 +123,7 @@ public class ServerInfoFragment extends Fragment implements View.OnClickListener
             customDialog  = new CustomDialog(getContext(),R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(primaryIpLabel.getText().toString());
 //            customDialog.setInputFilter();
+            customDialog.setInputText(InputType.TYPE_CLASS_PHONE);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override
@@ -165,7 +167,7 @@ public class ServerInfoFragment extends Fragment implements View.OnClickListener
             }
             customDialog  = new CustomDialog(getContext(),R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(secondaryIPLabel.getText().toString());
-            customDialog.setInputFilter();
+            customDialog.setInputText(InputType.TYPE_CLASS_PHONE);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override

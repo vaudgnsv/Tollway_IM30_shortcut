@@ -60,6 +60,7 @@ public class MenuServiceFragment extends Fragment {
         // Init 'View' instance(s) with rootView.findViewById here
         creditLinearLayout = rootView.findViewById(R.id.creditLinearLayout);
         qrLinearLayout = rootView.findViewById(R.id.qrLinearLayout);
+        settingLinearLayout = rootView.findViewById(R.id.settingLinearLayout);
         creditLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

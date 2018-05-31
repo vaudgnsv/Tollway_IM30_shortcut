@@ -113,8 +113,11 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         sureClickFrameLayout = findViewById(R.id.sureClickFrameLayout);
         exitClickFrameLayout = findViewById(R.id.exitClickFrameLayout);
         priceLabel = findViewById(R.id.priceLabel);
-        if (card != null)
-            cardNoLabel.setText(card.getNo());
+        if (card != null) {
+            String cutCardStart = card.getNo().substring(0,6);
+            String cutCardEnd = card.getNo().substring(12,card.getNo().length());
+            cardNoLabel.setText(cutCardStart + "XXXXXX" + cutCardEnd);
+        }
 
         oneClickFrameLayout.setOnClickListener(this);
         twoClickFrameLayout.setOnClickListener(this);
@@ -159,6 +162,21 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 if (dialogWaiting != null) {
                     dialogWaiting.dismiss();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isFinishing()) {
+                            Utility.customDialogAlert(CalculatePriceActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    }
+                });
+
             }
 
             @Override
@@ -167,6 +185,20 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 if (dialogWaiting != null) {
                     dialogWaiting.dismiss();
                 }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isFinishing()) {
+                            Utility.customDialogAlert(CalculatePriceActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
 
@@ -368,14 +400,14 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                     dialogParaEndble.dismiss();
                     dialogWaiting.show();
                     if (cardManager.getHostCard().equalsIgnoreCase("EPS")) {
-                        cardManager.setImportAmountEPS(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
+                        cardManager.setImportAmountEPS(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                     } else if (cardManager.getHostCard().equalsIgnoreCase("TMS")) {
-                        cardManager.setDataSalePIN(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
+                        cardManager.setDataSalePIN(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                     } else {
                         if (typeCard.equalsIgnoreCase(MenuServiceListActivity.IC_CARD)) {
-                            cardManager.setImportAmount(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())));
+                            cardManager.setImportAmount(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())));
                         } else {
-                            cardManager.setDataSaleFallBack(decimalFormat.format(Float.valueOf(priceLabel.getText().toString())));
+                            cardManager.setDataSaleFallBack(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())));
                         }
                     }
                 } else {

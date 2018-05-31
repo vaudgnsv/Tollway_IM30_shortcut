@@ -174,16 +174,6 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                 });
             }
         });
-        if (transTemp == null) {
-            transTemp = new ArrayList<>();
-        } else {
-            transTemp.clear();
-        }
-        if (transTempVoidFlag == null) {
-            transTempVoidFlag = new ArrayList<>();
-        } else {
-            transTempVoidFlag.clear();
-        }
 
         Dialog tagView = new Dialog(this);
         tagView.setContentView(R.layout.view_slip_settlement);
@@ -255,6 +245,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
             menuSettlementAdapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    cardManager.setDataDefault();
                     int position = (int) v.getTag();
                     if (position == 0) {
                         typeHost = "POS";
@@ -334,15 +325,28 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
     }
 
     private void selectDataTransTemp(String typeHost) {
-        if (realm == null) {
+        /*if (realm == null) {
             realm = Realm.getDefaultInstance();
+        }*/
+
+        if (transTemp == null) {
+            transTemp = new ArrayList<>();
+        } else {
+            transTemp.clear();
+        }
+        if (transTempVoidFlag == null) {
+            transTempVoidFlag = new ArrayList<>();
+        } else {
+            transTempVoidFlag.clear();
         }
         transTemp.addAll(realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).findAll());
+        Log.d(TAG, "selectDataTransTemp: " + transTemp.size());
         transTempVoidFlag.addAll(realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll());
-        if (realm != null) {
+        Log.d(TAG, "transTempVoidFlag: " + transTempVoidFlag.size());
+        /*if (realm != null) {
             realm.close();
             realm = null;
-        }
+        }*/
     }
 
     public void doPrinting(final Bitmap slip) {
@@ -388,9 +392,17 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (realm != null) {
-            realm.close();
-            realm = null;
-        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        realm = Realm.getDefaultInstance();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        realm.close();
     }
 }

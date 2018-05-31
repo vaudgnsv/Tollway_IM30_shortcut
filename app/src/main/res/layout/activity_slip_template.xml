@@ -610,7 +610,7 @@ TOTAL AMOUNT"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/timeburnerbold"
-                    android:text="GHL_DOL_1.0_18050701"
+                    android:text="DOL_18_05_30"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
 

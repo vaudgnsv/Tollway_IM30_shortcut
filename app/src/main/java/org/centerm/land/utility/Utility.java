@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -55,7 +56,7 @@ public class Utility {
         }
         dialogAlert.show();
     }
-    public static void customDialogAlertSuccess(Context context, final OnClickCloseImage onClickCloseImage) {
+    public static void customDialogAlertSuccess(Context context, @Nullable String msg, final OnClickCloseImage onClickCloseImage) {
         final Dialog dialogAlert = new Dialog(context);
         dialogAlert.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogAlert.setContentView(R.layout.dialog_custom_success);
@@ -64,6 +65,9 @@ public class Utility {
         dialogAlert.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         TextView msgLabel = dialogAlert.findViewById(R.id.msgLabel);
         ImageView closeImage = dialogAlert.findViewById(R.id.closeImage);
+        if (msg != null) {
+            msgLabel.setText(msg);
+        }
         closeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

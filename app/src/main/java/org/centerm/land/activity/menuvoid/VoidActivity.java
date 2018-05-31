@@ -66,6 +66,7 @@ public class VoidActivity extends SettingToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_void);
         cardManager = MainApplication.getCardManager();
+        realm = Realm.getDefaultInstance();
         initData();
         initWidget();
         initBtnExit();
@@ -111,6 +112,16 @@ public class VoidActivity extends SettingToolbarActivity {
                 if (!isFinishing()) {
                     if (dialogWaiting != null)
                         dialogWaiting.dismiss();
+                    if (dialogPin != null) {
+                        if (dialogPin.isShowing()) {
+                            dialogPin.dismiss();
+                        }
+                    }
+                    if (dialogApprCode != null) {
+                        if (dialogApprCode.isShowing()) {
+                            dialogApprCode.dismiss();
+                        }
+                    }
                     Intent intent = new Intent(VoidActivity.this, SlipTemplateActivity.class);
                     intent.putExtra(CalculatePriceActivity.KEY_CALCUATE_ID, id);
                     intent.putExtra(CalculatePriceActivity.KEY_TYPE_SALE_OR_VOID, CalculatePriceActivity.TypeVoid);
@@ -129,34 +140,12 @@ public class VoidActivity extends SettingToolbarActivity {
             public void onConnectTimeOut() {
                 if (dialogWaiting != null)
                     dialogWaiting.dismiss();
-                if (!isFinishing()) {
-                    Utility.customDialogAlert(VoidActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                        @Override
-                        public void onClickImage(Dialog dialog) {
-                            Intent intent = new Intent(VoidActivity.this, MenuServiceListActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(0, 0);
-                            finish();
-                        }
-                    });
-                }
             }
 
             @Override
             public void onTransactionTimeOut() {
                 if (dialogWaiting != null)
                     dialogWaiting.dismiss();
-                if (!isFinishing()) {
-                    Utility.customDialogAlert(VoidActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                        @Override
-                        public void onClickImage(Dialog dialog) {
-                            Intent intent = new Intent(VoidActivity.this, MenuServiceListActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(0, 0);
-                            finish();
-                        }
-                    });
-                }
             }
         });
 
@@ -164,6 +153,9 @@ public class VoidActivity extends SettingToolbarActivity {
             @Override
             public void onResponseCode(final String response) {
                 if (!isFinishing()) {
+                    if (dialogWaiting != null) {
+                        dialogWaiting.dismiss();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -191,6 +183,9 @@ public class VoidActivity extends SettingToolbarActivity {
             @Override
             public void onConnectTimeOut() {
                 if (!isFinishing()) {
+                    if (dialogWaiting != null) {
+                        dialogWaiting.dismiss();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -209,6 +204,9 @@ public class VoidActivity extends SettingToolbarActivity {
             @Override
             public void onTransactionTimeOut() {
                 if (!isFinishing()) {
+                    if (dialogWaiting != null) {
+                        dialogWaiting.dismiss();
+                    }
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -229,21 +227,12 @@ public class VoidActivity extends SettingToolbarActivity {
     }
 
     private void checkReversal() {
-        try {
-            if (realm == null) {
-                realm = Realm.getDefaultInstance();
-            }
-            ReversalTemp reversalTemp = realm.where(ReversalTemp.class).equalTo("hostTypeCard", typeHost).findFirst();
-            if (reversalTemp != null) {
-                dialogWaiting.dismiss();
-                cardManager.setDataReversalAndSendHost(reversalTemp);
-            }
-        } finally {
-            if (realm != null) {
-                realm.close();
-            }
-            realm = null;
+        ReversalTemp reversalTemp = realm.where(ReversalTemp.class).equalTo("hostTypeCard", typeHost).findFirst();
+        if (reversalTemp != null) {
+            dialogWaiting.dismiss();
+            cardManager.setDataReversalAndSendHost(reversalTemp);
         }
+
     }
 
     private void customDialogInvoice(String traceNo, String price) {
@@ -292,27 +281,22 @@ public class VoidActivity extends SettingToolbarActivity {
             }
             traceNoAddZero += traceNo;
             Log.d(TAG, "searchDataTransTemp: " + traceNoAddZero);
-            try {
-                if (realm == null) {
-                    realm = Realm.getDefaultInstance();
+
+            transTemp = realm.where(TransTemp.class).equalTo("ecr", traceNoAddZero).equalTo("hostTypeCard", typeHost).findAll();
+            Log.d(TAG, "searchDataTransTemp: " + transTemp);
+            if (transTemp.size() > 0) {
+                voidAdapter.clear();
+                if (transTempList == null) {
+                    transTempList = new ArrayList<>();
+                } else {
+                    transTempList.clear();
                 }
-                transTemp = realm.where(TransTemp.class).equalTo("traceNo", traceNoAddZero).equalTo("hostTypeCard", typeHost).findAll();
-                Log.d(TAG, "searchDataTransTemp: " + transTemp);
-                if (transTemp.size() > 0) {
-                    voidAdapter.clear();
-                    if (transTempList == null) {
-                        transTempList = new ArrayList<>();
-                    } else {
-                        transTempList.clear();
-                    }
-                    transTempList.addAll(transTemp);
-                    voidAdapter.setItem(transTempList);
-                    voidAdapter.notifyDataSetChanged();
-                }
-            } finally {
-                realm.close();
-                realm = null;
+                transTempList.addAll(transTemp);
+                voidAdapter.setItem(transTempList);
+                voidAdapter.notifyDataSetChanged();
             }
+
+
         } else {
             setVoidList();
         }
@@ -328,7 +312,7 @@ public class VoidActivity extends SettingToolbarActivity {
                 public void onClick(View v) {
                     int position = (int) v.getTag();
                     transTemp = voidAdapter.getItem(position);
-                    customDialogPin(transTemp.getTraceNo(), transTemp.getAmount(), transTemp);
+                    customDialogPin(transTemp.getEcr(), transTemp.getAmount(), transTemp);
                 }
             });
         } else {
@@ -339,17 +323,10 @@ public class VoidActivity extends SettingToolbarActivity {
         } else {
             transTempList.clear();
         }
-        try {
-            if (realm == null) {
-                realm = Realm.getDefaultInstance();
-            }
             transTempList.addAll(realm.copyFromRealm(realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll()));
             voidAdapter.setItem(transTempList);
             voidAdapter.notifyDataSetChanged();
-        } finally {
-            realm.close();
-            realm = null;
-        }
+
     }
 
     private void customDialogWaiting() {
@@ -384,7 +361,7 @@ public class VoidActivity extends SettingToolbarActivity {
                     String keyPin = Preference.getInstance(VoidActivity.this).getValueString(Preference.KEY_PIN);
                     if (s.toString().equalsIgnoreCase(keyPin)) {
                         dialogPin.dismiss();
-                        customDialogInvoice(transTemp.getTraceNo(), transTemp.getAmount());
+                        customDialogInvoice(transTemp.getEcr(), transTemp.getAmount());
                         Log.d(TAG, "onTextChanged: " + transTemp.getApprvCode());
                     } else {
                         inputTextLabel.setVisibility(View.VISIBLE);
@@ -446,14 +423,17 @@ public class VoidActivity extends SettingToolbarActivity {
     protected void onResume() {
         super.onResume();
         setVoidList();
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (realm != null) {
-            realm.close();
-            realm = null;
-        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        realm.close();
     }
 }
