@@ -81,7 +81,7 @@ public class VoidActivity extends SettingToolbarActivity {
     }
 
     public void initWidget() {
-        super.initWidget();
+//        super.initWidget();
         customDialogWaiting();
         customDialogApprCode();
         invoiceEt = findViewById(R.id.invoiceEt);

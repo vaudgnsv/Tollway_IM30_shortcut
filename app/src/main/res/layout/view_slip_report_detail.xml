@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settlementRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/contentToolbar"
+        layout="@layout/content_toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayoutToolbarBottom"
+        android:layout_below="@+id/contentToolbar"
+        android:background="@color/color_background">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/slipNestedScrollView"
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/printBtn"
+        android:layout_marginEnd="18sp"
+        android:layout_marginStart="18sp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:padding="4dp">
+
+        <LinearLayout
+            android:id="@+id/reportDetailLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="48dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/bankImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logo_image_ktb_bw" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/bank1Image"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ktb_logo5"
+                        android:src="@drawable/ktb_logo5" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/merchantName1Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="Header Line1"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/merchantName2Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="Header Line2"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/merchantName3Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="Header Line3"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:text="Date/Time"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/dateLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="15/08/18"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/timeLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.2"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:gravity="end"
+                    android:text="09:54:33"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:text="MID"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/midLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.1"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="111111212424123"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:text="TID"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tidLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="3123123123"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:text="Batch"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/batchLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="000473"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.6">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:text="HOST"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/hostLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="KTB ONUS"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/timeburnerbold"
+                android:text="DETAIL REPORT"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="CARD NAME"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="EXP DATE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="TRANSACTION"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="APPROVAL CODE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="CARD NAME"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="EXP DATE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="TRANSACTION"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="APPROVAL CODE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/black"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewReportDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    </RelativeLayout>
+    <include layout="@layout/content_exit" />
+</RelativeLayout>

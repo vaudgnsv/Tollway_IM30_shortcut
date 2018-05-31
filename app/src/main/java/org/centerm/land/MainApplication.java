@@ -19,7 +19,6 @@ public class MainApplication extends Application {
         cardManager.bindService();
         Realm.init(this);
         RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
-        Realm.deleteRealm(realmConfiguration); // Clean slate
         Realm.setDefaultConfiguration(realmConfiguration); // Make this Realm the default
         setPreference();
 

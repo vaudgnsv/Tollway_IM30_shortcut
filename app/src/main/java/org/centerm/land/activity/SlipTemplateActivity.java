@@ -100,7 +100,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
 
     @Override
     public void initWidget() {
-        super.initWidget();
+//        super.initWidget();
         cardManager = MainApplication.getCardManager();
         cardManager.abortPBOCProcess();
         printDev = cardManager.getInstancesPrint();

@@ -115,7 +115,8 @@
         <activity android:name=".activity.settlement.SlipSettlementActivity" />
         <activity android:name=".activity.qr.MenuQrActivity" />
         <activity android:name=".activity.qr.GenerateQrActivity" />
-        <activity android:name=".activity.qr.CheckQrActivity"></activity>
+        <activity android:name=".activity.qr.CheckQrActivity" />
+        <activity android:name=".activity.menuvoid.MenuDetailReportActivity"></activity>
     </application>
 
 </manifest>

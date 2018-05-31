@@ -42,6 +42,7 @@ public class TransTemp extends RealmObject {
 	private String emciFree;
 	private String pin;
 	private String fee;
+	private String de11OnlineTMS;
 
 	public int getId() {
 		return id;
@@ -337,5 +338,13 @@ public class TransTemp extends RealmObject {
 
 	public void setFee(String fee) {
 		this.fee = fee;
+	}
+
+	public String getDe11OnlineTMS() {
+		return de11OnlineTMS;
+	}
+
+	public void setDe11OnlineTMS(String de11OnlineTMS) {
+		this.de11OnlineTMS = de11OnlineTMS;
 	}
 }

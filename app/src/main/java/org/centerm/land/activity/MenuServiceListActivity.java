@@ -23,6 +23,7 @@ import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.activity.menuvoid.MenuActivity;
+import org.centerm.land.activity.menuvoid.MenuDetailReportActivity;
 import org.centerm.land.activity.settlement.MenuSettlementActivity;
 import org.centerm.land.adapter.MenuServiceAdapter;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
@@ -76,7 +77,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
     }
 
     public void initWidget() {
-        super.initWidget();
+//        super.initWidget();
         nameMenuList = new ArrayList<>();
         nameMenuList.add("Sale");
         nameMenuList.add("Void");
@@ -334,7 +335,9 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                             overridePendingTransition(0, 0);
                         }
                     } else if (position == 3) {
-
+                        Intent intent = new Intent(MenuServiceListActivity.this, MenuDetailReportActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0,0);
                     } else if (position == 4) {
 
                     } else if (position == 5) {

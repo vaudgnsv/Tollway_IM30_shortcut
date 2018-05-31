@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/contentToolbar"
-        layout="@layout/content_toolbar_setting" />
+        layout="@layout/content_toolbar" />
 
     <LinearLayout
         android:layout_above="@+id/linearLayoutToolbarBottom"

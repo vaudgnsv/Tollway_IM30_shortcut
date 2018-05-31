@@ -89,6 +89,8 @@ public class CardManager {
 
     private boolean typeCheck = false;
 
+    private int saleId = 0;
+
 
     private AidlDeviceManager manager = null;
     private AidlDeviceManager managerTle = null;
@@ -728,6 +730,7 @@ public class CardManager {
             Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
             Double amountFee = (Double.valueOf(amount) * fee.intValue()) / 100;
             Double amountAll = Double.valueOf(amount) + amountFee;
+            Log.d(TAG, "setImportAmount: " + amountAll);
             pboc2.importAmount(decimalFormat.format(amountAll));
             mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
             //ส่งค่าที่ยังไม่ได้ คิดว่า Fee เพื่อ จะได้ ไปคิดคำนวณอีกตอนบันทึกลงดาต้าเบส
@@ -840,7 +843,7 @@ public class CardManager {
                     if (Tag_4f.equalsIgnoreCase("4F08A000000677010100") || Tag_4f.equalsIgnoreCase("4F08A000000677010101") ||
                             Tag_4f.equalsIgnoreCase("4F08A000000333010103") || Tag_4f.equalsIgnoreCase("4F08A000000677010109")) {
 
-                        HOST_CARD = "EPS";/*CardPrefix.getTypeCardTMS(card.getNo()) == null ? "EPS" : CardPrefix.getTypeCardTMS(card.getNo());*/
+                        HOST_CARD = CardPrefix.getTypeCardTMS(card.getNo()) == null ? "EPS" : CardPrefix.getTypeCardTMS(card.getNo());
 
                     } else {
                         HOST_CARD = CardPrefix.getTypeCard(card.getNo());
@@ -1734,6 +1737,7 @@ public class CardManager {
             REF2 = ref2;
             REF3 = ref3;
             Double amountAll = Double.valueOf(amount) + amountFee;
+            Log.d(TAG, "setImportAmountEPS: " + decimalFormat.format(amountAll));
             pboc2.importAmount(decimalFormat.format(amountAll));
             mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
             mBlockDataSend[52 - 1] = keyPin;
@@ -1776,7 +1780,7 @@ public class CardManager {
         Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
         Double amountFee1 = (Double.valueOf(AMOUNT) * fee) / 100;
         Double amountAll = Double.valueOf(amount) + amountFee1;
-        Log.d(TAG, "setDataSalePINTMS amount: " + amount + " fee : " + fee + " amountFee1 : " + amountFee1  + " amountAll : " + amountAll);
+        Log.d(TAG, "setDataSalePINTMS amount: " + amount + " fee : " + fee + " amountFee1 : " + amountFee1 + " amountAll : " + amountAll);
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
         mBlockDataSend[11 - 1] = calNumTraceNo(traceIdNo);
 //        mBlockDataSend[14 - 1] = card.getExpireDate();        // Paul_20180522
@@ -2010,7 +2014,7 @@ public class CardManager {
         Double amountAll = Double.valueOf(transTemp.getAmount()) + amountFee1;
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
         AMOUNT = transTemp.getAmount();
-        mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceIdPlus(context, "TMS"));
+        mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "TMS"));
         mBlockDataSend[22 - 1] = transTemp.getPointServiceEntryMode();
         if (transTemp.getApplicationPAN() != null) {
             mBlockDataSend[23 - 1] = transTemp.getApplicationPAN();
@@ -2140,11 +2144,9 @@ public class CardManager {
                 } else {
                     invoiceNumber = Preference.getInstance(context).getValueString(Preference.KEY_INVOICE_NUMBER_EPS);
                 }
-                if (HOST_CARD.equalsIgnoreCase("EPS")) {
-                    String f60 = "0200" + calNumTraceNo(CardPrefix.geTraceIdPlus(context, HOST_CARD)) + BlockCalculateUtil.hexToString(tcUpload.get(tcUploadPosition).getRefNo());
-                    mBlockDataSend[60 - 1] = CardPrefix.calLen(String.valueOf(f60.length()), 4) + BlockCalculateUtil.getHexString(f60);
-
-                }
+                String traceNo = String.valueOf(Integer.valueOf(tcUpload.get(tcUploadPosition).getTraceNo()) - 1);
+                String f60 = "0200" + CardPrefix.calLen(traceNo, 6) + BlockCalculateUtil.hexToString(tcUpload.get(tcUploadPosition).getRefNo());
+                mBlockDataSend[60 - 1] = CardPrefix.calLen(String.valueOf(f60.length()), 4) + BlockCalculateUtil.getHexString(f60);
                 mBlockDataSend[62 - 1] = getLength62(String.valueOf(calNumTraceNo(invoiceNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber));
                 onLineNow = true;
                 TPDU = CardPrefix.getTPDU(context, HOST_CARD);
@@ -2561,7 +2563,7 @@ public class CardManager {
         if (transTemp.size() > 0) {
             batchUploadSize = transTemp.size();
 //            for (int i = 0; i < transTemp.size(); i++) {
-            traceIdNo = CardPrefix.geTraceIdPlus(context, HOST_CARD);
+            traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
             Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
             amountAll += Float.valueOf(transTemp.get(batchUpload).getAmount());
             mBlockDataSend = new String[64];
@@ -2651,7 +2653,7 @@ public class CardManager {
         if (transTemp.size() > 0) {
             Log.d(TAG, "batchOffEPS batchUpload : " + batchUpload + " transTemp.size() : " + transTemp.size());
             batchUploadSize = transTemp.size();
-            traceIdNo = CardPrefix.geTraceIdPlus(context, HOST_CARD);
+            traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
             Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
             Log.d(TAG, "batchOffEPS batchUpload: " + batchUpload);
             amountAll += Double.valueOf(transTemp.get(batchUpload).getAmount());
@@ -2738,7 +2740,7 @@ public class CardManager {
         if (transTemp.size() > 0) {
             Log.d(TAG, "batchTMS: " + batchUploadSize + " batchUpload" + batchUpload);
             batchUploadSize = transTemp.size();
-            traceIdNo = CardPrefix.geTraceIdPlus(context, HOST_CARD);
+            traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
             Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
 //            amountAll += Float.valueOf(transTemp.get(batchUpload).getAmount());
             mBlockDataSend = new String[64];
@@ -2828,7 +2830,7 @@ public class CardManager {
         mBlockDataSend[2 - 1] = card.getNo().length() + card.getNo();
         mBlockDataSend[3 - 1] = "490000";
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(Double.valueOf(AMOUNT) + amountFee));
-        mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceIdPlus(context, "TMS"));
+        mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "TMS"));
         mBlockDataSend[12 - 1] = time;
         mBlockDataSend[13 - 1] = dateTime;
         mBlockDataSend[22 - 1] = f22;
@@ -2879,7 +2881,7 @@ public class CardManager {
         String cardNo = card.getNo();
         String feeAmount = CardPrefix.calLen(decimalFormat.format(amountFee).replace(".", ""), 10);
         Double feeDou = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
-        String feeRate = CardPrefix.calLen(String.valueOf(decimalFormat.format(feeDou)).replace(".",""), 4);
+        String feeRate = CardPrefix.calLen(String.valueOf(decimalFormat.format(feeDou)).replace(".", ""), 4);
         Log.d(TAG, "setOnlineUploadCredit feeRate : " + feeRate);
         String feeType = "F";
         String terId = CardPrefix.getTerminalId(context, HOST_CARD);
@@ -2937,7 +2939,7 @@ public class CardManager {
         mBlockDataSend[2 - 1] = transTemp.getCardNo().length() + transTemp.getCardNo();
         mBlockDataSend[3 - 1] = "490000";
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
-        mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceIdPlus(context, "TMS"));
+        mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "TMS"));
         mBlockDataSend[12 - 1] = time;
         mBlockDataSend[13 - 1] = dateTime;
         mBlockDataSend[22 - 1] = f22;
@@ -2977,7 +2979,7 @@ public class CardManager {
         String msgV = Preference.getInstance(context).getValueString(Preference.KEY_MESSAGE_VERSION);
         String transactionC = "8065";
         String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, HOST_CARD), 8);
-        String transactionNo = "00000000";
+        String transactionNo = CardPrefix.calLen(transTemp.getDe11OnlineTMS(), 8);
         String comCode = CardPrefix.calSpenLen(Preference.getInstance(context).getValueString(Preference.KEY_TAG_1001), 10);
         String ref1 = CardPrefix.calSpenLen(Preference.getInstance(context).getValueString(Preference.KEY_TAG_1002), 50);
         String ref2 = CardPrefix.calSpenLen(Preference.getInstance(context).getValueString(Preference.KEY_TAG_1003), 50);
@@ -3042,7 +3044,7 @@ public class CardManager {
                 mBlockDataSend[2 - 1] = transTemp.get(i).getCardNo().length() + transTemp.get(i).getCardNo();
                 mBlockDataSend[3 - 1] = "480000";
                 mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
-                mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceIdPlus(context, "TMS"));
+                mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "TMS"));
                 mBlockDataSend[12 - 1] = time;
                 mBlockDataSend[13 - 1] = dateTime.substring(4, 8);
                 mBlockDataSend[22 - 1] = transTemp.get(i).getPointServiceEntryMode();
@@ -3564,6 +3566,10 @@ public class CardManager {
                         }
                     }
                 }
+            } else if (receivedMessageType.equals("0330") && mBlockDataSend[3 - 1].equals("490000")) {
+                Log.d(TAG, "updateTransactionDe11Online: ");
+                updateTransactionDe11Online();
+
             } else if (response_code.equals("95")) {
                 Log.d(TAG, "dealWithTheResponse: " + response_code);
                 setBatchUpload();
@@ -3577,7 +3583,7 @@ public class CardManager {
                     Log.d(TAG, "Batch Upload 2 : ");
                     batchUpload = 0;
                     batchUploadSize = 0;
-                    String traceIdNo = CardPrefix.geTraceIdPlus(context, HOST_CARD);
+                    String traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
                     String batchNumber = CardPrefix.getBatch(context, HOST_CARD);
                     mBlockDataSend = new String[64];
                     mBlockDataSend[3 - 1] = "960000";
@@ -3724,6 +3730,24 @@ public class CardManager {
                 }
                 MTI = "";
             }
+        }
+    }
+
+    private void updateTransactionDe11Online() {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    TransTemp transTemp = realm.where(TransTemp.class).equalTo("id", saleId).findFirst();
+                    if (transTemp != null) {
+                        transTemp.setDe11OnlineTMS(mBlockDataSend[11 - 1]);
+                        realm.copyFromRealm(transTemp);
+                    }
+                }
+            });
+        } finally {
+            realm.close();
         }
     }
 
@@ -3914,8 +3938,10 @@ public class CardManager {
         int nextId;
         if (currentId == null) {
             nextId = 1;
+            saleId = nextId;
         } else {
             nextId = currentId.intValue() + 1;
+            saleId = nextId;
         }
         TransTemp transTemp = realm.createObject(TransTemp.class, nextId);
         transTemp.setAppid("000001");
@@ -3928,7 +3954,7 @@ public class CardManager {
         String tTime = new SimpleDateFormat("HH:mm:ss").format(cDate);
         transTemp.setTransTime(tTime);
         String amountAll = String.valueOf(Double.valueOf(AMOUNT) + amountFee);
-        Log.d(TAG, "insertTransaction amountAll : " + amountAll + " AMOUNT : " +Float.valueOf(AMOUNT) + " amountFee : " + amountFee);
+        Log.d(TAG, "insertTransaction amountAll : " + amountAll + " AMOUNT : " + Float.valueOf(AMOUNT) + " amountFee : " + amountFee);
         transTemp.setAmount(AMOUNT);
         transTemp.setCardNo(CARD_NO);
         transTemp.setCardType("0"); //cardType == REFUND ? "1" : "0"
@@ -4218,7 +4244,7 @@ public class CardManager {
                                            String ecr,
                                            String mBlock23,
                                            String pin, String f22, double amountFee) {
-        String traceIdNo = CardPrefix.geTraceIdPlus(context, HOST_CARD);
+        String traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
         String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
 
         try {
