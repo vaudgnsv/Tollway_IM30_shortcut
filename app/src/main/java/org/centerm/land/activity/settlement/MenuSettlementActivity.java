@@ -1,6 +1,7 @@
 package org.centerm.land.activity.settlement;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,6 +14,7 @@ import android.os.RemoteException;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,12 +25,14 @@ import android.widget.TextView;
 
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
 import com.centerm.smartpos.constant.Constant;
+import com.google.zxing.qrcode.encoder.QRCode;
 
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.adapter.MenuSettlementAdapter;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
+import org.centerm.land.database.QrCode;
 import org.centerm.land.database.TransTemp;
 import org.centerm.land.utility.Preference;
 import org.centerm.land.utility.Utility;
@@ -72,7 +76,8 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
     private TextView voidSaleAmountLabel = null;
     private TextView cardCountLabel = null;
     private TextView cardAmountLabel = null;
-
+    private View qrView;
+    private int status = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +102,10 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
             @Override
             public void onSettlementSuccess() {
                 dialogWaiting.dismiss();
-                Intent intent = new Intent(MenuSettlementActivity.this,SlipSettlementActivity.class);
-                intent.putExtra(KEY_TYPE_HOST,typeHost);
+                Intent intent = new Intent(MenuSettlementActivity.this, SlipSettlementActivity.class);
+                intent.putExtra(KEY_TYPE_HOST, typeHost);
                 startActivity(intent);
-                overridePendingTransition(0,0);
+                overridePendingTransition(0, 0);
             }
 
             @Override
@@ -117,20 +122,22 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
             @Override
             public void onResponseCode(final String response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialogWaiting != null) {
-                            dialogWaiting.dismiss();
-                        }
-                        Utility.customDialogAlert(MenuSettlementActivity.this, response, new Utility.OnClickCloseImage() {
-                            @Override
-                            public void onClickImage(Dialog dialog) {
-                                dialog.dismiss();
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialogWaiting != null) {
+                                dialogWaiting.dismiss();
                             }
-                        });
-                    }
-                });
+                            Utility.customDialogAlert(MenuSettlementActivity.this, response, new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
             }
 
             @Override
@@ -140,80 +147,80 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
 
             @Override
             public void onConnectTimeOut() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialogWaiting != null) {
-                            dialogWaiting.dismiss();
-                        }
-                        Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                            @Override
-                            public void onClickImage(Dialog dialog) {
-                                dialog.dismiss();
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialogWaiting != null) {
+                                dialogWaiting.dismiss();
                             }
-                        });
-                    }
-                });
+                            Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
             }
 
             @Override
             public void onTransactionTimeOut() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (dialogWaiting != null) {
-                            dialogWaiting.dismiss();
-                        }
-                        Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                            @Override
-                            public void onClickImage(Dialog dialog) {
-                                dialog.dismiss();
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialogWaiting != null) {
+                                dialogWaiting.dismiss();
                             }
-                        });
-                    }
-                });
+                            Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
 
-        Dialog tagView = new Dialog(this);
-        tagView.setContentView(R.layout.view_slip_settlement);
-        tagView.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        tagView.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        settlementLinearLayout = tagView.findViewById(R.id.settlementLinearLayout);
-        dateLabel = tagView.findViewById(R.id.dateLabel);
-        timeLabel = tagView.findViewById(R.id.timeLabel);
-        midLabel = tagView.findViewById(R.id.midLabel);
-        tidLabel = tagView.findViewById(R.id.tidLabel);
-        batchLabel = tagView.findViewById(R.id.batchLabel);
-        hostLabel = tagView.findViewById(R.id.hostLabel);
-        saleCountLabel = tagView.findViewById(R.id.saleCountLabel);
-        saleTotalLabel = tagView.findViewById(R.id.saleTotalLabel);
-        voidSaleCountLabel = tagView.findViewById(R.id.voidSaleCountLabel);
-        voidSaleAmountLabel = tagView.findViewById(R.id.voidSaleAmountLabel);
-        cardCountLabel = tagView.findViewById(R.id.cardCountLabel);
-        cardAmountLabel = tagView.findViewById(R.id.cardAmountLabel);
+        LayoutInflater inflater =
+                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        qrView = inflater.inflate(R.layout.view_slip_settlement, null);
+        settlementLinearLayout = qrView.findViewById(R.id.settlementLinearLayout);
+        dateLabel = qrView.findViewById(R.id.dateLabel);
+        timeLabel = qrView.findViewById(R.id.timeLabel);
+        midLabel = qrView.findViewById(R.id.midLabel);
+        tidLabel = qrView.findViewById(R.id.tidLabel);
+        batchLabel = qrView.findViewById(R.id.batchLabel);
+        hostLabel = qrView.findViewById(R.id.hostLabel);
+        saleCountLabel = qrView.findViewById(R.id.saleCountLabel);
+        saleTotalLabel = qrView.findViewById(R.id.saleTotalLabel);
+        voidSaleCountLabel = qrView.findViewById(R.id.voidSaleCountLabel);
+        voidSaleAmountLabel = qrView.findViewById(R.id.voidSaleAmountLabel);
+        cardCountLabel = qrView.findViewById(R.id.cardCountLabel);
+        cardAmountLabel = qrView.findViewById(R.id.cardAmountLabel);
     }
 
     private void setViewSlip() {
-        if (realm == null) {
-            realm = Realm.getDefaultInstance();
-        }
-        RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag","N").equalTo("hostTypeCard",typeHost).findAll();
+        RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll();
         float amountSale = 0;
         float amountVoid = 0;
         for (int i = 0; i < transTemp.size(); i++) {
             amountSale += Float.valueOf(transTemp.get(i).getAmount());
         }
-        RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("voidFlag","Y").equalTo("hostTypeCard",typeHost).findAll();
+        RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("voidFlag", "Y").equalTo("hostTypeCard", typeHost).findAll();
         for (int i = 0; i < transTempVoid.size(); i++) {
             amountVoid += Float.valueOf(transTempVoid.get(i).getAmount());
         }
         Date date = new Date();
 
-        voidSaleCountLabel.setText(transTempVoid.size()+"");
-        voidSaleAmountLabel.setText(String.format("%.2f",amountVoid));
+        voidSaleCountLabel.setText(transTempVoid.size() + "");
+        voidSaleAmountLabel.setText(String.format("%.2f", amountVoid));
         cardCountLabel.setText((transTemp.size() + transTempVoid.size()) + "");
-        cardAmountLabel.setText(String.format("%.2f",amountVoid + amountSale));
+        cardAmountLabel.setText(String.format("%.2f", amountVoid + amountSale));
         dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
         dateLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
         if (typeHost.equalsIgnoreCase("POS")) {
@@ -232,8 +239,6 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
             tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
             midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
         }
-        realm.close();
-        realm = null;
         doPrinting(getBitmapFromView(settlementLinearLayout));
         cardManager.deleteTransTemp();
     }
@@ -253,10 +258,10 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         if (transTemp.size() > 0) {
                             if (transTempVoidFlag.size() != 0) {
 //                                cardManager.setDataSettlementAndSend("POS");
-                                cardManager.setCheckTCUpload("POS",true);
+                                cardManager.setCheckTCUpload("POS", true);
                             } else {
 //                                cardManager.setDataSettlementAndSend("POS");
-                                cardManager.setCheckTCUpload("POS",true);
+                                cardManager.setCheckTCUpload("POS", true);
                             }
                             dialogWaiting.show();
                         } else {
@@ -273,7 +278,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         if (transTemp.size() > 0) {
                             if (transTempVoidFlag.size() != 0) {
 //                                cardManager.setDataSettlementAndSendEPS();
-                                cardManager.setCheckTCUpload("EPS",true);
+                                cardManager.setCheckTCUpload("EPS", true);
                             } else {
 //                                cardManager.setDataSettlementAndSendEPS();
                                 cardManager.setCheckTCUpload("EPS", true);
@@ -305,6 +310,8 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                                 }
                             });
                         }
+                    } else if (position == 3) {
+                        selectSettlementQR();
                     }
                 }
             });
@@ -316,9 +323,10 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         } else {
             menuList.clear();
         }
-        menuList.add("POS");
-        menuList.add("EPS");
-        menuList.add("TMS");
+        menuList.add("KTB Off us");
+        menuList.add("BASE24 EPS");
+        menuList.add("KTB On Us");
+        menuList.add("QR");
         menuSettlementAdapter.setItem(menuList);
         menuSettlementAdapter.notifyDataSetChanged();
 
@@ -375,6 +383,86 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         ImageView waitingImage = dialogWaiting.findViewById(R.id.waitingImage);
         AnimationDrawable animationDrawable = (AnimationDrawable) waitingImage.getBackground();
         animationDrawable.start();
+    }
+
+    private void selectSettlementQR() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                RealmResults<QrCode> qrCode = realm.where(QrCode.class).equalTo("statusSuccess", "1").findAll();
+                Double amountSaleQr = 0.0;
+                float amountVoidQr = 0;
+                if (qrCode.size() > 0 ) {
+                    status = 0;
+                    for (int i = 0; i < qrCode.size(); i++) {
+                        amountSaleQr += Double.valueOf(qrCode.get(i).getAmount());
+                    }
+
+                    Date date = new Date();
+                    voidSaleCountLabel.setText("0");
+                    voidSaleAmountLabel.setText(String.format("%.2f", 0.0));
+                    saleCountLabel.setText(qrCode.size() + "");
+                    saleTotalLabel.setText(String.format("%.2f", amountSaleQr));
+                    cardCountLabel.setText(qrCode.size() + "");
+                    cardAmountLabel.setText(String.format("%.2f", amountSaleQr));
+                    dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
+                    timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+                    hostLabel.setText("OFFUS POS");
+                    batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+                    tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
+                    midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_QR,dateLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TIME_QR,timeLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_QR,saleTotalLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_QR,saleCountLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_QR,voidSaleCountLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_QR,voidSaleAmountLabel.getText().toString());
+                    setMeasureQr();
+                } else {
+                    status = 1;
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                if (status == 0) {
+                    deleteQrAll();
+                    doPrinting(getBitmapFromView(settlementLinearLayout));
+                } else {
+                    Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
+    private void deleteQrAll() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<QrCode> qrCode = realm.where(QrCode.class).findAll();
+                qrCode.deleteAllFromRealm();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "onSuccess: ");
+            }
+        });
+
+
+    }
+
+    private void setMeasureQr() {
+        qrView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        qrView.layout(0, 0, qrView.getMeasuredWidth(), qrView.getMeasuredHeight());
     }
 
     public Bitmap getBitmapFromView(View view) {

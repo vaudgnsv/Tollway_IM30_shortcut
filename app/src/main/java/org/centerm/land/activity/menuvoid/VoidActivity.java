@@ -312,7 +312,16 @@ public class VoidActivity extends SettingToolbarActivity {
                 public void onClick(View v) {
                     int position = (int) v.getTag();
                     transTemp = voidAdapter.getItem(position);
-                    customDialogPin(transTemp.getEcr(), transTemp.getAmount(), transTemp);
+                    if (transTemp.getVoidFlag().equalsIgnoreCase("N")) {
+                        customDialogPin(transTemp.getEcr(), transTemp.getAmount(), transTemp);
+                    } else {
+                        Utility.customDialogAlert(VoidActivity.this, "รายการนี้ยกเลิกแล้ว", new Utility.OnClickCloseImage() {
+                            @Override
+                            public void onClickImage(Dialog dialog) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
                 }
             });
         } else {
@@ -323,7 +332,7 @@ public class VoidActivity extends SettingToolbarActivity {
         } else {
             transTempList.clear();
         }
-            transTempList.addAll(realm.copyFromRealm(realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll()));
+            transTempList.addAll(realm.copyFromRealm(realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).findAll()));
             voidAdapter.setItem(transTempList);
             voidAdapter.notifyDataSetChanged();
 
@@ -398,7 +407,6 @@ public class VoidActivity extends SettingToolbarActivity {
                     dialogInvoice.dismiss();
                     cardManager.setDataVoid(transTemp);
 //                    cardManager.insertReversalVoidTransaction(transTemp);
-                    Toast.makeText(VoidActivity.this, "apprCodeBox", Toast.LENGTH_SHORT).show();
                 } else {
                     Utility.customDialogAlert(VoidActivity.this, "ApprCode ไม่ตรงกัน ", new Utility.OnClickCloseImage() {
                         @Override

@@ -52,6 +52,15 @@
             android:text="KTB On Us"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
+        <Button
+            android:id="@+id/qrBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="Qr"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </RelativeLayout>

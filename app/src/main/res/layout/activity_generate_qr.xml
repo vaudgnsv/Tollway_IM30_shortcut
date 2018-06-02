@@ -66,13 +66,14 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/btn_edit_text_background"
                 android:gravity="center"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:inputType="number"
-                android:minHeight="60dp"
+                android:minHeight="40dp"
                 android:maxLength="20"
                 android:padding="8dp"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/black"
-                android:textSize="22sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
 
@@ -102,12 +103,13 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/btn_edit_text_background"
                 android:gravity="center"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:inputType="number"
-                android:minHeight="60dp"
+                android:minHeight="40dp"
                 android:padding="8dp"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/black"
-                android:textSize="35sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -143,12 +145,23 @@
                 android:text="ชำระเงินสำเร็จ"
                 android:textColor="@android:color/black" />
         </LinearLayout>
-
-        <ImageView
-            android:layout_margin="3dp"
-            android:id="@+id/qrImage"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_margin="3dp"
+                android:id="@+id/qrImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/thaiQrImage"
+                android:layout_gravity="center"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+        </FrameLayout>
+
 
     </LinearLayout>
 

@@ -63,6 +63,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/linearLayoutTestHost"
                 android:layout_margin="8dp"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -75,7 +76,7 @@
                     android:layout_height="wrap_content" />
                 <TextView
                     android:textColor="@android:color/white"
-                    android:text="Thai ID Card"
+                    android:text="Test Host"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>

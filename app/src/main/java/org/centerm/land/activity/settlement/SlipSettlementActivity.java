@@ -1,6 +1,7 @@
 package org.centerm.land.activity.settlement;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,16 +15,20 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
+import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
 import com.centerm.smartpos.constant.Constant;
 
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
+import org.centerm.land.activity.MenuServiceActivity;
+import org.centerm.land.activity.SlipTemplateActivity;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.TransTemp;
 import org.centerm.land.utility.Preference;
@@ -64,6 +69,10 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
     private AidlPrinter printDev;
 
     private Dialog dialogAlertLoading;
+    private Dialog dialogOutOfPaper;
+    private Button okBtn;
+    private TextView msgLabel;
+    private Bitmap bitmapOld = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +122,7 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
         merchantName3Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
 
         customDialogAlertLoading();
+        customDialogOutOfPaper();
 
         setViewSlip();
         new CountDownTimer(2000, 1000) {
@@ -137,7 +147,7 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
         dialogAlertLoading.setContentView(R.layout.dialog_custom_alert_loading);
         dialogAlertLoading.setCancelable(false);
         dialogAlertLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogAlertLoading.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogAlertLoading.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         dialogAlertLoading.show();
     }
 
@@ -163,24 +173,44 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
         saleCountLabel.setText(transTemp.size()+"");
         saleTotalLabel.setText(String.format("%.2f",amountSale));
         cardCountLabel.setText((transTemp.size() + transTempVoid.size()) + "");
-        cardAmountLabel.setText(String.format("%.2f",amountVoid + amountSale));
+        cardAmountLabel.setText(String.format("%.2f",amountSale));
         dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
         timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+
+
         if (typeHost.equalsIgnoreCase("POS")) {
-            hostLabel.setText("OFFUS POS");
+            hostLabel.setText("KTB Off us");
             batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_POS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_POS,dateLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_POS,timeLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_POS,saleTotalLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_POS,saleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_POS,voidSaleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS,voidSaleAmountLabel.getText().toString());
         } else if (typeHost.equalsIgnoreCase("EPS")) {
-            hostLabel.setText("OFFUS EPS");
+            hostLabel.setText("BASE24 EPS");
             batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_EPS,dateLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_EPS,timeLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_EPS,saleTotalLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_EPS,saleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_EPS,voidSaleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS,voidSaleAmountLabel.getText().toString());
         } else {
-            hostLabel.setText("KTB ONUS");
+            hostLabel.setText("KTB On Us");
             batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_TMS,dateLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_TMS,timeLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_TMS,saleTotalLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_TMS,saleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_TMS,voidSaleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_TMS,voidSaleAmountLabel.getText().toString());
         }
         realm.close();
         realm = null;
@@ -199,18 +229,58 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
     }
 
     public void doPrinting(final Bitmap slip) {
+        bitmapOld = slip;
         new Thread() {
             @Override
             public void run() {
                 try {
                     printDev.initPrinter();
-                    int ret = printDev.printBmpFastSync(slip, Constant.ALIGN.CENTER);
-//                    int ret = printDev.printBarCodeSync("asdasd");
-                    Log.d(TAG, "after call printData ret = " + ret);
+                    printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
+                        @Override
+                        public void onPrintFinish() throws RemoteException {
+                            Intent intent = new Intent(SlipSettlementActivity.this, MenuServiceActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                            overridePendingTransition(0, 0);
+                        }
+
+                        @Override
+                        public void onPrintError(int i) throws RemoteException {
+
+                        }
+
+                        @Override
+                        public void onPrintOutOfPaper() throws RemoteException {
+                            dialogOutOfPaper.show();
+                        }
+                    });
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             }
         }.start();
+    }
+
+    private void customDialogOutOfPaper() {
+        dialogOutOfPaper = new Dialog(this);
+        dialogOutOfPaper.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogOutOfPaper.setContentView(R.layout.dialog_custom_printer);
+        dialogOutOfPaper.setCancelable(false);
+        dialogOutOfPaper.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogOutOfPaper.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        okBtn = dialogOutOfPaper.findViewById(R.id.okBtn);
+        msgLabel = dialogOutOfPaper.findViewById(R.id.msgLabel);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doPrinting(bitmapOld);
+                dialogOutOfPaper.dismiss();
+            }
+        });
+
     }
 }

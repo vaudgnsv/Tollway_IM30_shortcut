@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_vertical"
+        android:padding="20dp"
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:imeOptions="actionSearch"
+            android:padding="8dp"
+            android:hint="invoice 6 หลัก"
+            android:id="@+id/invoiceEt"
+            android:layout_weight="1.7"
+            android:inputType="number"
+            android:minHeight="50dp"
+            android:background="@drawable/under_line_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/searchInvoiceImage"
+            android:layout_weight="0.3"
+            android:padding="8dp"
+            android:background="@drawable/search_background"
+            android:src="@drawable/search_icon"
+            android:layout_width="0dp"
+            android:layout_height="50dp" />
+    </LinearLayout>
+
+</LinearLayout>

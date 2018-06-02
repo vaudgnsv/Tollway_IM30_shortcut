@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <include layout="@layout/content_toolbar_setting"/>
+    <include layout="@layout/content_toolbar"/>
     <RelativeLayout
         android:background="@color/color_background"
         android:layout_width="match_parent"

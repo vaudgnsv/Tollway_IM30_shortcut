@@ -95,6 +95,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
 
     private void initWidget() {
         customDialogAlert();
+
         cardNoLabel = findViewById(R.id.cardNoLabel);
 
         oneClickFrameLayout = findViewById(R.id.oneClickFrameLayout);
@@ -114,8 +115,8 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         exitClickFrameLayout = findViewById(R.id.exitClickFrameLayout);
         priceLabel = findViewById(R.id.priceLabel);
         if (card != null) {
-            String cutCardStart = card.getNo().substring(0,6);
-            String cutCardEnd = card.getNo().substring(12,card.getNo().length());
+            String cutCardStart = card.getNo().substring(0, 6);
+            String cutCardEnd = card.getNo().substring(12, card.getNo().length());
             cardNoLabel.setText(cutCardStart + "XXXXXX" + cutCardEnd);
         }
 
@@ -291,10 +292,21 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
     }
 
     private void submitAmount() {
-        if (!cardManager.getHostCard().equalsIgnoreCase("POS")) {
-            dialogInputPin.show();
+        if (!priceLabel.getText().toString().equalsIgnoreCase("0.00") &&
+                !priceLabel.getText().toString().equalsIgnoreCase("0")) {
+            if (!cardManager.getHostCard().equalsIgnoreCase("POS")) {
+                dialogInputPin.show();
+                pinBox.requestFocus();
+            } else {
+                dialogParaEndble.show();
+            }
         } else {
-            dialogParaEndble.show();
+            Utility.customDialogAlert(CalculatePriceActivity.this, "กรุณาใส่จำนวนเงิน", new Utility.OnClickCloseImage() {
+                @Override
+                public void onClickImage(Dialog dialog) {
+                    dialog.dismiss();
+                }
+            });
         }
     }
 
@@ -304,6 +316,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         dialogInputPin.setCancelable(false);
         dialogInputPin.setContentView(R.layout.dialog_custom_input_pin);
         dialogInputPin.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogInputPin.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialogInputPin.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         pinBox = dialogInputPin.findViewById(R.id.pinBox);
         okBtn = dialogInputPin.findViewById(R.id.okBtn);
@@ -333,6 +346,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         dialogParaEndble.setCancelable(false);
         dialogParaEndble.setContentView(R.layout.dialog_custom_para_enable);
         dialogParaEndble.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogParaEndble.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialogParaEndble.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         LinearLayout comCodeLinearLayout = dialogParaEndble.findViewById(R.id.comCodeLinearLayout);
         final EditText comCodeBox = dialogParaEndble.findViewById(R.id.comCodeBox);
@@ -354,6 +368,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 comCodeLinearLayout.setVisibility(View.VISIBLE);
                 comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
                 comCodeBox.setEnabled(true);
+                comCodeBox.requestFocus();
             }
             if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("3")) {
                 ref1LinearLayout.setVisibility(View.VISIBLE);
@@ -363,6 +378,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 ref1LinearLayout.setVisibility(View.VISIBLE);
                 ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
                 ref1Box.setEnabled(true);
+                ref1Box.requestFocus();
             }
             if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("3")) {
                 ref2LinearLayout.setVisibility(View.VISIBLE);
@@ -372,6 +388,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 ref2LinearLayout.setVisibility(View.VISIBLE);
                 ref2Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1003));
                 ref2Box.setEnabled(true);
+                ref2Box.requestFocus();
             }
             if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("3")) {
                 ref3LinearLayout.setVisibility(View.VISIBLE);
@@ -381,6 +398,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 ref3LinearLayout.setVisibility(View.VISIBLE);
                 ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
                 ref3Box.setEnabled(true);
+                ref3Box.requestFocus();
             }
         } else {
             Utility.customDialogAlert(CalculatePriceActivity.this, "กรุณา First Settlement ก่อนทำรายการ", new Utility.OnClickCloseImage() {
@@ -413,7 +431,6 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 } else {
                     ref1Box.setError("กรุณากรอกร Ref1");
                 }
-
             }
         });
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -422,6 +439,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 dialogParaEndble.dismiss();
             }
         });
+
     }
 
     @Override

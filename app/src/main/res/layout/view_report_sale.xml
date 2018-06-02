@@ -29,6 +29,7 @@
             android:padding="4dp">
 
             <LinearLayout
+                android:padding="8dp"
                 android:id="@+id/slipLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -138,61 +139,61 @@
                 </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
-                    android:text="MID : "
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
-                <TextView
-                    android:layout_weight="1.5"
-                    android:id="@+id/midLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
-                    android:text="3333333"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_weight="0.5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:text="MID : "
+                        android:textColor="@android:color/black"
+                        android:textSize="13sp" />
+                    <TextView
+                        android:layout_weight="1.5"
+                        android:id="@+id/midLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:gravity="end"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:text="3333333"
+                        android:textColor="@android:color/black"
+                        android:textSize="13sp" />
+                </LinearLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-                <TextView
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
-                    android:text="TRACE : "
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
-                <TextView
-                    android:layout_weight="1.5"
-                    android:id="@+id/traceLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
-                    android:gravity="end"
-                    android:text="33333333"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
-            </LinearLayout>
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <TextView
+                        android:layout_weight="0.5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:text="TRACE : "
+                        android:textColor="@android:color/black"
+                        android:textSize="13sp" />
+                    <TextView
+                        android:layout_weight="1.5"
+                        android:id="@+id/traceLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/timeburnerbold"
+                        android:gravity="end"
+                        android:text="33333333"
+                        android:textColor="@android:color/black"
+                        android:textSize="13sp" />
+                </LinearLayout>
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -574,7 +575,6 @@
                     android:background="@android:color/black" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/sigatureLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -589,7 +589,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="40dp"
                     android:fontFamily="@font/timeburnerbold"
                     android:text="I ACKNOWLEDGE SATISFACTORY RECEIPT
 GOODS/SERVICES AND AGREE TO PAY
@@ -633,11 +633,37 @@ TOTAL AMOUNT"
                     android:layout_gravity="center"
                     android:layout_marginBottom="30dp"
                     android:layout_marginTop="20dp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="**** CUSTOMER COPY ****"
+                    android:fontFamily="@font/timeburnernormal"
+                    android:text="**** MERCHANT COPY ****"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
+
+                <View
+                    android:background="@android:color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+
+                <TextView
+                    android:textSize="14sp"
+                    android:text="TAX INVOICE (ABB)"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:gravity="center"
+                    android:textSize="8sp"
+                    android:text="35 SUKHUMVIT ROAD,KLONG TOEY NUA
+SUBDISTEICT,WATTANA DISTRICT,
+BANGKOK 10110 THAILAND
+TEL. 0-2255-2222 FAX. 0-2255-9391-3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:gravity="center"
+                    android:textSize="8sp"
+                    android:text="POS ID:2222"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
@@ -657,6 +683,6 @@ TOTAL AMOUNT"
 
     </RelativeLayout>
 
-    <!--<include layout="@layout/content_exit" />-->
+    <include layout="@layout/content_exit" />
 
 </RelativeLayout>

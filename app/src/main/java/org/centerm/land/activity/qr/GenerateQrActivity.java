@@ -3,6 +3,7 @@ package org.centerm.land.activity.qr;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,12 +28,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
+import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
 import com.centerm.smartpos.constant.Constant;
 import com.google.gson.JsonElement;
 
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
+import org.centerm.land.activity.MenuServiceActivity;
+import org.centerm.land.activity.SlipTemplateActivity;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.QrCode;
 import org.centerm.land.helper.CardPrefix;
@@ -45,6 +49,7 @@ import org.centerm.land.utility.Utility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -102,6 +107,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     private String dateFormat;
     private String dateFormatDef;
     private String timeFormat;
+    private ImageView thaiQrImage = null;
     private Dialog dialogQuestionPrint;
 
     private LinearLayout linearLayoutPrint = null;
@@ -135,6 +141,13 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     private View tagView;
     private View tagViewQr;
 
+    private int statusPrintFinish = 0;
+    private DecimalFormat decimalFormatShow;
+    private Dialog dialogOutOfPaper;
+    private Button okBtn;
+    private TextView msgLabel;
+    private Bitmap bitmapOld;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +160,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     @Override
     public void initWidget() {
 //        super.initWidget();
+        decimalFormatShow = new DecimalFormat("#,##0.00");
         cardManager = MainApplication.getCardManager();
         printDev = cardManager.getInstancesPrint();
         qrImage = findViewById(R.id.qrImage);
@@ -156,6 +170,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         ref1Box = findViewById(R.id.ref1Box);
         ref2Box = findViewById(R.id.ref2Box);
         linearLayoutPrint = findViewById(R.id.linearLayoutPrint);
+        thaiQrImage = findViewById(R.id.thaiQrImage);
 
         generatorBtn = findViewById(R.id.generatorBtn);
         qrSuccessBtn = findViewById(R.id.qrSuccessBtn);
@@ -167,6 +182,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         } else {
             ref2LinearLayout.setVisibility(View.GONE);
         }
+        customDialogOutOfPaper();
 
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -198,10 +214,11 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         tagView.layout(0, 0, tagView.getMeasuredWidth(), tagView.getMeasuredHeight());
     }
+
     private void setMeasureQr() {
         tagViewQr.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        tagViewQr.layout(0, 0, tagView.getMeasuredWidth(), tagViewQr.getMeasuredHeight());
+        tagViewQr.layout(0, 0, tagViewQr.getMeasuredWidth(), tagViewQr.getMeasuredHeight());
     }
 
 
@@ -209,18 +226,34 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.generatorBtn:
-                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//Hide:
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                if (!amountBox.getText().toString().trim().isEmpty()) {
-                    generatorQr();
-                } else {
+                View view = this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+                if (amountBox.getText().toString().trim().isEmpty()) {
                     Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอกจำนวนเงิน", new Utility.OnClickCloseImage() {
                         @Override
                         public void onClickImage(Dialog dialog) {
                             dialog.dismiss();
                         }
                     });
+                } else if (ref1Box.getText().toString().isEmpty()) {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref1", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else if (ref2LinearLayout.getVisibility() == View.VISIBLE && ref2Box.getText().toString().isEmpty()) {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref2", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else {
+                    generatorQr();
                 }
                 break;
             case R.id.qrSuccessBtn:
@@ -248,24 +281,28 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
 
                                 @Override
                                 public void onNext(Response<JsonElement> jsonElementResponse) {
-                                    Log.d(TAG, "onNext: " + jsonElementResponse);
-                                    Log.d(TAG, "onNext: " + jsonElementResponse.body());
-                                    Toast.makeText(GenerateQrActivity.this, "" + jsonElementResponse.body(), Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(GenerateQrActivity.this, "" + jsonElementResponse, Toast.LENGTH_SHORT).show();
                                     try {
-                                        JSONObject object = new JSONObject(jsonElementResponse.body().toString());
-                                        String code = object.getString("code");
-                                        if (code.equalsIgnoreCase("00000")) {
-//                                        slipSuccessLinearLayout.post(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//
-//                                                doPrinting(getBitmapFromView(slipSuccessLinearLayout));
-//                                            }
-//                                        });
-                                            selectQrSlip();
+                                        if (jsonElementResponse.body() != null) {
+                                            JSONObject object = new JSONObject(jsonElementResponse.body().toString());
+                                            String code = object.getString("code");
+                                            if (code.equalsIgnoreCase("00000")) {
+                                                selectQrSlip();
+                                            } else {
+                                                String dec = object.getString("desc");
+                                                Utility.customDialogAlert(GenerateQrActivity.this, dec, new Utility.OnClickCloseImage() {
+                                                    @Override
+                                                    public void onClickImage(Dialog dialog) {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+                                            }
                                         } else {
-
+                                            Utility.customDialogAlert(GenerateQrActivity.this, "ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้", new Utility.OnClickCloseImage() {
+                                                @Override
+                                                public void onClickImage(Dialog dialog) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -275,7 +312,12 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                                 @Override
                                 public void onError(Throwable e) {
                                     Log.d(TAG, "onError: " + e.getMessage());
-                                    Toast.makeText(GenerateQrActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Utility.customDialogAlert(GenerateQrActivity.this, "ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้", new Utility.OnClickCloseImage() {
+                                        @Override
+                                        public void onClickImage(Dialog dialog) {
+                                            dialog.dismiss();
+                                        }
+                                    });
                                 }
 
                                 @Override
@@ -293,7 +335,39 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 }
                 break;
             case R.id.linearLayoutPrint:
-                selectQr();
+                if (amountBox.getText().toString().isEmpty()) {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอกจำนวนเงิน", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else if (ref1Box.getText().toString().isEmpty()) {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref1", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else if (ref2LinearLayout.getVisibility() == View.VISIBLE && ref2Box.getText().toString().isEmpty()) {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref2", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else if (tagAll.isEmpty()) {
+                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณา Generator QR ก่อน", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                        }
+                    });
+                } else {
+                    linearLayoutPrint.setVisibility(View.INVISIBLE);
+                    linearLayoutPrint.setClickable(false);
+                    selectQr();
+                }
                 break;
         }
     }
@@ -301,6 +375,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     private void generatorQr() {
         if (!ref1Box.getText().toString().trim().isEmpty() && ref2SlipRelativeLayout.getVisibility() == View.GONE
                 || ref2SlipRelativeLayout.getVisibility() == View.VISIBLE && !ref1Box.getText().toString().trim().isEmpty() && !ref2Box.getText().toString().trim().isEmpty()) {
+            DecimalFormat decimalFormat = new DecimalFormat("###0.00");
             Date date = new Date();
             dateFormat = new SimpleDateFormat("dd/MM/yyyy").format(date);
             timeFormat = new SimpleDateFormat("hhMMss").format(date);
@@ -327,7 +402,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
             String tag30 = Utility.idValue("", "30", tagIn30);
             tagAll += tag30;
             tagAll = Utility.idValue(tagAll, "53", "764");
-            tagAll = Utility.idValue(tagAll, "54", amountBox.getText().toString());
+            tagAll = Utility.idValue(tagAll, "54", decimalFormat.format(Double.valueOf(amountBox.getText().toString())));
             tagAll = Utility.idValue(tagAll, "58", "TH");
             tagAll = Utility.idValue(tagAll, "59", nameCompany);
             String tagIn62 = Utility.idValue("", "07", qrTid);
@@ -337,7 +412,8 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
             tagAll += "6304";
             tagAll += Utility.CheckSumCrcCCITT(tagAll);
             Log.d(TAG, "initWidget: " + tagAll);
-            qrImage.setImageBitmap(Utility.createQRImage(tagAll, 300, 300));
+            qrImage.setImageBitmap(Utility.createQRImage(tagAll, 300, 300,GenerateQrActivity.this));
+//            thaiQrImage.setVisibility(View.VISIBLE);
             insertGenerateQr();
         } else {
 
@@ -348,7 +424,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                         dialog.dismiss();
                     }
                 });
-            } else if (ref2SlipRelativeLayout.getVisibility() == View.VISIBLE && ref1Box.getText().toString().trim().isEmpty()
+            } else if (ref2LinearLayout.getVisibility() == View.VISIBLE && ref1Box.getText().toString().trim().isEmpty()
                     || ref2Box.getText().toString().trim().isEmpty()) {
                 if (ref1Box.getText().toString().trim().isEmpty()) {
                     Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref1 ", new Utility.OnClickCloseImage() {
@@ -399,11 +475,6 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     }
 
     private void insertGenerateQr() {
-        try {
-            if (realm == null) {
-                realm = Realm.getDefaultInstance();
-            }
-
             Number currentId = realm.where(QrCode.class).max("id");
             if (currentId == null) {
                 nextId = 1;
@@ -428,6 +499,8 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                     qrCode.setNameCompany(nameCompany);
                     qrCode.setTextQrGenerateAll(tagAll);
                     qrCode.setAmount(amountBox.getText().toString());
+                    qrCode.setStatusPrint("0");
+                    qrCode.setStatusSuccess("0");
                     realm.copyFromRealm(qrCode);
                 }
             }, new Realm.Transaction.OnSuccess() {
@@ -440,19 +513,9 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 }
             });
 
-        } finally {
-            if (realm != null) {
-                realm.close();
-                realm = null;
-            }
-        }
     }
 
     private void selectQr() {
-        if (realm == null) {
-            realm = Realm.getDefaultInstance();
-        }
-
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -464,7 +527,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 dateLabel.setText(qrCode.getDate());
                 timeLabel.setText(qrCode.getTime());
                 comCodeLabel.setText(qrCode.getComCode());
-                amtThbLabel.setText(getString(R.string.slip_pattern_amount, qrCode.getAmount()));
+                amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
                 if (qrCode.getRef1() != null) {
                     ref1RelativeLayout.setVisibility(View.VISIBLE);
                     ref1Label.setText(qrCode.getRef1());
@@ -473,7 +536,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                     ref2RelativeLayout.setVisibility(View.VISIBLE);
                     ref2Label.setText(qrCode.getRef2());
                 }
-                qrSilpImage.setImageBitmap(Utility.createQRImage(qrCode.getTextQrGenerateAll(), 300, 300));
+                qrSilpImage.setImageBitmap(Utility.createQRImage(qrCode.getTextQrGenerateAll(), 300, 300,GenerateQrActivity.this));
 
                 qrTidSlipLabel.setText(qrCode.getQrTid());
                 billerSlipLabel.setText(qrCode.getBillerId());
@@ -481,14 +544,19 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 dateSlipLabel.setText(qrCode.getDate());
                 timeSlipLabel.setText(qrCode.getTime());
                 comCodeSlipLabel.setText(qrCode.getComCode());
-                amtThbSlipLabel.setText(getString(R.string.slip_pattern_amount, qrCode.getAmount()));
-                if (qrCode.getRef1() != null) {
+                amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
+                if (qrCode.getRef1() != null || !qrCode.getRef2().isEmpty()) {
                     ref1SlipRelativeLayout.setVisibility(View.VISIBLE);
                     ref1SlipLabel.setText(qrCode.getRef1());
                 }
-                if (qrCode.getRef2() != null) {
+                if (qrCode.getRef2() != null || !qrCode.getRef2().isEmpty()) {
                     ref2SlipRelativeLayout.setVisibility(View.VISIBLE);
                     ref2SlipLabel.setText(qrCode.getRef2());
+                }
+                QrCode qrCode = realm.where(QrCode.class).equalTo("id",nextId).findFirst();
+                if (qrCode != null) {
+                    qrCode.setStatusPrint("1");
+                    realm.copyToRealmOrUpdate(qrCode);
                 }
                 setMeasureQr();
             }
@@ -496,21 +564,13 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
             @Override
             public void onSuccess() {
                 Log.d(TAG, "onSuccess: ");
-
-                if (realm != null) {
-                    realm.close();
-                    realm = null;
-                }
                 dialogAlertLoading.show();
                 doPrinting(getBitmap(slipLinearLayout));
             }
         });
     }
-    private void selectQrSlip() {
-        if (realm == null) {
-            realm = Realm.getDefaultInstance();
-        }
 
+    private void selectQrSlip() {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -533,19 +593,21 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                     ref2SlipLabel.setText(qrCode.getRef2());
                 }
 
+                QrCode qrCode = realm.where(QrCode.class).equalTo("id",nextId).findFirst();
+                if (qrCode != null) {
+                    qrCode.setStatusSuccess("1");
+                    realm.copyToRealmOrUpdate(qrCode);
+                }
+
                 setMeasure();
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
                 Log.d(TAG, "onSuccess: ");
-
-                if (realm != null) {
-                    realm.close();
-                    realm = null;
-                }
                 dialogAlertLoading.show();
                 doPrinting(getBitmap(slipSuccessLinearLayout));
+                statusPrintFinish = 1;
             }
         });
     }
@@ -562,35 +624,91 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         return returnedBitmap;
     }
 
-    public Bitmap getBitmap(View v ) {
+    public Bitmap getBitmap(View v) {
         return getBitmapFromView(v);
     }
 
     public void doPrinting(final Bitmap slip) {
+        bitmapOld = slip;
         new Thread() {
             @Override
             public void run() {
                 try {
                     printDev.initPrinter();
-                    int ret = printDev.printBmpFastSync(slip, Constant.ALIGN.CENTER);
-//                    int ret = printDev.printBarCodeSync("asdasd");
-                    Log.d(TAG, "after call printData ret = " + ret);
+                    printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
+                        @Override
+                        public void onPrintFinish() throws RemoteException {
+                            if (dialogAlertLoading != null) {
+                                dialogAlertLoading.dismiss();
+                            }
+                            if (statusPrintFinish == 1) {
+                                Intent intent = new Intent(GenerateQrActivity.this, MenuServiceActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                                overridePendingTransition(0, 0);
+                            }
+                        }
 
-                    if (dialogAlertLoading != null) {
-                        dialogAlertLoading.dismiss();
-                    }
+                        @Override
+                        public void onPrintError(int i) throws RemoteException {
+
+                        }
+
+                        @Override
+                        public void onPrintOutOfPaper() throws RemoteException {
+                            dialogOutOfPaper.show();
+                        }
+                    });
+
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             }
         }.start();
     }
+
     public void customDialogAlertLoading() {
         dialogAlertLoading = new Dialog(this);
         dialogAlertLoading.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogAlertLoading.setContentView(R.layout.dialog_custom_alert_loading);
         dialogAlertLoading.setCancelable(false);
         dialogAlertLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogAlertLoading.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogAlertLoading.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+    }
+
+    private void customDialogOutOfPaper() {
+        dialogOutOfPaper = new Dialog(this);
+        dialogOutOfPaper.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogOutOfPaper.setContentView(R.layout.dialog_custom_printer);
+        dialogOutOfPaper.setCancelable(false);
+        dialogOutOfPaper.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogOutOfPaper.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        okBtn = dialogOutOfPaper.findViewById(R.id.okBtn);
+        msgLabel = dialogOutOfPaper.findViewById(R.id.msgLabel);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doPrinting(bitmapOld);
+                dialogOutOfPaper.dismiss();
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        realm = Realm.getDefaultInstance();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        realm.close();
     }
 }

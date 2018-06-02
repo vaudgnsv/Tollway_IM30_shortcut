@@ -39,7 +39,11 @@ public class VoidAdapter extends RecyclerView.Adapter<VoidAdapter.ViewHolder> {
         holder.traceLabel.setText(voidList.get(position).getEcr());
         holder.cardNoLabel.setText(voidList.get(position).getCardNo());
         holder.amountLabel.setText(decimalFormat.format(Float.valueOf(voidList.get(position).getAmount())));
-        holder.typeLabel.setText(voidList.get(position).getTransStat());
+        if (voidList.get(position).getVoidFlag().equals("Y")) {
+            holder.typeLabel.setText("VOID");
+        } else {
+            holder.typeLabel.setText("SALE");
+        }
         holder.timeLabel.setText(voidList.get(position).getTransTime());
         holder.voidLinearLayout.setTag(position);
     }

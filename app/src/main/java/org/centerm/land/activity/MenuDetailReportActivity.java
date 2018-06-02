@@ -1,7 +1,8 @@
-package org.centerm.land.activity.menuvoid;
+package org.centerm.land.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.os.RemoteException;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,21 +22,27 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
+import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
 import com.centerm.smartpos.constant.Constant;
 
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.adapter.MenuReportAdapter;
+import org.centerm.land.adapter.ReportTaxDetailAdapter;
 import org.centerm.land.adapter.SlipReportAdapter;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.TransTemp;
+import org.centerm.land.utility.Preference;
 import org.centerm.land.utility.Utility;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -88,6 +94,31 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     private LinearLayout summaryLinearLayout;
     private Dialog dialogHost;
     private String typeClick;
+    private Dialog dialogOutOfPaper;
+    private Button okBtn;
+    private TextView msgLabel;
+    private Bitmap bitmapOld;
+    private Dialog dialogMenuHostTwo;
+
+    /***
+     * Report Tax Detail
+     */
+    private View reportTaxView;
+    private TextView taxIdLabel;
+    private TextView batchIdLabel;
+    private TextView hostTaxLabel;
+    private TextView dateTaxLabel;
+    private TextView timeTaxLabel;
+    private RecyclerView recyclerViewReportTaxDetail;
+    private ReportTaxDetailAdapter reportTaxDetailAdapter;
+    private ArrayList<TransTemp> taxList = null;
+    private LinearLayout reportTaxDetailLinearLayout;
+    private TextView countFeeLabel;
+    private TextView totalFeeLabel;
+    private TextView countVoidFeeLabel;
+    private TextView totalVoidFeeLabel;
+    private TextView countGrandLabel;
+    private TextView totalCountGrandLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,10 +138,12 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         menuRecyclerView.setLayoutManager(layoutManager);
         setMenuList();
-
+        customDialogOutOfPaper();
         customDialogHost();
+        customDialogHostTwo();
         reportView();
         reportSummaryView();
+        setViewReportTaxDetail();
     }
 
     private void reportView() {
@@ -124,6 +157,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         recyclerViewReportDetail.setLayoutManager(layoutManager1);
         recyclerViewReportDetail.setAdapter(slipReportAdapter);
     }
+
     private void reportSummaryView() {
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -152,6 +186,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         reportView.layout(0, 0, reportView.getMeasuredWidth(), reportView.getMeasuredHeight());
     }
+
     private void setMeasureSummary() {
         summaryLinearLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -174,7 +209,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                         dialogHost.show();
                     } else if (position == 2) {
                         typeClick = "TAX";
-                        dialogHost.show();
+                        dialogMenuHostTwo.show();
 
                     }
                 }
@@ -250,9 +285,9 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     }
 
     private void selectSummaryReport(String typeHost) {
-        final RealmResults<TransTemp> transTempSale = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag","N").findAll();
+        final RealmResults<TransTemp> transTempSale = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "N").findAll();
 
-        final RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag","Y").findAll();
+        final RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "Y").findAll();
         Log.d(TAG, "selectSummaryReport: " + transTempSale.size());
         Log.d(TAG, "selectSummaryReport: " + transTempVoid.size());
         for (int i = 0; i < transTempSale.size(); i++) {
@@ -264,13 +299,13 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         }
 
         saleCountLabel.setText(String.valueOf(transTempSale.size()));
-        saleTotalLabel.setText(totalSale+"");
-        voidSaleCountLabel.setText(transTempVoid.size()+"");
-        voidSaleAmountLabel.setText(totalVoid+"");
+        saleTotalLabel.setText(totalSale + "");
+        voidSaleCountLabel.setText(transTempVoid.size() + "");
+        voidSaleAmountLabel.setText(totalVoid + "");
         countAll = transTempSale.size() + transTempVoid.size();
-        cardCountLabel.setText(countAll+"");
+        cardCountLabel.setText(countAll + "");
         totalAll = totalSale - totalVoid;
-        cardAmountLabel.setText(totalAll+"");
+        cardAmountLabel.setText(totalAll + "");
 
         setMeasureSummary();
         new CountDownTimer(1500, 1000) {
@@ -296,10 +331,6 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
 
     }
 
-    private void selectType() {
-
-    }
-
     private void customDialogHost() {
         dialogHost = new Dialog(this);
         dialogHost.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -320,13 +351,13 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         posBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if (typeClick.equals("DetailReport")) {
-                   selectDetailReport("POS");
-               } else if (typeClick.equals("SummaryReport")) {
-                   selectSummaryReport("POS");
-               } else {
+                if (typeClick.equals("DetailReport")) {
+                    selectDetailReport("POS");
+                } else if (typeClick.equals("SummaryReport")) {
+                    selectSummaryReport("POS");
+                } else {
 
-               }
+                }
             }
         });
         epsBtn.setOnClickListener(new View.OnClickListener() {
@@ -337,7 +368,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                 } else if (typeClick.equals("SummaryReport")) {
                     selectSummaryReport("EPS");
                 } else {
-
+                    dialogMenuHostTwo.show();
                 }
             }
         });
@@ -356,6 +387,134 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         });
     }
 
+
+    private void customDialogHostTwo() {
+        dialogMenuHostTwo = new Dialog(this);
+        dialogMenuHostTwo.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogMenuHostTwo.setCancelable(false);
+        dialogMenuHostTwo.setContentView(R.layout.dialog_custom_host_2);
+        dialogMenuHostTwo.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogMenuHostTwo.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        posBtn = dialogMenuHostTwo.findViewById(R.id.posBtn);
+        epsBtn = dialogMenuHostTwo.findViewById(R.id.epsBtn);
+        closeImage = dialogMenuHostTwo.findViewById(R.id.closeImage);
+        closeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogMenuHostTwo.dismiss();
+            }
+        });
+        posBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDatabaseTax("POS");
+            }
+        });
+        epsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDatabaseTax("EPS");
+            }
+        });
+    }
+
+
+    private void setViewReportTaxDetail() {
+        LayoutInflater inflater =
+                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        reportTaxView = inflater.inflate(R.layout.view_slip_report_tax_detail, null);
+        reportTaxDetailLinearLayout = reportTaxView.findViewById(R.id.reportTaxDetailLinearLayout);
+        taxIdLabel = reportTaxView.findViewById(R.id.taxIdLabel);
+        batchIdLabel = reportTaxView.findViewById(R.id.batchIdLabel);
+        hostTaxLabel = reportTaxView.findViewById(R.id.hostLabel);
+        dateTaxLabel = reportTaxView.findViewById(R.id.dateLabel);
+        timeTaxLabel = reportTaxView.findViewById(R.id.timeLabel);
+        countFeeLabel = reportTaxView.findViewById(R.id.countFeeLabel);
+        totalFeeLabel = reportTaxView.findViewById(R.id.totalFeeLabel);
+        countVoidFeeLabel = reportTaxView.findViewById(R.id.countVoidFeeLabel);
+        totalVoidFeeLabel = reportTaxView.findViewById(R.id.totalVoidFeeLabel);
+        countGrandLabel = reportTaxView.findViewById(R.id.countGrandLabel);
+        totalCountGrandLabel = reportTaxView.findViewById(R.id.totalCountGrandLabel);
+        recyclerViewReportTaxDetail = reportTaxView.findViewById(R.id.recyclerViewReportTaxDetail);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerViewReportTaxDetail.setLayoutManager(layoutManager);
+    }
+
+    private void getDatabaseTax(String typeHost) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat timeFormat = new SimpleDateFormat("hh:MM:ss");
+        taxIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TAX_ID));
+        if (typeHost.equalsIgnoreCase("EPS")) {
+            batchIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+            hostTaxLabel.setText("BASE24 EPS");
+        } else {
+            batchIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+            hostTaxLabel.setText("KTB OFFUS");
+        }
+        dateTaxLabel.setText(dateFormat.format(date));
+        timeTaxLabel.setText(timeFormat.format(date));
+        RealmResults<TransTemp> tax = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).findAll();
+        if (tax.size() > 0) {
+            Double amountVoid = 0.0;
+            Double amount = 0.0;
+            int feeSize = 0;
+            int feeVoidSize = 0;
+            RealmResults<TransTemp> taxVoid = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "Y").findAll();
+            for (int i = 0; i < taxVoid.size(); i++) {
+                amountVoid += Double.valueOf(taxVoid.get(i).getFee());
+            }
+            feeVoidSize = taxVoid.size();
+            RealmResults<TransTemp> taxFee = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "N").findAll();
+            for (int i = 0; i < taxFee.size(); i++) {
+                amount += Double.valueOf(taxFee.get(i).getFee());
+            }
+            feeSize = taxFee.size();
+            countFeeLabel.setText(feeSize + "");
+            totalFeeLabel.setText(decimalFormat.format(amount));
+            countVoidFeeLabel.setText(feeVoidSize + "");
+            totalVoidFeeLabel.setText(decimalFormat.format(amountVoid));
+            countGrandLabel.setText(feeSize + feeVoidSize + "");
+            totalCountGrandLabel.setText(decimalFormat.format(amount));
+            if (taxList == null) {
+                taxList = new ArrayList<>();
+            } else {
+                taxList.clear();
+            }
+            taxList.addAll(tax);
+            if (recyclerViewReportTaxDetail.getAdapter() == null) {
+                reportTaxDetailAdapter = new ReportTaxDetailAdapter(this);
+                recyclerViewReportTaxDetail.setAdapter(reportTaxDetailAdapter);
+            } else {
+                reportTaxDetailAdapter.clear();
+            }
+            reportTaxDetailAdapter.setItem(taxList);
+            reportTaxDetailAdapter.notifyDataSetChanged();
+
+            setMeasureTaxDetail();
+
+            new CountDownTimer(1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    doPrinting(getBitmapFromView(reportTaxDetailLinearLayout));
+                }
+            }.start();
+        }
+
+    }
+
+    private void setMeasureTaxDetail() {
+        reportTaxView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        reportTaxView.layout(0, 0, reportTaxView.getMeasuredWidth(), reportTaxView.getMeasuredHeight());
+    }
+
     public Bitmap getBitmapFromView(View view) {
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnedBitmap);
@@ -368,20 +527,60 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         return returnedBitmap;
     }
 
-    public void doPrinting(final Bitmap slip) {
+    public void doPrinting(Bitmap slip) {
+        bitmapOld = slip;
         new Thread() {
             @Override
             public void run() {
                 try {
                     printDev.initPrinter();
-                    int ret = printDev.printBmpFastSync(slip, Constant.ALIGN.CENTER);
-//                    int ret = printDev.printBarCodeSync("asdasd");
-                    Log.d(TAG, "after call printData ret = " + ret);
+                    printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
+                        @Override
+                        public void onPrintFinish() throws RemoteException {
+                            Intent intent = new Intent(MenuDetailReportActivity.this, MenuServiceActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
+                            overridePendingTransition(0, 0);
+                        }
+
+                        @Override
+                        public void onPrintError(int i) throws RemoteException {
+
+                        }
+
+                        @Override
+                        public void onPrintOutOfPaper() throws RemoteException {
+                            dialogOutOfPaper.show();
+                        }
+                    });
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             }
         }.start();
+    }
+
+    private void customDialogOutOfPaper() {
+        dialogOutOfPaper = new Dialog(this);
+        dialogOutOfPaper.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogOutOfPaper.setContentView(R.layout.dialog_custom_printer);
+        dialogOutOfPaper.setCancelable(false);
+        dialogOutOfPaper.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogOutOfPaper.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        okBtn = dialogOutOfPaper.findViewById(R.id.okBtn);
+        msgLabel = dialogOutOfPaper.findViewById(R.id.msgLabel);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doPrinting(bitmapOld);
+                dialogOutOfPaper.dismiss();
+            }
+        });
+
     }
 
     @Override

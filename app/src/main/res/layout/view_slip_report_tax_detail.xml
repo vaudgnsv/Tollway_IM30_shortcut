@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settlementRelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/contentToolbar"
+        layout="@layout/content_toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayoutToolbarBottom"
+        android:layout_below="@+id/contentToolbar"
+        android:background="@color/color_background">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/slipNestedScrollView"
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/printBtn"
+        android:layout_marginEnd="18sp"
+        android:layout_marginStart="18sp"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:padding="4dp">
+
+        <LinearLayout
+            android:id="@+id/reportTaxDetailLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="48dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/bankTaxImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/logo_image_ktb_bw" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/bankTax1Image"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ktb_logo5"
+                        android:src="@drawable/ktb_logo5" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/merchantNameTax1Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="35 SUKHUMVIT ROAD,KLONG TOEY NUA
+SUBDISTEICT,WATTANA DISTRICT,
+BANGKOK 10110 THAILAND
+TEL. 0-2255-2222 FAX. 0-2255-9391-3"
+                    android:textColor="@android:color/black"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="1"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:text="TAX ID"
+                    android:textSize="10sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/taxIdLabel"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="1"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:text="BATCH NUM :"
+                    android:textSize="10sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/batchIdLabel"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_weight="1"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:text="HOST :"
+                    android:textSize="10sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/hostLabel"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/dateLabel"
+                    android:layout_weight="1.3"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:text="DATE/TIME: "
+                    android:textSize="10sp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/timeLabel"
+                    android:layout_weight="0.7"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/timeburnerbold"
+                android:text="DETAIL REPORT"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="CARD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="TAX INVOICE NO."
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="PRODUCT NAME"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="end"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="TRACE"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="DATE TIME"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp"
+                        android:text="VOLUME"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="@android:color/black"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewReportTaxDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textColor="@android:color/black"
+                    android:text="GRAND TOTALS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:weightSum="3"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:text="TOTAL"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:weightSum="3"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="10sp"
+                        android:textColor="@android:color/black"
+                        android:text="FEE"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:id="@+id/countFeeLabel"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:id="@+id/totalFeeLabel"
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:text="TOTAL"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:weightSum="3"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="10sp"
+                        android:textColor="@android:color/black"
+                        android:text="VOID FEE"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:id="@+id/countVoidFeeLabel"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:id="@+id/totalVoidFeeLabel"
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:text="TOTAL"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+                <View
+                    android:layout_marginTop="3dp"
+                    android:background="@android:color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"/>
+                <LinearLayout
+                    android:layout_marginTop="3dp"
+                    android:weightSum="3"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:textSize="10sp"
+                        android:textColor="@android:color/black"
+                        android:text="GRAND TOTALS"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:id="@+id/countGrandLabel"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@android:color/black"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:textSize="10sp"
+                        android:id="@+id/totalCountGrandLabel"
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:text="TOTAL"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    </RelativeLayout>
+    <include layout="@layout/content_exit" />
+</RelativeLayout>

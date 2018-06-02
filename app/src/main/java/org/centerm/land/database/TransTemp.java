@@ -43,6 +43,11 @@ public class TransTemp extends RealmObject {
 	private String pin;
 	private String fee;
 	private String de11OnlineTMS;
+	private String emvAppLabel;
+	private String emvAid;
+	private String emvTc;
+	private String emvNameCardHolder;
+	private String taxAbb;
 
 	public int getId() {
 		return id;
@@ -346,5 +351,45 @@ public class TransTemp extends RealmObject {
 
 	public void setDe11OnlineTMS(String de11OnlineTMS) {
 		this.de11OnlineTMS = de11OnlineTMS;
+	}
+
+	public String getEmvAppLabel() {
+		return emvAppLabel;
+	}
+
+	public void setEmvAppLabel(String emvAppLabel) {
+		this.emvAppLabel = emvAppLabel;
+	}
+
+	public String getEmvAid() {
+		return emvAid;
+	}
+
+	public void setEmvAid(String emvAid) {
+		this.emvAid = emvAid;
+	}
+
+	public String getEmvTc() {
+		return emvTc;
+	}
+
+	public void setEmvTc(String emvTc) {
+		this.emvTc = emvTc;
+	}
+
+	public String getEmvNameCardHolder() {
+		return emvNameCardHolder;
+	}
+
+	public void setEmvNameCardHolder(String emvNameCardHolder) {
+		this.emvNameCardHolder = emvNameCardHolder;
+	}
+
+	public String getTaxAbb() {
+		return taxAbb;
+	}
+
+	public void setTaxAbb(String taxAbb) {
+		this.taxAbb = taxAbb;
 	}
 }

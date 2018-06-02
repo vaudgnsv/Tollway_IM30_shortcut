@@ -23,16 +23,13 @@ import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.activity.menuvoid.MenuActivity;
-import org.centerm.land.activity.menuvoid.MenuDetailReportActivity;
 import org.centerm.land.activity.settlement.MenuSettlementActivity;
 import org.centerm.land.adapter.MenuServiceAdapter;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.ReversalTemp;
-import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.model.Card;
 import org.centerm.land.utility.Utility;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -85,7 +82,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
 //        nameMenuList.add("Batch Upload");
 //        nameMenuList.add("TC Upload");
         nameMenuList.add("Detail Report");
-        nameMenuList.add("Summary Report");
+        nameMenuList.add("Reprint");
         recyclerViewMenuList = findViewById(R.id.recyclerViewMenuList);
         linearLayoutToolbarBottom = findViewById(R.id.linearLayoutToolbarBottom);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -339,7 +336,9 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                         startActivity(intent);
                         overridePendingTransition(0,0);
                     } else if (position == 4) {
-
+                        Intent intent = new Intent(MenuServiceListActivity.this, ReprintActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(0,0);
                     } else if (position == 5) {
 
                     } else if (position == 6) {
@@ -356,10 +355,6 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
 
     private boolean checkReversal(String typeClick) {
         this.typeClick = typeClick;
-        try {
-            if (realm == null) {
-                realm = Realm.getDefaultInstance();
-            }
             ReversalTemp reversalTemp = null;
             reversalTemp = realm.where(ReversalTemp.class).findFirst();
             if (reversalTemp != null) {
@@ -370,13 +365,6 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                 dismissDialogAll();
                 return true;
             }
-        } finally {
-            Log.d(TAG, "checkResversal: finally");
-            if (realm != null) {
-                realm.close();
-            }
-            realm = null;
-        }
     }
 
     private void customDialog() {
@@ -510,14 +498,12 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (realm != null) {
-            realm.close();
-            realm = null;
-        }
+    protected void onStop() {
+        super.onStop();
+        realm.close();
     }
 }

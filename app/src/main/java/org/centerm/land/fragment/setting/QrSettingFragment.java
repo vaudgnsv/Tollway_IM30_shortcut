@@ -112,7 +112,7 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
 
         }
 
-        ref1CB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ref2CB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -122,10 +122,10 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
                 }
             }
         });
-        if (ref2CB.isChecked()) {
-            Preference.getInstance(getContext()).setValueBoolean(Preference.KEY_REF_2,true);
+        if (Preference.getInstance(getContext()).getValueBoolean(Preference.KEY_REF_2)) {
+            ref2CB.setChecked(true);
         } else {
-            Preference.getInstance(getContext()).setValueBoolean(Preference.KEY_REF_2,false);
+            ref2CB.setChecked(false);
         }
     }
 

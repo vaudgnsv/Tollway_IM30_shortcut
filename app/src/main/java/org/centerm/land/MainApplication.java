@@ -5,6 +5,10 @@ import android.app.Application;
 import org.centerm.land.manager.Contextor;
 import org.centerm.land.utility.Preference;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -25,6 +29,14 @@ public class MainApplication extends Application {
     }
 
     private void setPreference() {
+        String adminPassword = Preference.getInstance(this).getValueString(Preference.KEY_ADMIN_PASS_WORD);
+        if (adminPassword.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_ADMIN_PASS_WORD, "5179191");
+        }
+        String normalPassword = Preference.getInstance(this).getValueString(Preference.KEY_NORMAL_PASS_WORD);
+        if (normalPassword.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_NORMAL_PASS_WORD, "11111111");
+        }
         setTexABB();
 
         setFee();
@@ -56,22 +68,31 @@ public class MainApplication extends Application {
     }
 
     private void setTexABB() {
-        String texAbb = Preference.getInstance(this).getValueString(Preference.KEY_TAX_INVOICE_NO);
+        String texAbbPos = Preference.getInstance(this).getValueString(Preference.KEY_TAX_INVOICE_NO_POS);
+        String texAbbEps = Preference.getInstance(this).getValueString(Preference.KEY_TAX_INVOICE_NO_EPS);
         String texId = Preference.getInstance(this).getValueString(Preference.KEY_TAX_ID);
 
-        if (texAbb.isEmpty()) {
-            Preference.getInstance(this).setValueString(Preference.KEY_TAX_INVOICE_NO,"61900020201805250004");
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String dateAll = dateFormat.format(date);
+
+        if (texAbbPos.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_TAX_INVOICE_NO_POS, dateAll + "0000");
+        }
+
+        if (texAbbEps.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_TAX_INVOICE_NO_EPS, dateAll + "0000");
         }
 
         if (texId.isEmpty()) {
-            Preference.getInstance(this).setValueString(Preference.KEY_TAX_ID,"3101083187");
+            Preference.getInstance(this).setValueString(Preference.KEY_TAX_ID, "3101083187");
         }
     }
 
     private void setFee() {
         Double fee = Preference.getInstance(this).getValueDouble(Preference.KEY_FEE);
         if (fee <= 0) {
-            Preference.getInstance(this).setValueDouble(Preference.KEY_FEE,2.00d);
+            Preference.getInstance(this).setValueDouble(Preference.KEY_FEE, 2.00d);
         }
     }
 
@@ -143,6 +164,7 @@ public class MainApplication extends Application {
             Preference.getInstance(this).setValueString(Preference.KEY_TERMINAL_ID_EPS, "31900010");
         }
     }
+
     private void setTrace() {
         String tracePOS = Preference.getInstance(this).getValueString(Preference.KEY_TRACE_NO_POS);
         String traceTMS = Preference.getInstance(this).getValueString(Preference.KEY_TRACE_NO_TMS);
@@ -158,6 +180,7 @@ public class MainApplication extends Application {
             Preference.getInstance(this).setValueString(Preference.KEY_TRACE_NO_EPS, "1");
         }
     }
+
     private void setBatch() {
         String batchPOS = Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS);
         String batchTMS = Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS);
@@ -197,6 +220,7 @@ public class MainApplication extends Application {
             Preference.getInstance(this).setValueString(Preference.KEY_TRANSACTION_CODE, "6010");
         }
     }
+
     private void setTerminalVersion() {
         String terminalVersion = Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_VERSION);
 

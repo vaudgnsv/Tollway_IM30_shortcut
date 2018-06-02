@@ -3,7 +3,10 @@ package org.centerm.land.utility;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
@@ -56,6 +59,7 @@ public class Utility {
         }
         dialogAlert.show();
     }
+
     public static void customDialogAlertSuccess(Context context, @Nullable String msg, final OnClickCloseImage onClickCloseImage) {
         final Dialog dialogAlert = new Dialog(context);
         dialogAlert.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -88,18 +92,18 @@ public class Utility {
     }
 
     public static String idValue(String szQr, String szId, String szValue) {
-        String szLen=null;
+        String szLen = null;
         szLen = String.valueOf(szValue.length());
-        if(szLen.length()==1)
-            szLen="0"+szLen;
+        if (szLen.length() == 1)
+            szLen = "0" + szLen;
 
-        szQr += szId+szLen+szValue;
+        szQr += szId + szLen + szValue;
 
         return szQr;
     }
 
 
-    public static Bitmap createQRImage(String url, int QR_WIDTH, int QR_HEIGHT) {
+    public static Bitmap createQRImage(String url, int QR_WIDTH, int QR_HEIGHT, Context context) {
         try {//判断URL合法性
             if (url == null || "".equals(url) || url.length() < 1) {
                 return null;
@@ -122,6 +126,10 @@ public class Utility {
             }//生成二维码图片的格式，使用ARGB_8888
             Bitmap bitmap = Bitmap.createBitmap(QR_WIDTH, QR_HEIGHT, Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, QR_WIDTH, 0, 0, QR_WIDTH, QR_HEIGHT);
+
+            Bitmap overlay = BitmapFactory.decodeResource(context.getResources(), R.drawable.qr_bot_s);
+            //setting bitmap to image view
+            bitmap = mergeBitmaps(overlay, bitmap);
             //显示到一个ImageView上面
             return bitmap;
         } catch (WriterException e) {
@@ -130,9 +138,27 @@ public class Utility {
         return null;
     }
 
-    public static String CheckSumCrcCCITT(String SourceString)
-    {
-        String OutString=null;
+    private static Bitmap mergeBitmaps(Bitmap overlay, Bitmap bitmap) {
+
+        int height = bitmap.getHeight();
+        int width = bitmap.getWidth();
+
+        Bitmap combined = Bitmap.createBitmap(width, height, bitmap.getConfig());
+        Canvas canvas = new Canvas(combined);
+        int canvasWidth = canvas.getWidth();
+        int canvasHeight = canvas.getHeight();
+
+        canvas.drawBitmap(bitmap, new Matrix(), null);
+
+        int centreX = (canvasWidth - overlay.getWidth()) / 2;
+        int centreY = (canvasHeight - overlay.getHeight()) / 2;
+        canvas.drawBitmap(overlay, centreX, centreY, null);
+
+        return combined;
+    }
+
+    public static String CheckSumCrcCCITT(String SourceString) {
+        String OutString = null;
         int crc = 0xffff;
 //        int polynomial = 0xffff;
         int polynomial = 0x1021;
@@ -141,8 +167,8 @@ public class Utility {
         byte[] array = SourceString.getBytes();
         for (byte b : array) {
             for (int i = 0; i < 8; i++) {
-                boolean bit = ((b   >> (7-i) & 1) == 1);
-                boolean c15 = ((crc >> 15    & 1) == 1);
+                boolean bit = ((b >> (7 - i) & 1) == 1);
+                boolean c15 = ((crc >> 15 & 1) == 1);
                 crc <<= 1;
                 if (c15 ^ bit) crc ^= polynomial;
             }
@@ -150,15 +176,13 @@ public class Utility {
         crc &= 0xFFFF;
         OutString = Integer.toHexString(crc);
         if (OutString.length() < 4) {
-            for (int i = OutString.length(); i < 4; i++ ) {
-                OutString = "0"+OutString;
+            for (int i = OutString.length(); i < 4; i++) {
+                OutString = "0" + OutString;
             }
         }
-        System.out.printf("utility:: CheckSumCrcCCITT AAAAAAAAAAAAAAA  %s \n",OutString);
+        System.out.printf("utility:: CheckSumCrcCCITT AAAAAAAAAAAAAAA  %s \n", OutString);
         return OutString;
     }
-
-
 
     public interface OnClickCloseImage {
         void onClickImage(Dialog dialog);

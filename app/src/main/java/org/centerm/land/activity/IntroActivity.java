@@ -22,7 +22,7 @@ public class IntroActivity extends SettingToolbarActivity {
     }
 
     public void initWidget() {
-        super.initWidget();
+//        super.initWidget();
         ImageView logoKTBImage = findViewById(R.id.logoKTBImage);
         logoKTBImage.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -114,9 +114,13 @@
         <activity android:name=".activity.settlement.MenuSettlementActivity" />
         <activity android:name=".activity.settlement.SlipSettlementActivity" />
         <activity android:name=".activity.qr.MenuQrActivity" />
-        <activity android:name=".activity.qr.GenerateQrActivity" />
+        <activity
+            android:name=".activity.qr.GenerateQrActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activity.qr.CheckQrActivity" />
-        <activity android:name=".activity.menuvoid.MenuDetailReportActivity"></activity>
+        <activity android:name=".activity.MenuDetailReportActivity" />
+        <activity android:name=".activity.ReprintActivity" />
+        <activity android:name=".activity.PrintPreviousActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package org.centerm.land.activity;
 
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,13 +8,18 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -22,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
+import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
 import com.centerm.smartpos.aidl.sys.AidlDeviceManager;
 import com.centerm.smartpos.constant.Constant;
 
@@ -43,6 +50,11 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
 
     private Realm realm = null;
 
+    private CountDownTimer timer = null;
+
+    /**
+     * Slip
+     */
     private ImageView bankImage = null;
     private ImageView bank1Image = null;
     private TextView merchantName1Label = null;
@@ -70,16 +82,58 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     private RelativeLayout ref1RelativeLayout = null;
     private RelativeLayout ref2RelativeLayout = null;
     private RelativeLayout ref3RelativeLayout = null;
+    /**
+     * Slip Auto
+     */
+    private ImageView bankImageAuto = null;
+    private ImageView bank1ImageAuto = null;
+    private TextView merchantName1LabelAuto = null;
+    private TextView merchantName2LabelAuto = null;
+    private TextView merchantName3LabelAuto = null;
+    private TextView tidLabelAuto = null;
+    private TextView midLabelAuto = null;
+    private TextView traceLabelAuto = null;
+    private TextView systrcLabelAuto = null;
+    private TextView batchLabelAuto = null;
+    private TextView refNoLabelAuto = null;
+    private TextView dateLabelAuto = null;
+    private TextView timeLabelAuto = null;
+    private TextView typeLabelAuto = null;
+    private TextView typeCardLabelAuto = null;
+    private TextView cardNoLabelAuto = null;
+    private TextView apprCodeLabelAuto = null;
+    private TextView comCodeLabelAuto = null;
+    private TextView amtThbLabelAuto = null;
+    private TextView feeThbLabelAuto = null;
+    private TextView totThbLabelAuto = null;
+    private TextView ref1LabelAuto = null;
+    private TextView ref2LabelAuto = null;
+    private TextView ref3LabelAuto = null;
+    private RelativeLayout ref1RelativeLayoutAuto = null;
+    private RelativeLayout ref2RelativeLayoutAuto = null;
+    private RelativeLayout ref3RelativeLayoutAuto = null;
 
     private Button printBtn;
     private AidlPrinter printDev = null;
     private AidlDeviceManager manager = null;
     private NestedScrollView slipNestedScrollView;
+    private NestedScrollView slipNestedScrollViewAuto;
     private LinearLayout slipLinearLayout;
+    private LinearLayout slipLinearLayoutAuto;
     private CardManager cardManager = null;
 
     private int saleId;
     private String typeSlip;
+    private View printFirst;
+
+    private boolean statusOutScress = false;
+
+    private AidlPrinterStateChangeListener.Stub callBackPrint = null;
+    private Dialog dialogOutOfPaper;
+    private Button okBtn;
+
+    private Bitmap bitmapOld = null;
+    private TextView msgLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +141,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         setContentView(R.layout.activity_slip_template);
         initData();
         initWidget();
-        initBtnExit();
+//        initBtnExit();
     }
 
     private void initData() {
@@ -104,6 +158,10 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         cardManager = MainApplication.getCardManager();
         cardManager.abortPBOCProcess();
         printDev = cardManager.getInstancesPrint();
+
+        setViewPrintFirst();
+        customDialogOutOfPaper();
+
         printBtn = findViewById(R.id.printBtn);
         slipNestedScrollView = findViewById(R.id.slipNestedScrollView);
         slipLinearLayout = findViewById(R.id.slipLinearLayout);
@@ -144,6 +202,50 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         selectSALE();
     }
 
+    private void setViewPrintFirst() {
+        LayoutInflater inflater =
+                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        printFirst = inflater.inflate(R.layout.view_report_sale, null);
+
+        slipNestedScrollViewAuto = printFirst.findViewById(R.id.slipNestedScrollView);
+        slipLinearLayoutAuto = printFirst.findViewById(R.id.slipLinearLayout);
+        bankImageAuto = printFirst.findViewById(R.id.bankImage);
+        bank1ImageAuto = printFirst.findViewById(R.id.bank1Image);
+        merchantName1LabelAuto = printFirst.findViewById(R.id.merchantName1Label);
+        merchantName1LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+
+        merchantName2LabelAuto = printFirst.findViewById(R.id.merchantName2Label);
+        merchantName2LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+
+        merchantName3LabelAuto = printFirst.findViewById(R.id.merchantName3Label);
+        merchantName3LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+
+        tidLabelAuto = printFirst.findViewById(R.id.tidLabel);
+        midLabelAuto = printFirst.findViewById(R.id.midLabel);
+        traceLabelAuto = printFirst.findViewById(R.id.traceLabel);
+        systrcLabelAuto = printFirst.findViewById(R.id.systrcLabel);
+        batchLabelAuto = printFirst.findViewById(R.id.batchLabel);
+        refNoLabelAuto = printFirst.findViewById(R.id.refNoLabel);
+        dateLabelAuto = printFirst.findViewById(R.id.dateLabel);
+        timeLabelAuto = printFirst.findViewById(R.id.timeLabel);
+        typeLabelAuto = printFirst.findViewById(R.id.typeLabel);
+        typeCardLabelAuto = printFirst.findViewById(R.id.typeCardLabel);
+        cardNoLabelAuto = printFirst.findViewById(R.id.cardNoLabel);
+        apprCodeLabelAuto = printFirst.findViewById(R.id.apprCodeLabel);
+        comCodeLabelAuto = printFirst.findViewById(R.id.comCodeLabel);
+        amtThbLabelAuto = printFirst.findViewById(R.id.amtThbLabel);
+        feeThbLabelAuto = printFirst.findViewById(R.id.feeThbLabel);
+        totThbLabelAuto = printFirst.findViewById(R.id.totThbLabel);
+        ref1LabelAuto = printFirst.findViewById(R.id.ref1Label);
+        ref2LabelAuto = printFirst.findViewById(R.id.ref2Label);
+        ref3LabelAuto = printFirst.findViewById(R.id.ref3Label);
+        ref1RelativeLayoutAuto = printFirst.findViewById(R.id.ref1RelativeLayout);
+        ref2RelativeLayoutAuto = printFirst.findViewById(R.id.ref2RelativeLayout);
+        ref3RelativeLayoutAuto = printFirst.findViewById(R.id.ref3RelativeLayout);
+
+
+    }
+
     private void selectSALE() {
         try {
             if (realm == null) {
@@ -153,6 +255,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             TransTemp transTemp = realm.where(TransTemp.class).equalTo("id", saleId).findFirst();
             Log.d(TAG, "selectSALE: " + transTemp.getCardNo());
             setDataView(transTemp);
+            setDataViewAuto(transTemp);
         } finally {
             if (realm != null) {
                 realm.close();
@@ -163,7 +266,13 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     }
 
     private void setDataView(TransTemp item) {
-
+        if (item.getHostTypeCard().equalsIgnoreCase("POS")) {
+            Preference.getInstance(SlipTemplateActivity.this).setValueInt(Preference.KEY_SALE_VOID_PRINT_ID_POS, item.getId());
+        } else if (item.getHostTypeCard().equalsIgnoreCase("EPS")) {
+            Preference.getInstance(SlipTemplateActivity.this).setValueInt(Preference.KEY_SALE_VOID_PRINT_ID_EPS, item.getId());
+        } else {
+            Preference.getInstance(SlipTemplateActivity.this).setValueInt(Preference.KEY_SALE_VOID_PRINT_ID_TMS, item.getId());
+        }
         DecimalFormat decimalFormatShow = new DecimalFormat("#,##0.00");
         DecimalFormat decimalFormat = new DecimalFormat("###0.00");
         tidLabel.setText(item.getTid());
@@ -181,8 +290,8 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         timeLabel.setText(item.getTransTime());
         typeLabel.setText(item.getTransStat());
         typeCardLabel.setText(CardPrefix.getTypeCardName(item.getCardNo()));
-        String cutCardStart = item.getCardNo().substring(0,6);
-        String cutCardEnd = item.getCardNo().substring(12,item.getCardNo().length());
+        String cutCardStart = item.getCardNo().substring(0, 6);
+        String cutCardEnd = item.getCardNo().substring(12, item.getCardNo().length());
         cardNoLabel.setText(cutCardStart + "XXXXXX" + cutCardEnd);
         apprCodeLabel.setText(item.getApprvCode());
         comCodeLabel.setText(item.getComCode());
@@ -200,7 +309,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             }
         } else {
             amtThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getAmount()))));
-            Log.d(TAG, "setDataView Else : " + item.getAmount() + " Fee : " + item.getFee());
+
             if (item.getHostTypeCard().equals("TMS")) {
                 if (!item.getEmciFree().isEmpty()) {
                     feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format(Float.valueOf(item.getEmciFree()))));
@@ -211,6 +320,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                     feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
                     totThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
                 }
+                Log.d(TAG, "setDataView Else : " + item.getAmount() + " Fee : " + item.getEmciFree());
             } else {
                 if (item.getFee() != null) {
                     feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getFee()))));
@@ -237,6 +347,96 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         }
     }
 
+    private void setDataViewAuto(TransTemp item) {
+
+        DecimalFormat decimalFormatShow = new DecimalFormat("#,##0.00");
+        DecimalFormat decimalFormat = new DecimalFormat("###0.00");
+        tidLabelAuto.setText(item.getTid());
+        midLabelAuto.setText(item.getMid());
+        traceLabelAuto.setText(item.getEcr());
+        systrcLabelAuto.setText(item.getTraceNo());
+        if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("POS"))
+            batchLabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+        else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("EPS"))
+            batchLabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+        else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("TMS"))
+            batchLabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
+        refNoLabelAuto.setText(item.getRefNo());
+        dateLabelAuto.setText(item.getTransDate());
+        timeLabelAuto.setText(item.getTransTime());
+        typeLabelAuto.setText(item.getTransStat());
+        typeCardLabelAuto.setText(CardPrefix.getTypeCardName(item.getCardNo()));
+        String cutCardStart = item.getCardNo().substring(0, 6);
+        String cutCardEnd = item.getCardNo().substring(12, item.getCardNo().length());
+        cardNoLabelAuto.setText(cutCardStart + "XXXXXX" + cutCardEnd);
+        apprCodeLabelAuto.setText(item.getApprvCode());
+        comCodeLabelAuto.setText(item.getComCode());
+        if (typeSlip.equalsIgnoreCase(CalculatePriceActivity.TypeSale)) {
+            amtThbLabelAuto.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(item.getAmount()))));
+            Log.d(TAG, "setDataView if : " + item.getAmount() + " Fee : " + item.getFee());
+            if (item.getFee() != null) {
+                feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(item.getFee()))));
+                double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(item.getFee())));
+                double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(item.getAmount())));
+                totThbLabelAuto.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format((float) (amount + fee))));
+            } else {
+                feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                totThbLabelAuto.setText(getString(R.string.slip_pattern_amount, "0.00"));
+            }
+        } else {
+            amtThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getAmount()))));
+            Log.d(TAG, "setDataView Else : " + item.getAmount() + " Fee : " + item.getFee());
+            if (item.getHostTypeCard().equals("TMS")) {
+                if (!item.getEmciFree().isEmpty()) {
+                    feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format(Float.valueOf(item.getEmciFree()))));
+                    float fee = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getEmciFree())));
+                    float amount = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getAmount())));
+                    totThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format((float) (amount + fee))));
+                } else {
+                    feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
+                    totThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
+                }
+            } else {
+                if (item.getFee() != null) {
+                    feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getFee()))));
+                    float fee = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getFee())));
+                    float amount = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getAmount())));
+                    totThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format((float) (amount + fee))));
+                } else {
+                    feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
+                    totThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
+                }
+            }
+        }
+        if (!item.getRef1().isEmpty()) {
+            ref1RelativeLayoutAuto.setVisibility(View.VISIBLE);
+            ref1LabelAuto.setText(item.getRef1());
+        }
+        if (!item.getRef2().isEmpty()) {
+            ref2RelativeLayoutAuto.setVisibility(View.VISIBLE);
+            ref2LabelAuto.setText(item.getRef2());
+        }
+        if (!item.getRef3().isEmpty()) {
+            ref3RelativeLayoutAuto.setVisibility(View.VISIBLE);
+            ref3LabelAuto.setText(item.getRef3());
+        }
+
+        setMeasure();
+
+        new CountDownTimer(1500, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                doPrinting(getBitmapFromView(slipLinearLayoutAuto));
+                autoPrint();
+            }
+        }.start();
+    }
+
 
     @Override
     protected void onResume() {
@@ -244,20 +444,89 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
 
     }
 
-    public void doPrinting(final Bitmap slip) {
+    private void autoPrint() {
+        if (timer != null) {
+            timer.cancel();
+        }
+        timer = new CountDownTimer(10000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.d(TAG, "onTick: " + millisUntilFinished);
+            }
+
+            @Override
+            public void onFinish() {
+                statusOutScress = true;
+                doPrinting(getBitmapFromView(slipLinearLayout));
+            }
+        };
+        timer.start();
+    }
+
+    public void doPrinting(Bitmap slip) {
+        bitmapOld = slip;
         new Thread() {
             @Override
             public void run() {
                 try {
                     printDev.initPrinter();
-                    int ret = printDev.printBmpFastSync(slip, Constant.ALIGN.CENTER);
+                    printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
+                        @Override
+                        public void onPrintFinish() throws RemoteException {
+                            Log.d(TAG, "onPrintFinish: ");
+                            if (statusOutScress) {
+                                Intent intent = new Intent(SlipTemplateActivity.this, MenuServiceActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                                overridePendingTransition(0, 0);
+                            } else {
+                                if (timer != null) {
+                                    timer.cancel();
+                                    timer.start();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onPrintError(int i) throws RemoteException {
+                            Log.d(TAG, "onPrintError: ");
+                            msgLabel.setText("เกิดข้อผิดพลาด");
+                            dialogOutOfPaper.show();
+                        }
+
+                        @Override
+                        public void onPrintOutOfPaper() throws RemoteException {
+                            Log.d(TAG, "onPrintOutOfPaper: ");
+                            if (!statusOutScress) {
+                                timer.cancel();
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    dialogOutOfPaper.show();
+                                }
+                            });
+                        }
+                    });
 //                    int ret = printDev.printBarCodeSync("asdasd");
-                    Log.d(TAG, "after call printData ret = " + ret);
+//                    Log.d(TAG, "after call printData ret = " + ret);
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             }
         }.start();
+    }
+
+    private void setMeasure() {
+        printFirst.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        printFirst.layout(0, 0, printFirst.getMeasuredWidth(), printFirst.getMeasuredHeight());
     }
 
     public Bitmap getBitmapFromView(View view) {
@@ -275,7 +544,35 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     @Override
     public void onClick(View v) {
         if (v == printBtn) {
+            statusOutScress = true;
             doPrinting(getBitmapFromView(slipLinearLayout));
+            if (timer != null) {
+                timer.cancel();
+            }
         }
+    }
+
+    private void customDialogOutOfPaper() {
+        dialogOutOfPaper = new Dialog(this);
+        dialogOutOfPaper.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogOutOfPaper.setContentView(R.layout.dialog_custom_printer);
+        dialogOutOfPaper.setCancelable(false);
+        dialogOutOfPaper.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogOutOfPaper.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        okBtn = dialogOutOfPaper.findViewById(R.id.okBtn);
+        msgLabel = dialogOutOfPaper.findViewById(R.id.msgLabel);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doPrinting(bitmapOld);
+                dialogOutOfPaper.dismiss();
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
     }
 }

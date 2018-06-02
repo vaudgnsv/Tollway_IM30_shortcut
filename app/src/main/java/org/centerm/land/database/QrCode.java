@@ -23,6 +23,8 @@ public class QrCode extends RealmObject {
     private String header3;
     private String nameCompany;
     private String textQrGenerateAll;
+    private String statusPrint; // 0 ยังไม่ได้ปริ้น 1 คือ ปรั้นแล้ว
+    private String statusSuccess;// 0 ยังไม่สำเร็จ 1 คือ สำเร็จชำระเงินแล้ว
 
     public int getId() {
         return id;
@@ -150,5 +152,21 @@ public class QrCode extends RealmObject {
 
     public void setTextQrGenerateAll(String textQrGenerateAll) {
         this.textQrGenerateAll = textQrGenerateAll;
+    }
+
+    public String getStatusPrint() {
+        return statusPrint;
+    }
+
+    public void setStatusPrint(String statusPrint) {
+        this.statusPrint = statusPrint;
+    }
+
+    public String getStatusSuccess() {
+        return statusSuccess;
+    }
+
+    public void setStatusSuccess(String statusSuccess) {
+        this.statusSuccess = statusSuccess;
     }
 }

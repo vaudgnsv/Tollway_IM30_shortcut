@@ -238,9 +238,9 @@ public class MenuActivity extends SettingToolbarActivity {
         } else {
             nameMenuList.clear();
         }
-        nameMenuList.add("POS");
-        nameMenuList.add("EPS");
-        nameMenuList.add("TMS");
+        nameMenuList.add("KTB Off us");
+        nameMenuList.add("BASE24 EPS");
+        nameMenuList.add("KTB On Us");
         menuVoidAdapter.setItem(nameMenuList);
         menuVoidAdapter.notifyDataSetChanged();
     }
