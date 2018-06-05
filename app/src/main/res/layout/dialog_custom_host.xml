@@ -2,9 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:paddingBottom="20dp"
-    android:paddingTop="20dp">
+    android:background="@android:color/white">
 
     <ImageView
         android:id="@+id/closeImage"
@@ -20,6 +18,17 @@
         android:layout_below="@+id/closeImage"
         android:layout_margin="30dp"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/tmsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/pressed_menu"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="KTB On Us"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/posBtn"
@@ -43,15 +52,6 @@
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
-        <Button
-            android:id="@+id/tmsBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/pressed_menu"
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:text="KTB On Us"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
     </LinearLayout>
 
 </RelativeLayout>

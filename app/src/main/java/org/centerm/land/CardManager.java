@@ -75,6 +75,7 @@ public class CardManager {
     private String REF2 = "";
     private String REF3 = "";
     private String COMCODE = "";
+    private String TRANCE_NO = "";
     private int batchUpload = 0;
     private int batchUploadSize = 0;
     private String settlement61 = "";
@@ -87,6 +88,9 @@ public class CardManager {
 
     private int tcUploadPosition = 0;
     private int tcUploadSize = 0;
+
+    private int uploadCreditPosition = 0;
+    private int uploadCreditSize = 0;
 
     private boolean typeCheck = false;
 
@@ -115,6 +119,8 @@ public class CardManager {
     private String CARDLABEL;
     private String TC;
     private String TAX_ABB_NEW;
+    private String invoiceGB = "";
+    private String stTraceId = "";
 
     public static CardManager init(Context context) {
         if (instance == null) {
@@ -462,10 +468,11 @@ public class CardManager {
     }
 
     public void startTransaction(int Type) {
+        Log.d(TAG, "startTransaction: ");
         OPERATE_ID = Type;
         try {
             if (pboc2 != null) {
-                pboc2.cancelCheckCard(); // Edit พี่สิน
+//                pboc2.cancelCheckCard(); // Edit พี่สิน
                 pboc2.endPBOC();
             }
         } catch (RemoteException e) {
@@ -543,7 +550,7 @@ public class CardManager {
                                 PROCESSING_CODE = mBlockDataSend[3 - 1];    // Paul_20180523
                                 mBlockDataSend[22 - 1] = POS_ENT_MODE;
 //                                mBlockDataSend[23 - 1] = "0001";
-                                mBlockDataSend[25 - 1] = "00"; // Insert Chip
+                                mBlockDataSend[25 - 1] = "05"; // Insert Chip
 
                                 //POSEM = POS_ENT_MODE;
 //                                String tag9f06 = readKernelData(EMVTAGS.combine(0x9F, 0x06));
@@ -578,8 +585,8 @@ public class CardManager {
 
                                 String[] name = TRACK1.split("5E");
                                 Log.d(TAG, "onFindMagCard " + name.length + " : Name = " + name[0] + " === " + BlockCalculateUtil.hexToString(name[1]));
-                                String nameCard = BlockCalculateUtil.hexToString(name[1]);
-                                String typeName = CardPrefix.getTypeCardName(card.getNo());
+                                NAMECARDHOLDER = BlockCalculateUtil.hexToString(name[1]);
+//                                String typeName = CardPrefix.getTypeCardName(card.getNo());
 
 //                                TRACK2 = "6216541000000398D49121209920009016216";
                                 StringBuilder dataStr = new StringBuilder();
@@ -735,13 +742,17 @@ public class CardManager {
     }
 
 
-    public void setImportAmount(String amount) {
+    public void setImportAmount(String amount, String ref1, String ref2, String ref3, String comCode) {
         try {
             DecimalFormat decimalFormat = new DecimalFormat("###0.00");
             Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
             Double amountFee = (Double.valueOf(amount) * fee.intValue()) / 100;
             Double amountAll = Double.valueOf(amount) + amountFee;
             Log.d(TAG, "setImportAmount: " + amountAll);
+            COMCODE = comCode;
+            REF1 = ref1;
+            REF2 = ref2;
+            REF3 = ref3;
             pboc2.importAmount(decimalFormat.format(amountAll));
             mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
             //ส่งค่าที่ยังไม่ได้ คิดว่า Fee เพื่อ จะได้ ไปคิดคำนวณอีกตอนบันทึกลงดาต้าเบส
@@ -849,6 +860,7 @@ public class CardManager {
                     //SINN 20180524 CHECK TH chip card
                     tagPanSnEMV = readKernelData(EMVTAGS.EMVTAG_APP_PAN_SN);
                     AID = readKernelData(EMVTAGS.EMVTAG_AID);
+                    AID = AID.substring(4, AID.length());
                     String nameCard = readKernelData(EMVTAGS.combine(0x5F, 0x20));
                     String cardLabel = readKernelData(EMVTAGS.EMVTAG_APP_LABEL);
                     if (nameCard.length() > 6) {
@@ -858,11 +870,6 @@ public class CardManager {
                         CARDLABEL = BlockCalculateUtil.hexToString(cardLabel.substring(4, cardLabel.length()));
                     }
                     String Tc = readKernelData(EMVTAGS.combine(0x9F, 0x26));
-                    Log.d(TAG, "----> CardInfoData ==> Aid " + AID);
-                    Log.d(TAG, "----> CardInfoData ==> Tc " + Tc);
-                    Log.d(TAG, "----> CardInfoData ==> nameCard " + NAMECARDHOLDER);
-                    Log.d(TAG, "----> CardInfoData ==> cardLabel " + CARDLABEL);
-                    Log.d(TAG, "----> CardInfoData ==> arg0 " + tagPanSnEMV);
                     String Tag_4f = readKernelData(EMVTAGS.EMVTAG_AID);
                     Log.d(TAG, "----> CardInfoData ==> Tag_4f " + Tag_4f);
                     if (Tag_4f.equalsIgnoreCase("4F08A000000677010100") || Tag_4f.equalsIgnoreCase("4F08A000000677010101") ||
@@ -876,6 +883,7 @@ public class CardManager {
 
                     Log.d(TAG, "----> CardInfoData ==> Tag_4f " + Tag_4f);
                     String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
+                    invoiceGB = calNumTraceNo(invoiceNumber);
                     String mBlockData24 = "";
                     if (HOST_CARD.equalsIgnoreCase("EPS")) {
                         mBlockData24 = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
@@ -1568,14 +1576,8 @@ public class CardManager {
 
                 break;
             case PROCESS_REQUEST_TRANSACTION_TIMEOUTED:
-                if (insertOrUpdateDatabase != null) {
-                    insertOrUpdateDatabase.onTransactionTimeOut();
-                }
                 break;
             case PROCESS_REQUEST_CONNECTION_FAILED:
-                if (insertOrUpdateDatabase != null) {
-                    insertOrUpdateDatabase.onConnectTimeOut();
-                }
                 break;
             case PROCESS_TRANS_RESULT_FALLBACK:
                 FALLBACK_HAPPEN = true;
@@ -1604,7 +1606,7 @@ public class CardManager {
         public void ConnectTimeOut() {
             Log.d(TAG, "ConnectTimeOut: ");
             response_code = "93";
-            processCallback(PROCESS_REQUEST_CONNECTION_FAILED);
+//            processCallback(PROCESS_REQUEST_CONNECTION_FAILED);
             if (connectStatusSocket != null) {
                 connectStatusSocket.onConnectTimeOut();
             }
@@ -1620,7 +1622,7 @@ public class CardManager {
         public void TransactionTimeOut() {
             Log.d(TAG, "TransactionTimeOut: ");
             response_code = "91";
-            processCallback(PROCESS_REQUEST_TRANSACTION_TIMEOUTED);
+//            processCallback(PROCESS_REQUEST_TRANSACTION_TIMEOUTED);
             if (connectStatusSocket != null) {
                 connectStatusSocket.onTransactionTimeOut();
             }
@@ -1656,9 +1658,14 @@ public class CardManager {
         }
     };
 
-    public void setDataDefault() {
+    public void setDataDefaultBatchUpload() {
         batchUploadSize = 0;
         batchUpload = 0;
+    }
+
+    public void setDataDefaultUploadCradit() {
+        uploadCreditPosition = 0;
+        uploadCreditSize = 0;
     }
 
     /**
@@ -1714,50 +1721,12 @@ public class CardManager {
     public void setDataSalePIN(String amount, String pin, String ref1, String ref2, String ref3, String comCode) {
 //        HOST_CARD = CardPrefix.getTypeCard(card.getNo());
         Log.d(TAG, "setDataSalePIN HOST_CARD: " + HOST_CARD);
+        Log.d(TAG, "setDataSalePIN HOST_CARD: " + comCode);
         String keyPin;
         if (HOST_CARD.equalsIgnoreCase("TMS")) {
             keyPin = OnUsTMSinblock(card.getNo(), pin);
             Log.d(TAG, "setDataSalePIN keyPin : " + keyPin);
             setDataSalePINTMS(amount, pin, keyPin, ref1, ref2, ref3, comCode);
-        } else {
-//            Log.d(TAG, "setDataSalePIN HOST_CARD: " + HOST_CARD);
-//            keyPin = OffUsEPSPinblock(card.getNo(), pin);
-//            MERCHANT_NUMBER = CardPrefix.getMerchantId(context, HOST_CARD);
-//            TERMINAL_ID = CardPrefix.getTerminalId(context, HOST_CARD);
-//            if (HOST_CARD.equalsIgnoreCase("TMS")) {
-//                NII = CardPrefix.getNii(card.getNo(), context);     // Paul_20180523
-//            } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
-//                NII = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
-//            }
-//            String traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
-//            String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
-//            CARD_NO = card.getNo();
-//            AMOUNT = amount;
-//            EXPIRY = card.getExpireDate();
-//            TERMINAL_ID = CardPrefix.getTerminalId(context, HOST_CARD);
-//            MERCHANT_NUMBER = CardPrefix.getMerchantId(context, HOST_CARD);
-//            mBlockDataSend = new String[64];
-//
-//            mBlockDataSend[3 - 1] = "003000";
-//            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(amount);
-//            mBlockDataSend[11 - 1] = calNumTraceNo(traceIdNo);
-////            mBlockDataSend[14 - 1] = card.getExpireDate();
-//            mBlockDataSend[22 - 1] = "0051";
-//            mBlockDataSend[23 - 1] = tagPanSnEMV.substring(4, 8);
-//            mBlockDataSend[24 - 1] = NII;
-//            Log.d(TAG, "setDataSalePIN TRACK2: " + NII);
-//            Log.d(TAG, "setDataSalePIN TRACK2: " + TRACK2);
-//            mBlockDataSend[35 - 1] = TRACK2;
-//            mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
-//            mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
-//            mBlockDataSend[52 - 1] = keyPin;
-//            if (HOST_CARD.equalsIgnoreCase("EPS") || HOST_CARD.equalsIgnoreCase("POS")) {
-//                mBlockDataSend[55 - 1] = MBLOCK55;
-//            }
-//            mBlockDataSend[62 - 1] = getLength62(String.valueOf(calNumTraceNo(invoiceNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber));
-//            onLineNow = true;
-//            TPDU = CardPrefix.getTPDU(context, HOST_CARD);
-//            packageAndSend(TPDU, MESSAGE_SALE, mBlockDataSend);
         }
 
     }
@@ -1833,6 +1802,7 @@ public class CardManager {
         Log.d(TAG, "Track2MappingTable:  mBlockDataSend[41 - 1]  " + mBlockDataSend[41 - 1]);
         mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(calNumTraceNo(Preference.getInstance(context).getValueString(Preference.KEY_MERCHANT_ID_TMS)));
         mBlockDataSend[52 - 1] = keyPin;
+        invoiceGB = calNumTraceNo(invoiceNumber);
         mBlockDataSend[62 - 1] = getLength62(String.valueOf(calNumTraceNo(invoiceNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber));
         String terminalV = Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_VERSION);
         String messageV = Preference.getInstance(context).getValueString(Preference.KEY_MESSAGE_VERSION);
@@ -1851,7 +1821,11 @@ public class CardManager {
                 "00" +
                 CardPrefix.calSpenLen("", 14) +
                 CardPrefix.calSpenLen("", 8);
-        Log.d(TAG, "setDataSalePINTMS: " + mBlock63);
+        Log.d(TAG, "setDataSalePINTMS: " + COMCODE);
+        Log.d(TAG, "setDataSalePINTMS: " + REF1);
+        Log.d(TAG, "setDataSalePINTMS: " + REF2);
+        Log.d(TAG, "setDataSalePINTMS: " + REF3);
+        Log.d(TAG, "setDataSalePINTMS mBlock63 : " + mBlock63);
         mBlockDataSend[63 - 1] = CardPrefix.calLen(String.valueOf(mBlock63.length()), 4) + BlockCalculateUtil.getHexString(mBlock63);
         Log.d(TAG, "setDataSalePINTMS: " + mBlockDataSend[63 - 1]);
         // Paul_20180522 Start
@@ -1870,12 +1844,16 @@ public class CardManager {
         FALLBACK_HAPPEN = false;
     }
 
-    public void setDataSaleFallBack(String amount) {
+    public void setDataSaleFallBack(String amount, String ref1, String ref2, String ref3, String comCode) {
         DecimalFormat decimalFormat = new DecimalFormat("###0.00");
         HOST_CARD = CardPrefix.getTypeCard(card.getNo());
         NII = CardPrefix.getNii(card.getNo(), context);     // Paul_20180523
         String traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
         String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
+        COMCODE = comCode;
+        REF1 = ref1;
+        REF2 = ref2;
+        REF3 = ref3;
         CARD_NO = card.getNo();
         AMOUNT = amount;
         EXPIRY = card.getExpireDate();
@@ -1894,6 +1872,7 @@ public class CardManager {
         mBlockDataSend[35 - 1] = TRACK2;
         mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
         mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+        invoiceGB = calNumTraceNo(invoiceNumber);
         mBlockDataSend[62 - 1] = getLength62(String.valueOf(calNumTraceNo(invoiceNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber));
         onLineNow = true;
         TPDU = CardPrefix.getTPDU(context, HOST_CARD);
@@ -1901,6 +1880,7 @@ public class CardManager {
     }
 
     public void setDataVoid(TransTemp temp) {
+        TRANCE_NO = "";
         transTemp = temp;
         HOST_CARD = transTemp.getHostTypeCard();
         if (HOST_CARD.equalsIgnoreCase("TMS")) {
@@ -1935,7 +1915,7 @@ public class CardManager {
         Double amountAll = Double.valueOf(transTemp.getAmount()) + amountFee1;
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
         AMOUNT = transTemp.getAmount();
-        mBlockDataSend[11 - 1] = transTemp.getTraceNo();
+        mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "POS"));
         mBlockDataSend[14 - 1] = transTemp.getExpiry();
         mBlockDataSend[22 - 1] = transTemp.getPointServiceEntryMode();
         if (transTemp.getApplicationPAN() != null) {
@@ -2002,7 +1982,7 @@ public class CardManager {
         Double amountAll = Double.valueOf(transTemp.getAmount()) + Double.valueOf(transTemp.getFee());
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
         AMOUNT = transTemp.getAmount();
-        mBlockDataSend[11 - 1] = transTemp.getTraceNo();
+        mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "EPS"));
         mBlockDataSend[14 - 1] = transTemp.getExpiry();
         mBlockDataSend[22 - 1] = transTemp.getPointServiceEntryMode();
         mBlockDataSend[23 - 1] = transTemp.getApplicationPAN();
@@ -2051,6 +2031,7 @@ public class CardManager {
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(Double.valueOf(transTemp.getAmount())));
         AMOUNT = transTemp.getAmount();
         mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "TMS"));
+        Log.d(TAG, "setDataVoidTMS mBlockDataSend[11 - 1] : " + mBlockDataSend[11 - 1]);
         mBlockDataSend[22 - 1] = transTemp.getPointServiceEntryMode();
         if (transTemp.getApplicationPAN() != null) {
             mBlockDataSend[23 - 1] = transTemp.getApplicationPAN();
@@ -2190,7 +2171,7 @@ public class CardManager {
 
                 tcUploadPosition++;
             } else {
-                switch (HOST_CARD) {
+                /*switch (HOST_CARD) {
                     case "EPS":
                         setDataSettlementAndSendEPS();
                         break;
@@ -2200,7 +2181,8 @@ public class CardManager {
                     default:
                         setDataSettlementAndSendTMS();
                         break;
-                }
+                }*/
+                setUploadCredit();
             }
 
         } finally {
@@ -2213,7 +2195,7 @@ public class CardManager {
 
     public void setDataSettlementAndSend(String typeHost) {
         HOST_CARD = typeHost;
-        setUploadCredit();
+//        setUploadCredit();
         String traceIdNo;
         try {
             if (realm == null) {
@@ -2249,10 +2231,10 @@ public class CardManager {
             mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
             mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
             mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
-            MTI = MESSAGE_SETTLEMENT;
+            settlement63 = mBlockDataSend[63 - 1];
             onLineNow = false;
             TPDU = CardPrefix.getTPDU(context, HOST_CARD);
-            packageAndSend(TPDU, MTI, mBlockDataSend);
+            packageAndSend(TPDU, MESSAGE_SETTLEMENT, mBlockDataSend);
 
         } finally {
             if (realm != null) {
@@ -2347,7 +2329,7 @@ public class CardManager {
 
     public void setDataSettlementAndSendEPS() {
         HOST_CARD = "EPS";
-        setUploadCredit();
+//        setUploadCredit();
         String traceIdNo;
         try {
             if (realm == null) {
@@ -2377,6 +2359,7 @@ public class CardManager {
             mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
             mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
             mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
+            settlement63 = mBlockDataSend[63 - 1];
             MTI = MESSAGE_SETTLEMENT;
             onLineNow = false;
             Log.d(TAG, "mBlockDataSend[3 - 1]: " + SETTLEMENT_PROCESSING_CODE
@@ -2523,7 +2506,7 @@ public class CardManager {
         mBlockDataSend[2 - 1] = card.getNo().length() + card.getNo();
         mBlockDataSend[3 - 1] = "943000";
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(AMOUNT);
-        mBlockDataSend[11 - 1] = calNumTraceNo(String.valueOf((Integer.valueOf(trackNo) + 1)));
+        mBlockDataSend[11 - 1] = calNumTraceNo(String.valueOf((Integer.valueOf(trackNo))));
         mBlockDataSend[12 - 1] = time.replace(":", "");
         mBlockDataSend[13 - 1] = date.substring(4, 8);
         mBlockDataSend[14 - 1] = card.getExpireDate();
@@ -2590,6 +2573,7 @@ public class CardManager {
     }
 
     private void batchOff() {
+        HOST_CARD = "POS";
         DecimalFormat decimalFormat = new DecimalFormat("###0.00");
         String traceIdNo = null;
         RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", HOST_CARD).findAll();
@@ -2603,11 +2587,12 @@ public class CardManager {
             traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
             Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
             amountAll += Float.valueOf(transTemp.get(batchUpload).getAmount());
+            Log.d(TAG, "batchUploadSize : " + batchUploadSize + " \n batchUpload : " + batchUpload);
             mBlockDataSend = new String[64];
             mBlockDataSend[2 - 1] = transTemp.get(batchUpload).getCardNo().length() + transTemp.get(batchUpload).getCardNo();
             mBlockDataSend[3 - 1] = "003000";
-            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(Float.valueOf(transTemp.get(batchUpload).getAmount()) + Float.valueOf(transTemp.get(batchUpload).getFee())));
-            mBlockDataSend[11 - 1] = calNumTraceNo(transTemp.get(batchUpload).getTraceNo());
+            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(Double.valueOf(transTemp.get(batchUpload).getAmount()) + Double.valueOf(transTemp.get(batchUpload).getFee())));
+            mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, HOST_CARD));
             mBlockDataSend[12 - 1] = transTemp.get(batchUpload).getTransTime().replace(":", "");
             mBlockDataSend[13 - 1] = transTemp.get(batchUpload).getTransDate().substring(4, 8);
             mBlockDataSend[14 - 1] = transTemp.get(batchUpload).getExpiry();
@@ -2628,56 +2613,54 @@ public class CardManager {
             mBlockDataSend[60 - 1] = getLength62(String.valueOf(s60.length())) + BlockCalculateUtil.getHexString(s60);
             mBlockDataSend[62 - 1] = getLength62(String.valueOf(transTemp.get(batchUpload).getEcr().length())) + BlockCalculateUtil.getHexString(transTemp.get(batchUpload).getEcr());
 
-            Log.d(TAG, "BatchUpload mBlockDataSend[2 - 1]: " + transTemp.get(batchUpload).getCardNo().length() + transTemp.get(batchUpload).getCardNo()
-                    + "\n BatchUpload mBlockDataSend[3 - 1]: 003000"
-                    + "\n BatchUpload mBlockDataSend[4 - 1]:" + BlockCalculateUtil.getAmount(transTemp.get(batchUpload).getAmount())
-                    + "\n BatchUpload mBlockDataSend[11 - 1]:" + calNumTraceNo(transTemp.get(batchUpload).getTraceNo())
-                    + "\n BatchUpload mBlockDataSend[12 - 1]:" + transTemp.get(batchUpload).getTransTime().replace(":", "")
-                    + "\n BatchUpload mBlockDataSend[13 - 1]:" + transTemp.get(batchUpload).getTransDate().substring(4, 8)
-                    + "\n BatchUpload mBlockDataSend[14 - 1]:" + transTemp.get(batchUpload).getExpiry()
-                    + "\n BatchUpload mBlockDataSend[22 - 1]:" + transTemp.get(batchUpload).getPointServiceEntryMode()
-                    + "\n BatchUpload mBlockDataSend[23 - 1]:" + transTemp.get(batchUpload).getApplicationPAN()
-                    + "\n BatchUpload mBlockDataSend[24 - 1]: 0245"
-                    + "\n BatchUpload mBlockDataSend[25 - 1]: 05"
-                    + "\n BatchUpload mBlockDataSend[37 - 1]:" + transTemp.get(batchUpload).getRefNo()
-                    + "\n BatchUpload mBlockDataSend[38 - 1]:" + transTemp.get(batchUpload).getApprvCode()
-                    + "\n BatchUpload mBlockDataSend[39 - 1]:" + transTemp.get(batchUpload).getRespCode()
-                    + "\n BatchUpload mBlockDataSend[41 - 1]:" + BlockCalculateUtil.getHexString(TERMINAL_ID)
-                    + "\n BatchUpload mBlockDataSend[42 - 1]:" + BlockCalculateUtil.getHexString(MERCHANT_NUMBER)
-                    + "\n BatchUpload mBlockDataSend[55 - 1]:" + transTemp.get(batchUpload).getIccData()
-                    + "\n BatchUpload mBlockDataSend[60 - 1]:" + getLength62(String.valueOf(s60.length())) + BlockCalculateUtil.getHexString(s60)
-                    + "\n BatchUpload mBlockDataSend[62 - 1]:" + transTemp.get(batchUpload).getEcr());
-
             onLineNow = false; // Paul_20180602
             packageAndSend(TPDU, "0320", mBlockDataSend);
             batchUpload++;
 //            }
 
         } else {
-            traceIdNo = String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS)) + 1);
-            Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
+            traceIdNo = String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS)));
+            String batchNumber = CardPrefix.getBatch(context, HOST_CARD);
+            mBlockDataSend = new String[64];
+            mBlockDataSend[3 - 1] = "960000";
+            mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.valueOf(traceIdNo));
+            if (HOST_CARD.equalsIgnoreCase("POS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_POS);
+            } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
+            } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
+            }
+            mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+            mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+            mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
+            mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
+            MTI = MESSAGE_SETTLEMENT;
+            onLineNow = false; // Paul_20180602
+            packageAndSend(TPDU, "0500", mBlockDataSend);
         }
-        String batchNumber = CardPrefix.getBatch(context, HOST_CARD);
-        mBlockDataSend = new String[64];
-        mBlockDataSend[3 - 1] = "960000";
-        mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.valueOf(traceIdNo));
-        if (HOST_CARD.equalsIgnoreCase("POS")) {
-            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_POS);
-        } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
-            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
-        } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
-            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
-        }
-        mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
-        mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
-        mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
-        mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
-        MTI = MESSAGE_SETTLEMENT;
-        onLineNow = false; // Paul_20180602
-        packageAndSend(TPDU, "0500", mBlockDataSend);
+//        String batchNumber = CardPrefix.getBatch(context, HOST_CARD);
+//        mBlockDataSend = new String[64];
+//        mBlockDataSend[3 - 1] = "960000";
+//        mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.valueOf(traceIdNo));
+//        if (HOST_CARD.equalsIgnoreCase("POS")) {
+//            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_POS);
+//        } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
+//            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
+//        } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
+//            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
+//        }
+//        mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+//        mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+//        mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
+//        mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
+//        MTI = MESSAGE_SETTLEMENT;
+//        onLineNow = false; // Paul_20180602
+//        packageAndSend(TPDU, "0500", mBlockDataSend);
     }
 
     private void batchOffEPS() {
+        HOST_CARD = "EPS";
         DecimalFormat decimalFormat = new DecimalFormat("###0.00");
         String traceIdNo = null;
         RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", HOST_CARD).findAll();
@@ -2697,7 +2680,9 @@ public class CardManager {
             mBlockDataSend = new String[64];
             mBlockDataSend[2 - 1] = transTemp.get(batchUpload).getCardNo().length() + transTemp.get(batchUpload).getCardNo();
             mBlockDataSend[3 - 1] = "003000";
-            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(Double.valueOf(transTemp.get(batchUpload).getAmount())) + Double.valueOf(transTemp.get(batchUpload).getFee()));
+            Double amount = Double.valueOf(transTemp.get(batchUpload).getAmount());
+            Double fee = Double.valueOf(transTemp.get(batchUpload).getFee());
+            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amount + fee));
 //                mBlockDataSend[11 - 1] = calNumTraceNo(transTemp.get(i).getTraceNo());
             mBlockDataSend[11 - 1] = calNumTraceNo(traceIdNo);
             mBlockDataSend[12 - 1] = transTemp.get(batchUpload).getTransTime().replace(":", "");
@@ -2729,30 +2714,31 @@ public class CardManager {
             batchUpload++;
 
         } else {
-            traceIdNo = String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS)) + 1);
-            Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
+            traceIdNo = String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS)));
+            String batchNumber = CardPrefix.getBatch(context, HOST_CARD);
+            mBlockDataSend = new String[64];
+            mBlockDataSend[3 - 1] = "960000";
+            mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.valueOf(traceIdNo));
+            if (HOST_CARD.equalsIgnoreCase("POS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_POS);
+            } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
+            } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
+            }
+            mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+            mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+            mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
+            mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
+            MTI = MESSAGE_SETTLEMENT;
+            onLineNow = false; // Paul_20180602
+            packageAndSend(TPDU, "0500", mBlockDataSend);
         }
-        String batchNumber = CardPrefix.getBatch(context, HOST_CARD);
-        mBlockDataSend = new String[64];
-        mBlockDataSend[3 - 1] = "960000";
-        mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.valueOf(traceIdNo));
-        if (HOST_CARD.equalsIgnoreCase("POS")) {
-            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_POS);
-        } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
-            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
-        } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
-            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
-        }
-        mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
-        mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
-        mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
-        mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
-        MTI = MESSAGE_SETTLEMENT;
-        onLineNow = true;
-        packageAndSend(TPDU, "0500", mBlockDataSend);
+
     }
 
     private void batchTMS() {
+        HOST_CARD = "TMS";
         TERMINAL_ID = CardPrefix.getTerminalId(context, "TMS");
         MERCHANT_NUMBER = CardPrefix.getMerchantId(context, "TMS");
         DecimalFormat decimalFormat = new DecimalFormat("###0.00");
@@ -2778,13 +2764,15 @@ public class CardManager {
             Log.d(TAG, "batchTMS: " + batchUploadSize + " batchUpload" + batchUpload);
             batchUploadSize = transTemp.size();
             traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
-            Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
-//            amountAll += Float.valueOf(transTemp.get(batchUpload).getAmount());
+            amountAll += Float.valueOf(transTemp.get(batchUpload).getAmount());
             mBlockDataSend = new String[64];
             mBlockDataSend[2 - 1] = transTemp.get(batchUpload).getCardNo().length() + transTemp.get(batchUpload).getCardNo();
             mBlockDataSend[3 - 1] = "003000";
-            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(Float.valueOf(transTemp.get(batchUpload).getAmount()) + Float.valueOf(transTemp.get(batchUpload).getFee())));
-            mBlockDataSend[11 - 1] = calNumTraceNo(transTemp.get(batchUpload).getTraceNo());
+            Double amount = Double.valueOf(transTemp.get(batchUpload).getAmount());
+            String feeIf = transTemp.get(batchUpload).getEmciFree().isEmpty() ? "0.0" : transTemp.get(batchUpload).getEmciFree();
+            Double fee = Double.valueOf(feeIf);
+            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amount + fee));
+            mBlockDataSend[11 - 1] = calNumTraceNo(traceIdNo);
             mBlockDataSend[12 - 1] = transTemp.get(batchUpload).getTransTime().replace(":", "");
             mBlockDataSend[13 - 1] = transTemp.get(batchUpload).getTransDate().substring(4, 8);
 //                mBlockDataSend[14 - 1] = transTemp.get(i).getExpiry();
@@ -2823,61 +2811,75 @@ public class CardManager {
             batchUpload++;
 
         } else {
-            traceIdNo = String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS)) + 1);
-            Preference.getInstance(context).setValueString(Preference.KEY_TRACE_NO_POS, traceIdNo);
+            traceIdNo = String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS)));
+            String batchNumber = CardPrefix.getBatch(context, HOST_CARD);
+            mBlockDataSend = new String[64];
+            mBlockDataSend[3 - 1] = "960000";
+            mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.valueOf(traceIdNo));
+            if (HOST_CARD.equalsIgnoreCase("POS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_POS);
+            } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
+            } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
+                mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
+            }
+            mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+            mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+            mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
+            mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
+            MTI = MESSAGE_SETTLEMENT;
+            onLineNow = false; // Paul_20180602
+            packageAndSend(TPDU, "0500", mBlockDataSend);
         }
-//        String batchNumber = CardPrefix.getBatch(context, HOST_CARD);
-//        mBlockDataSend = new String[64];
-//        mBlockDataSend[3 - 1] = "960000";
-//        mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.valueOf(traceIdNo));
-//        if (HOST_CARD.equalsIgnoreCase("POS")) {
-//            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_POS);
-//        } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
-//            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
-//        } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
-//            mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
-//        }
-//        mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
-//        mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
-//        mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
-//        mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
-//        MTI = MESSAGE_SETTLEMENT;
-//        onLineNow = true;
-//        packageAndSend(TPDU, "0500", mBlockDataSend);
     }
 
     public void setDataTestHostPos() {
+        TERMINAL_ID = CardPrefix.getTerminalId(context, "POS");
+        MERCHANT_NUMBER = CardPrefix.getMerchantId(context, "POS");
         mBlockDataSend = new String[64];
         mBlockDataSend[3 - 1] = "990000";
-        mBlockDataSend[11 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS);
+        mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.parseInt(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_POS)));
         mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_POS);
-        mBlockDataSend[41 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_ID_POS);
-        mBlockDataSend[42 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_MERCHANT_ID_POS);
+        mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+        mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
 
-        TPDU = CardPrefix.getTPDU(context,"POS");
-        packageAndSend(TPDU,"0800",mBlockDataSend);
+        TPDU = CardPrefix.getTPDU(context, "POS");
+        packageAndSend(TPDU, "0800", mBlockDataSend);
     }
+
     public void setDataTestHostEPS() {
+        TERMINAL_ID = CardPrefix.getTerminalId(context, "EPS");
+        MERCHANT_NUMBER = CardPrefix.getMerchantId(context, "EPS");
         mBlockDataSend = new String[64];
         mBlockDataSend[3 - 1] = "990000";
-        mBlockDataSend[11 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_EPS);
+        mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.parseInt(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_EPS)));
         mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_EPS);
-        mBlockDataSend[41 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_ID_EPS);
-        mBlockDataSend[42 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_MERCHANT_ID_EPS);
+        mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+        mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
 
-        TPDU = CardPrefix.getTPDU(context,"EPS");
-        packageAndSend(TPDU,"0800",mBlockDataSend);
+        TPDU = CardPrefix.getTPDU(context, "EPS");
+        packageAndSend(TPDU, "0800", mBlockDataSend);
     }
+
     public void setDataTestHostTMS() {
+        String terminalVersion = "00000001";
+        String messageVersion = Preference.getInstance(context).getValueString(Preference.KEY_MESSAGE_VERSION);
+        String transactionCode = "4017";
+        String messageLen = "00000058";
+        String terminalCERT = "              "; // Paul_20180522
+        String checkSUM = "        ";           // Paul_20180522
+        TERMINAL_ID = CardPrefix.getTerminalId(context, "TMS");
+        MERCHANT_NUMBER = CardPrefix.getMerchantId(context, "TMS");
         mBlockDataSend = new String[64];
         mBlockDataSend[3 - 1] = "990000";
-        mBlockDataSend[11 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_TMS);
+        mBlockDataSend[11 - 1] = BlockCalculateUtil.getSerialCode(Integer.parseInt(Preference.getInstance(context).getValueString(Preference.KEY_TRACE_NO_TMS)));
         mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
-        mBlockDataSend[41 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_ID_TMS);
-        mBlockDataSend[42 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_MERCHANT_ID_TMS);
+        mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+        mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+        mBlockDataSend[63 - 1] = getLength62(String.valueOf((messageLen + terminalVersion + messageVersion + transactionCode + terminalCERT + checkSUM).length())) + BlockCalculateUtil.getHexString(messageLen + terminalVersion + messageVersion + transactionCode + terminalCERT + checkSUM);
 
-        TPDU = CardPrefix.getTPDU(context,"TMS");
-        packageAndSend(TPDU,"0800",mBlockDataSend);
+        TPDU = CardPrefix.getTPDU(context, "TMS");
+        packageAndSend(TPDU, "0800", mBlockDataSend);
     }
 
     private void setOnlineUploadCredit(String mBlock55,
@@ -2902,6 +2904,7 @@ public class CardManager {
         mBlockDataSend[3 - 1] = "490000";
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(Double.valueOf(AMOUNT) + amountFee));
         mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "TMS"));
+        stTraceId = mBlockDataSend[11 - 1];
         mBlockDataSend[12 - 1] = time;
         mBlockDataSend[13 - 1] = dateTime;
         mBlockDataSend[22 - 1] = f22;
@@ -3112,19 +3115,20 @@ public class CardManager {
             TERMINAL_ID = CardPrefix.getTerminalId(context, "TMS");
             RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("hostTypeCard", HOST_CARD).equalTo("voidFlag", "N").findAll();
             float fee = Preference.getInstance(context).getValueFloat(Preference.KEY_FEE);
-            for (int i = 0; i < transTemp.size(); i++) {
-                Double amountFee = (Double.valueOf(transTemp.get(i).getAmount()) * fee) / 100;
-                Double amountAll = Double.valueOf(transTemp.get(i).getAmount()) + amountFee;
+            uploadCreditSize = transTemp.size();
+            if (transTemp.size() > 0) {
+                Double amountFee = (Double.valueOf(transTemp.get(uploadCreditPosition).getAmount()) * fee) / 100;
+                Double amountAll = Double.valueOf(transTemp.get(uploadCreditPosition).getAmount()) + amountFee;
                 mBlockDataSend = new String[64];
-                mBlockDataSend[2 - 1] = transTemp.get(i).getCardNo().length() + transTemp.get(i).getCardNo();
+                mBlockDataSend[2 - 1] = transTemp.get(uploadCreditPosition).getCardNo().length() + transTemp.get(uploadCreditPosition).getCardNo();
                 mBlockDataSend[3 - 1] = "480000";
                 mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
                 mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, "TMS"));
                 mBlockDataSend[12 - 1] = time;
                 mBlockDataSend[13 - 1] = dateTime.substring(4, 8);
-                mBlockDataSend[22 - 1] = transTemp.get(i).getPointServiceEntryMode();
+                mBlockDataSend[22 - 1] = transTemp.get(uploadCreditPosition).getPointServiceEntryMode();
                 mBlockDataSend[24 - 1] = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
-                if (transTemp.get(i).getIccData() != null) {
+                if (transTemp.get(uploadCreditPosition).getIccData() != null) {
                     mBlockDataSend[25 - 1] = "05";
                 } else {
                     mBlockDataSend[25 - 1] = "00";
@@ -3132,10 +3136,11 @@ public class CardManager {
                 /*if (transTemp.get(i) != null && transTemp.get(i).getTrack2() != null) {
                     mBlockDataSend[35 - 1] = Track2MappingTable(transTemp.get(i).getTrack2(),dateTime+time);
                 }*/
-                mBlockDataSend[37 - 1] = BlockCalculateUtil.getHexString(transTemp.get(i).getRefNo());
-                mBlockDataSend[38 - 1] = BlockCalculateUtil.getHexString(transTemp.get(i).getApprvCode());
-                mBlockDataSend[39 - 1] = BlockCalculateUtil.getHexString(transTemp.get(i).getRespCode());
+                mBlockDataSend[37 - 1] = BlockCalculateUtil.getHexString(transTemp.get(uploadCreditPosition).getRefNo());
+                mBlockDataSend[38 - 1] = BlockCalculateUtil.getHexString(transTemp.get(uploadCreditPosition).getApprvCode());
+                mBlockDataSend[39 - 1] = BlockCalculateUtil.getHexString(transTemp.get(uploadCreditPosition).getRespCode());
                 mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+                Log.d(TAG, "setUploadCredit: " + MERCHANT_NUMBER);
                 mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
                 mBlockDataSend[62 - 1] = getLength62(String.valueOf(calNumTraceNo(invoiceNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber));
                 String msgLen = "00000268";
@@ -3161,8 +3166,22 @@ public class CardManager {
                 onLineNow = false; //Paul_20180602
                 TPDU = CardPrefix.getTPDU(context, "TMS");
                 packageAndSend(TPDU, "0320", mBlockDataSend);
+                uploadCreditPosition++;
+                Log.d(TAG, "uploadCreditPosition: " + uploadCreditPosition + "\n uploadCreditSize : " + uploadCreditSize);
+            } else {
+                setDataDefaultUploadCradit();
+                switch (HOST_CARD) {
+                    case "EPS":
+                        setDataSettlementAndSendEPS();
+                        break;
+                    case "POS":
+                        setDataSettlementAndSend("POS");
+                        break;
+                    default:
+                        setDataSettlementAndSendTMS();
+                        break;
+                }
             }
-
         } finally {
             if (realm != null) {
                 realm.close();
@@ -3489,15 +3508,18 @@ public class CardManager {
         } else {
 
             // Paul_20180522 Start
-            StringBuilder resultToLoad = new StringBuilder();
-            String first = mBlockDataReceived[39 - 1].substring(0, 2);
-            String second = mBlockDataReceived[39 - 1].substring(2);
-            resultToLoad.append(first.substring(1));
-            resultToLoad.append(second.substring(1));
-            String resultToLoadStr = resultToLoad.toString().trim();
-            //System.out.println("resultToLoadStr: "+resultToLoadStr);
-            Log.d(TAG, "resultToLoadStr:" + resultToLoadStr);
-            response_code = resultToLoadStr;
+            String resultToLoadStr = null;
+            if (!mBlockDataReceived[39 - 1].isEmpty()) {
+                StringBuilder resultToLoad = new StringBuilder();
+                String first = mBlockDataReceived[39 - 1].substring(0, 2);
+                String second = mBlockDataReceived[39 - 1].substring(2);
+                resultToLoad.append(first.substring(1));
+                resultToLoad.append(second.substring(1));
+                resultToLoadStr = resultToLoad.toString().trim();
+                //System.out.println("resultToLoadStr: "+resultToLoadStr);
+                Log.d(TAG, "resultToLoadStr:" + resultToLoadStr);
+                response_code = resultToLoadStr;
+            }
 
             if (onLineNow) {
                 System.out.printf("utility:: dealWithTheResponse 0006 \n");
@@ -3530,7 +3552,7 @@ public class CardManager {
             Log.d(TAG, "RESULT:" + response_code);
             Log.d(TAG, "dealWithTheResponse 3 - 1: " + mBlockDataSend[3 - 1] + " receivedMessageType : " + receivedMessageType);
 
-            if (receivedMessageType.equals("0810")){
+            if (response_code.equals("00") && receivedMessageType.equals("0810") && mBlockDataSend[3 - 1].equals("990000")) {
                 if (testHostLister != null) {
                     testHostLister.onResponseCodeSuccess();
                 }
@@ -3562,6 +3584,7 @@ public class CardManager {
                         F37 = mBlockDataReceived[37 - 1];
                         F38 = mBlockDataReceived[38 - 1];
                         F39 = mBlockDataReceived[39 - 1];
+                        TRANCE_NO = mBlockDataReceived[11 - 1];
                         if (HOST_CARD.equalsIgnoreCase("POS")) {
                             Preference.getInstance(context).setValueString(Preference.KEY_INVOICE_NUMBER_POS, String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_INVOICE_NUMBER_POS)) + 1));
                         } else if (HOST_CARD.equalsIgnoreCase("EPS")) {
@@ -3600,6 +3623,8 @@ public class CardManager {
                     if (connectStatusSocket != null) {
                         connectStatusSocket.onReceived();
                     }
+                } else {
+                    deleteReversal();
                 }
             } else if (mBlockDataSend[3 - 1].equals(TC_ADVICE_CODE)) { // TCUpload
                 Log.d(TAG, "tcUploadPosition : " + tcUploadPosition + " tcUploadSize : " + tcUploadSize);
@@ -3621,17 +3646,7 @@ public class CardManager {
 //            setUploadCredit(mBlockDataSend[55 - 1]);
                                 }
                             } else {
-                                switch (HOST_CARD) {
-                                    case "EPS":
-                                        setDataSettlementAndSendEPS();
-                                        break;
-                                    case "POS":
-                                        setDataSettlementAndSend("POS");
-                                        break;
-                                    default:
-                                        setDataSettlementAndSendTMS();
-                                        break;
-                                }
+                                setUploadCredit();
                             }
                         }
                     } else {
@@ -3646,9 +3661,14 @@ public class CardManager {
                 Log.d(TAG, "updateTransactionDe11Online: ");
                 updateTransactionDe11Online();
 
-            } else if (response_code.equals("95")) {
-                Log.d(TAG, "dealWithTheResponse: " + response_code);
+            } else if (response_code.equals("95") && mBlockDataSend[3 - 1].equals("920000")) {
+                Log.d(TAG, "dealWithTheResponse Settlement Open: " + response_code);
                 setBatchUpload();
+            } else if (response_code.equals("95") && mBlockDataSend[3 - 1].equals("960000")) {
+                Log.d(TAG, "dealWithTheResponse Close Sett: " + response_code);
+                if (settlementHelperLister != null) {
+                    settlementHelperLister.onCloseSettlementFail();
+                }
             } else if (response_code.equals("00") && receivedMessageType.equals("0330") && mBlockDataSend[3 - 1].equals("003000")) {
                 Log.d(TAG, "Batch Upload 0 : ");
                 if (batchUploadSize > batchUpload) {
@@ -3674,14 +3694,49 @@ public class CardManager {
                     mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
                     mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
                     mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
-                    mBlockDataSend[61 - 1] = settlement61;
+                    if (HOST_CARD.equals("TMS")) {
+                        mBlockDataSend[61 - 1] = settlement61;
+                    }
                     mBlockDataSend[63 - 1] = settlement63;
                     MTI = MESSAGE_SETTLEMENT;
                     onLineNow = true;
                     TPDU = CardPrefix.getTPDU(context, HOST_CARD);
                     packageAndSend(TPDU, "0500", mBlockDataSend);
                 }
-            } else if (response_code.equals("00") && mBlockDataReceived[3 - 1].equals("480000")) {
+            }/* else if (response_code.equals("00") && receivedMessageType.equals("0510") && mBlockDataSend[3 - 1].equals("960000")) {
+
+            } */ else if (response_code.equals("00") && mBlockDataReceived[3 - 1].equals("480000")) {
+
+                if (uploadCreditSize > uploadCreditPosition) {
+                    setUploadCredit();
+                } else {
+                    setDataDefaultUploadCradit();
+                    switch (HOST_CARD) {
+                        case "EPS":
+                            setDataSettlementAndSendEPS();
+                            break;
+                        case "POS":
+                            setDataSettlementAndSend("POS");
+                            break;
+                        default:
+                            setDataSettlementAndSendTMS();
+                            break;
+                    }
+                }
+
+            } else if (!response_code.equals("00") && mBlockDataReceived[3 - 1].equals("480000")) {
+
+                switch (HOST_CARD) {
+                    case "EPS":
+                        setDataSettlementAndSendEPS();
+                        break;
+                    case "POS":
+                        setDataSettlementAndSend("POS");
+                        break;
+                    default:
+                        setDataSettlementAndSendTMS();
+                        break;
+                }
 
             } else if (response_code.equals("00") && mBlockDataReceived[3 - 1].equals("920000")) {
                 Log.d(TAG, "onSettlementSuccess: ");
@@ -3696,7 +3751,7 @@ public class CardManager {
                 } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
                     Preference.getInstance(context).setValueString(Preference.KEY_BATCH_NUMBER_TMS, String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_BATCH_NUMBER_TMS)) + 1));
                 }
-            } else if (response_code.equals("00") && mBlockDataReceived[3 - 1].equals("960000")) { // SettlementClose
+            } else if (response_code.equals("00") && receivedMessageType.equals("0510") && mBlockDataReceived[3 - 1].equals("960000")) { // SettlementClose
                 Log.d(TAG, "onSettlementSuccess: ");
                 if (settlementHelperLister != null) {
                     settlementHelperLister.onSettlementSuccess();
@@ -3709,6 +3764,10 @@ public class CardManager {
                 } else if (HOST_CARD.equalsIgnoreCase("TMS")) {
                     Preference.getInstance(context).setValueString(Preference.KEY_BATCH_NUMBER_TMS, String.valueOf(Integer.valueOf(Preference.getInstance(context).getValueString(Preference.KEY_BATCH_NUMBER_TMS)) + 1));
                 }
+                if (HOST_CARD.equals("TMS")) {
+                    setDataFirstSettlement();
+                }
+                Log.d(TAG, "Close : Settlement");
                 Log.d(TAG, "response_code: " + receivedMessageType);
             } else if (response_code.trim().equals("00") && receivedMessageType.equals("0410")) {
                 if (reversalListener != null) {
@@ -3817,7 +3876,7 @@ public class CardManager {
                 public void execute(Realm realm) {
                     TransTemp transTemp = realm.where(TransTemp.class).equalTo("id", saleId).findFirst();
                     if (transTemp != null) {
-                        transTemp.setDe11OnlineTMS(mBlockDataSend[11 - 1]);
+                        transTemp.setDe11OnlineTMS(stTraceId);
                         realm.copyFromRealm(transTemp);
                     }
                 }
@@ -3991,6 +4050,7 @@ public class CardManager {
         double amountFee = (Double.valueOf(AMOUNT) * fee) / 100;
 //        String traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
         String traceIdNo = mBlockDataSend[11 - 1];// Pual_20180601
+        Log.d(TAG, "insertTransaction: " + traceIdNo);
         String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
         String EMCI_ID = "";
         String EMCI_Fee = "";
@@ -4059,14 +4119,16 @@ public class CardManager {
         transTemp.setVoidFlag("N");
         transTemp.setCloseFlag("N");
         transTemp.setTransStat("SALE");
-        transTemp.setEcr(calNumTraceNo(invoiceNumber));
+        transTemp.setEcr(invoiceGB);
         transTemp.setHostTypeCard(HOST_CARD);
         transTemp.setComCode(COMCODE);
         transTemp.setRef1(REF1);
         transTemp.setRef2(REF2);
         transTemp.setRef3(REF3);
         transTemp.setPin(mBlockDataSend[52 - 1]);
-        transTemp.setFee(decimalFormat.format(amountFee));
+        if (!HOST_CARD.equals("TMS")) {
+            transTemp.setFee(decimalFormat.format(amountFee));
+        }
         if (!typeCard.equalsIgnoreCase("M")) {
             if (HOST_CARD.equalsIgnoreCase("POS")) {
                 Date date = new Date();
@@ -4077,10 +4139,10 @@ public class CardManager {
                 int numberRunPos = Integer.parseInt(taxAbbOriginal.substring(8, 12));
                 if (taxDate.equalsIgnoreCase(dateNow)) {
                     ++numberRunPos;
-                    Preference.getInstance(context).setValueString(Preference.KEY_TAX_INVOICE_NO_POS,taxDate+CardPrefix.calLen(String.valueOf(numberRunPos),4));
+                    Preference.getInstance(context).setValueString(Preference.KEY_TAX_INVOICE_NO_POS, taxDate + CardPrefix.calLen(String.valueOf(numberRunPos), 4));
                 } else {
                     String newTaxInvoice = dateNow + "0001";
-                    Preference.getInstance(context).setValueString(Preference.KEY_TAX_INVOICE_NO_POS,newTaxInvoice);
+                    Preference.getInstance(context).setValueString(Preference.KEY_TAX_INVOICE_NO_POS, newTaxInvoice);
                 }
             } else {
                 Date date = new Date();
@@ -4091,19 +4153,19 @@ public class CardManager {
                 int numberRunPos = Integer.parseInt(taxAbbOriginal.substring(8, 12));
                 if (taxDate.equalsIgnoreCase(dateNow)) {
                     ++numberRunPos;
-                    Preference.getInstance(context).setValueString(Preference.KEY_TAX_INVOICE_NO_EPS,taxDate+CardPrefix.calLen(String.valueOf(numberRunPos),4));
+                    Preference.getInstance(context).setValueString(Preference.KEY_TAX_INVOICE_NO_EPS, taxDate + CardPrefix.calLen(String.valueOf(numberRunPos), 4));
                 } else {
                     String newTaxInvoice = dateNow + "0001";
-                    Preference.getInstance(context).setValueString(Preference.KEY_TAX_INVOICE_NO_EPS,newTaxInvoice);
+                    Preference.getInstance(context).setValueString(Preference.KEY_TAX_INVOICE_NO_EPS, newTaxInvoice);
                 }
             }
             String tid;
             String taxAbb;
             if (HOST_CARD.equalsIgnoreCase("POS")) {
-                tid = CardPrefix.getTerminalId(context,HOST_CARD);
+                tid = CardPrefix.getTerminalId(context, HOST_CARD);
                 taxAbb = Preference.getInstance(context).getValueString(Preference.KEY_TAX_INVOICE_NO_POS);
             } else {
-                tid = CardPrefix.getTerminalId(context,HOST_CARD);
+                tid = CardPrefix.getTerminalId(context, HOST_CARD);
                 taxAbb = Preference.getInstance(context).getValueString(Preference.KEY_TAX_INVOICE_NO_EPS);
             }
             TAX_ABB_NEW = tid + taxAbb;
@@ -4442,6 +4504,12 @@ public class CardManager {
         realm.beginTransaction();
         if (trans != null) {
             trans.setVoidFlag("Y");
+//            trans.setTraceNo(mBlockDataReceived[11 - 1]);
+            if (!TRANCE_NO.isEmpty()) {
+                trans.setTraceNo(TRANCE_NO);
+            } else {
+                trans.setTraceNo(mBlockDataSend[11 - 1]);
+            }
         }
         realm.commitTransaction();
         if (insertOrUpdateDatabase != null) {
@@ -4533,16 +4601,45 @@ public class CardManager {
     public void setResponseCodeListener(ResponseCodeListener responseCodeListener) {
         this.responseCodeListener = responseCodeListener;
     }
+
     public void setTestHostLister(TestHostLister testHostLister) {
         this.testHostLister = testHostLister;
     }
 
+    public void removeCardHelperListener() {
+        this.cardHelperListener = null;
+    }
+
+    public void removeInsertOrUpdateDatabase() {
+        this.insertOrUpdateDatabase = null;
+    }
+
+    public void removeReversalListener() {
+        this.reversalListener = null;
+    }
+
+    public void removeConnectStatusSocket() {
+        this.connectStatusSocket = null;
+    }
+
+    public void removeSettlementHelperLister() {
+        this.settlementHelperLister = null;
+    }
+
+    public void removeResponseCodeListener() {
+        this.responseCodeListener = null;
+    }
+
+    public void removeTestHostLister() {
+        this.testHostLister = null;
+    }
+
+
     public interface SettlementHelperLister {
         public void onSettlementSuccess();
 
-        public void onConnectTimeOut();
+        public void onCloseSettlementFail();
 
-        public void onTransactionTimeOut();
     }
 
     public interface CardHelperListener {
@@ -4565,10 +4662,6 @@ public class CardManager {
         public void onUpdateVoidSuccess(int id);
 
         public void onInsertSuccess(int id);
-
-        public void onConnectTimeOut();
-
-        public void onTransactionTimeOut();
     }
 
     public interface ReversalListener {
@@ -4596,6 +4689,7 @@ public class CardManager {
 
         public void onTransactionTimeOut();
     }
+
     public interface TestHostLister {
         public void onResponseCodeSuccess();
 

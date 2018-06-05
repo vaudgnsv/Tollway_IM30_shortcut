@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
@@ -217,23 +218,66 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
             public void onInsertSuccess(int nextId) {
 
             }
+        });
 
+        cardManager.setConnectStatusSocket(new CardManager.ConnectStatusSocket() {
             @Override
             public void onConnectTimeOut() {
-                if (dialogWaiting != null)
-                    dialogWaiting.dismiss();
-                if (timer != null) {
-                    timer.cancel();
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utility.customDialogAlert(MenuServiceListActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                    if (dialogWaiting != null)
+                        dialogWaiting.dismiss();
+                    if (timer != null) {
+                        timer.cancel();
+                    }
                 }
             }
 
             @Override
             public void onTransactionTimeOut() {
-                if (dialogWaiting != null)
-                    dialogWaiting.dismiss();
-                if (timer != null) {
-                    timer.cancel();
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utility.customDialogAlert(MenuServiceListActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                    if (dialogWaiting != null)
+                        dialogWaiting.dismiss();
+                    if (timer != null) {
+                        timer.cancel();
+                    }
                 }
+            }
+
+            @Override
+            public void onError() {
+
+            }
+
+            @Override
+            public void onOther() {
+
+            }
+
+            @Override
+            public void onReceived() {
+
             }
         });
 
@@ -334,11 +378,11 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                     } else if (position == 3) {
                         Intent intent = new Intent(MenuServiceListActivity.this, MenuDetailReportActivity.class);
                         startActivity(intent);
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                     } else if (position == 4) {
                         Intent intent = new Intent(MenuServiceListActivity.this, ReprintActivity.class);
                         startActivity(intent);
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                     } else if (position == 5) {
 
                     } else if (position == 6) {
@@ -355,16 +399,16 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
 
     private boolean checkReversal(String typeClick) {
         this.typeClick = typeClick;
-            ReversalTemp reversalTemp = null;
-            reversalTemp = realm.where(ReversalTemp.class).findFirst();
-            if (reversalTemp != null) {
-                dialogWaiting.show();
-                cardManager.setDataReversalAndSendHost(reversalTemp);
-                return false;
-            } else {
-                dismissDialogAll();
-                return true;
-            }
+        ReversalTemp reversalTemp = null;
+        reversalTemp = realm.where(ReversalTemp.class).findFirst();
+        if (reversalTemp != null) {
+            dialogWaiting.show();
+            cardManager.setDataReversalAndSendHost(reversalTemp);
+            return false;
+        } else {
+            dismissDialogAll();
+            return true;
+        }
     }
 
     private void customDialog() {
@@ -445,6 +489,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                     public void onFinish() {
                         if (typeTimer == 1) {
                             dismissDialogAll();
+                            cardManager.stopTransaction();
                         } else if (typeTimer == 2) {
                             dismissDialogAll();
                             cardManager.stopTransaction();
@@ -499,6 +544,15 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
     protected void onResume() {
         super.onResume();
         realm = Realm.getDefaultInstance();
+        if (cardManager != null) {
+            cardManager.abortPBOCProcess();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cardManager.stopTransaction();
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.centerm.land.R;
 import org.centerm.land.database.TransTemp;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ReportTaxDetailAdapter extends RecyclerView.Adapter<ReportTaxDetailAdapter.ViewHolder> {
@@ -31,19 +32,21 @@ public class ReportTaxDetailAdapter extends RecyclerView.Adapter<ReportTaxDetail
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         holder.taxInvoiceNoLabel.setText(taxList.get(position).getTaxAbb());
         if (taxList.get(position).getVoidFlag().equalsIgnoreCase("Y")) {
             holder.productNameLabel.setText("VOID FEE");
         } else {
             holder.productNameLabel.setText("FEE");
         }
-        holder.traceLabel.setText(taxList.get(position).getTraceNo());
+        holder.traceLabel.setText(taxList.get(position).getEcr());
         String dateTime = taxList.get(position).getTransDate().substring(6, 8)
                 + "/"
                 + taxList.get(position).getTransDate().substring(4, 6)
                 + "/"
-                + taxList.get(position).getTransDate().substring(0, 4) + taxList.get(position).getTransTime();
+                + taxList.get(position).getTransDate().substring(0, 4) + " , " + taxList.get(position).getTransTime();
         holder.dateTimeTaxLabel.setText(dateTime);
+        holder.feeLabel.setText(decimalFormat.format(Double.valueOf(taxList.get(position).getFee())));
     }
 
     @Override

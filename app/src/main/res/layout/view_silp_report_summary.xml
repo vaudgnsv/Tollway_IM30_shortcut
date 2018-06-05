@@ -5,16 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/contentToolbar"
+        layout="@layout/content_toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayoutToolbarBottom"
+        android:layout_below="@+id/contentToolbar"
+        android:background="@color/color_background">
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/slipNestedScrollView"
             android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_above="@+id/printBtn"
-            android:layout_marginEnd="18sp"
-            android:layout_marginStart="18sp"
             android:layout_centerInParent="true"
             android:layout_marginBottom="10dp"
+            android:layout_marginEnd="18sp"
+            android:layout_marginStart="18sp"
             android:layout_marginTop="10dp"
             android:background="@android:color/white"
             android:padding="4dp">
@@ -51,11 +61,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/bank1Image"
@@ -82,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="Header Line1"
                         android:textColor="@android:color/black"
                         android:textSize="13sp" />
@@ -93,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="Header Line2"
                         android:textColor="@android:color/black"
                         android:textSize="13sp" />
@@ -104,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="Header Line3"
                         android:textColor="@android:color/black"
                         android:textSize="13sp" />
@@ -116,47 +126,44 @@
                     android:orientation="horizontal"
                     android:weightSum="3">
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.6">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
-                            android:text="Date/Time"
-                            android:textAllCaps="true"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="2dp"
-                            android:text=":"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                    </FrameLayout>
 
                     <TextView
-                        android:id="@+id/dateLabel"
-                        android:layout_width="0dp"
+                        android:layout_weight="0.8"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.2"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:text="Date/Time"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_weight="0.8"
+                        android:id="@+id/dateLabel"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="15/08/18"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
                     <TextView
+
+                        android:layout_weight="0.8"
+                        android:layout_marginStart="10dp"
                         android:id="@+id/timeLabel"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.2"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="end"
                         android:text="09:54:33"
                         android:textColor="@android:color/black"
@@ -178,7 +185,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:text="MID"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
@@ -199,21 +206,30 @@
                         android:id="@+id/midLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:layout_weight="2.4"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="111111212424123"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
                     <FrameLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3">
+                        android:layout_weight="0.6">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:text="TID"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
@@ -234,12 +250,11 @@
                         android:id="@+id/tidLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:layout_weight="2.4"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="3123123123"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -248,50 +263,47 @@
                     android:orientation="horizontal"
                     android:weightSum="3">
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.6">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
-                            android:text="Batch"
-                            android:textAllCaps="true"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="2dp"
-                            android:text=":"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                    </FrameLayout>
 
                     <TextView
+                        android:layout_weight="0.55"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:text="Batch"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_weight="1"
                         android:id="@+id/batchLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.8"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="000473"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
-                    <FrameLayout
+                    <LinearLayout
+                        android:layout_weight="2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.6">
+                        android:orientation="horizontal">
+
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:text="HOST"
                             android:textColor="@android:color/black"
                             android:textSize="10sp" />
@@ -305,17 +317,16 @@
                             android:textColor="@android:color/black"
                             android:textSize="10sp" />
 
-                    </FrameLayout>
-
-                    <TextView
-                        android:id="@+id/hostLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
-                        android:text="KTB ONUS"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
+                        <TextView
+                            android:id="@+id/hostLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:text="KTB ONUS"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -325,7 +336,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="SUMMARY REPORT"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />
@@ -349,7 +360,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="center"
                         android:text="COUNT"
                         android:textColor="@android:color/black"
@@ -360,7 +371,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="center"
                         android:text="Total"
                         android:textColor="@android:color/black"
@@ -383,7 +394,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:gravity="start"
                             android:text="SALES"
                             android:textColor="@android:color/black"
@@ -397,7 +408,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="center"
                         android:text="2"
                         android:textColor="@android:color/black"
@@ -409,7 +420,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="end"
                         android:text="300.00"
                         android:textColor="@android:color/black"
@@ -432,7 +443,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:gravity="start"
                             android:text="VOID SALES"
                             android:textColor="@android:color/black"
@@ -446,7 +457,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@android:color/black"
@@ -458,7 +469,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="end"
                         android:text="0.00"
                         android:textColor="@android:color/black"
@@ -471,6 +482,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="--------------------------------------------------------------------------------------------------------------------------------------------"
+                    android:textColor="@android:color/black"
                     android:textSize="10sp" />
 
                 <LinearLayout
@@ -488,7 +500,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:gravity="start"
                             android:text="CARD TOTALS"
                             android:textColor="@android:color/black"
@@ -502,7 +514,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@android:color/black"
@@ -514,7 +526,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="end"
                         android:text="0.00"
                         android:textColor="@android:color/black"
@@ -522,16 +534,11 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/timeburnerbold"
-                    android:text="Settlement Successful"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+    <include layout="@layout/content_exit" />
 </RelativeLayout>

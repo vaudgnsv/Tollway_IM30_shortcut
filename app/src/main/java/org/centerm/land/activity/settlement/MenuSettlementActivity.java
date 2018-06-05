@@ -10,6 +10,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,14 +20,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
+import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
 import com.centerm.smartpos.constant.Constant;
-import com.google.zxing.qrcode.encoder.QRCode;
 
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
@@ -37,6 +41,7 @@ import org.centerm.land.database.TransTemp;
 import org.centerm.land.utility.Preference;
 import org.centerm.land.utility.Utility;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,6 +84,17 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
     private View qrView;
     private int status = 0;
 
+    private boolean isSettlementAll = false;
+    private int settlementPosition = 0;
+    private Dialog dialogSettlement;
+    private ProgressBar progressBarStatus;
+    private TextView statusLabel;
+    private Button okBtn;
+    private Bitmap oldBitmap;
+    private Dialog dialogOutOfPaper;
+    private Button okPaperBtn;
+    private TextView msgLabel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,25 +113,36 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         menuSettleRecyclerView.setLayoutManager(layoutManager);
         setMenuList();
         customDialogWaiting();
-
+        customDialogSettlement();
+        customDialogOutOfPaper();
         cardManager.setSettlementHelperLister(new CardManager.SettlementHelperLister() {
             @Override
             public void onSettlementSuccess() {
-                dialogWaiting.dismiss();
-                Intent intent = new Intent(MenuSettlementActivity.this, SlipSettlementActivity.class);
-                intent.putExtra(KEY_TYPE_HOST, typeHost);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
+                if (!isSettlementAll) {
+                    dialogWaiting.dismiss();
+                    Intent intent = new Intent(MenuSettlementActivity.this, SlipSettlementActivity.class);
+                    intent.putExtra(KEY_TYPE_HOST, typeHost);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                } else {
+                    setViewSlip();
+                }
             }
 
             @Override
-            public void onConnectTimeOut() {
-
-            }
-
-            @Override
-            public void onTransactionTimeOut() {
-
+            public void onCloseSettlementFail() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utility.customDialogAlert(MenuSettlementActivity.this, "ทำรายการไม่สำเร็จ 95", new Utility.OnClickCloseImage() {
+                            @Override
+                            public void onClickImage(Dialog dialog) {
+                                dialog.dismiss();
+                                dialogWaiting.dismiss();
+                            }
+                        });
+                    }
+                });
             }
         });
 
@@ -129,10 +156,34 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                             if (dialogWaiting != null) {
                                 dialogWaiting.dismiss();
                             }
+                            if (dialogSettlement != null) {
+                                dialogSettlement.dismiss();
+                            }
                             Utility.customDialogAlert(MenuSettlementActivity.this, response, new Utility.OnClickCloseImage() {
                                 @Override
                                 public void onClickImage(Dialog dialog) {
                                     dialog.dismiss();
+                                    settlementPosition++;
+                                    if (settlementPosition == 0) {
+                                        statusLabel.setText("KTB offus ไม่มีข้อมูล");
+                                    } else if (settlementPosition == 1) {
+                                        statusLabel.setText("BASE24 EPS ไม่มีข้อมูล");
+                                    } else if (settlementPosition == 2) {
+                                        statusLabel.setText("KTB ONUS ไม่มีข้อมูล");
+                                    } else if (settlementPosition == 3) {
+                                        statusLabel.setText("QR ไม่มีข้อมูล");
+                                    } else {
+                                        statusLabel.setText("Settlement สำเร็จ");
+                                    }
+                                    if (settlementPosition == 1) {
+                                        selectDataTransTempAll("EPS");
+                                    } else if (settlementPosition == 2) {
+                                        selectDataTransTempAll("TMS");
+                                    } else if (settlementPosition == 3) {
+                                        selectSettlementQR();
+                                    } else {
+                                        Log.d(TAG, "success: " + settlementPosition);
+                                    }
                                 }
                             });
                         }
@@ -154,6 +205,12 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                             if (dialogWaiting != null) {
                                 dialogWaiting.dismiss();
                             }
+                            if (dialogSettlement != null) {
+                                dialogSettlement.dismiss();
+                            }
+                            if (dialogSettlement != null) {
+                                dialogSettlement.dismiss();
+                            }
                             Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
                                 @Override
                                 public void onClickImage(Dialog dialog) {
@@ -173,6 +230,9 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         public void run() {
                             if (dialogWaiting != null) {
                                 dialogWaiting.dismiss();
+                            }
+                            if (dialogSettlement != null) {
+                                dialogSettlement.dismiss();
                             }
                             Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
                                 @Override
@@ -205,42 +265,67 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
     }
 
     private void setViewSlip() {
-        RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll();
-        float amountSale = 0;
-        float amountVoid = 0;
-        for (int i = 0; i < transTemp.size(); i++) {
-            amountSale += Float.valueOf(transTemp.get(i).getAmount());
-        }
-        RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("voidFlag", "Y").equalTo("hostTypeCard", typeHost).findAll();
-        for (int i = 0; i < transTempVoid.size(); i++) {
-            amountVoid += Float.valueOf(transTempVoid.get(i).getAmount());
-        }
-        Date date = new Date();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+                Realm realm = Realm.getDefaultInstance();
+                try {
+                    RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll();
+                    Double amountSale = 0.0;
+                    Double amountVoid = 0.0;
+                    for (int i = 0; i < transTemp.size(); i++) {
+                        amountSale += Float.valueOf(transTemp.get(i).getAmount());
+                    }
+                    RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("voidFlag", "Y").equalTo("hostTypeCard", typeHost).findAll();
+                    for (int i = 0; i < transTempVoid.size(); i++) {
+                        amountVoid += Float.valueOf(transTempVoid.get(i).getAmount());
+                    }
+                    Date date = new Date();
 
-        voidSaleCountLabel.setText(transTempVoid.size() + "");
-        voidSaleAmountLabel.setText(String.format("%.2f", amountVoid));
-        cardCountLabel.setText((transTemp.size() + transTempVoid.size()) + "");
-        cardAmountLabel.setText(String.format("%.2f", amountVoid + amountSale));
-        dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
-        dateLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
-        if (typeHost.equalsIgnoreCase("POS")) {
-            hostLabel.setText("OFFUS POS");
-            batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
-            tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
-            midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
-        } else if (typeHost.equalsIgnoreCase("EPS")) {
-            hostLabel.setText("OFFUS EPS");
-            batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
-            tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
-            midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
-        } else {
-            hostLabel.setText("KTB ONUS");
-            batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
-            tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
-            midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
-        }
-        doPrinting(getBitmapFromView(settlementLinearLayout));
-        cardManager.deleteTransTemp();
+                    voidSaleCountLabel.setText(transTempVoid.size() + "");
+                    voidSaleAmountLabel.setText(decimalFormat.format(amountVoid));
+                    saleTotalLabel.setText(decimalFormat.format(amountSale));
+                    saleCountLabel.setText(transTemp.size()+"");
+                    cardCountLabel.setText((transTemp.size() + transTempVoid.size()) + "");
+                    cardAmountLabel.setText(decimalFormat.format(amountSale));
+                    dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
+                    dateLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+                    if (typeHost.equalsIgnoreCase("POS")) {
+                        hostLabel.setText("KTB OFFUS");
+                        batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+                        tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
+                        midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+                    } else if (typeHost.equalsIgnoreCase("EPS")) {
+                        hostLabel.setText("BASE24 EPS");
+                        batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+                        tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
+                        midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
+                    } else {
+                        hostLabel.setText("KTB ONUS");
+                        batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
+                        tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+                        midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+                    }
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).findAll();
+                            transTemp.deleteAllFromRealm();
+                        }
+                    });
+                    setMeasureQr();
+                    doPrinting(getBitmapFromView(settlementLinearLayout));
+
+                } finally {
+                    if (realm != null) {
+                        realm.close();
+                    }
+                }
+            }
+
+        }).start();
+
     }
 
     private void setMenuList() {
@@ -250,56 +335,21 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
             menuSettlementAdapter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    cardManager.setDataDefault();
+                    isSettlementAll = false;
+                    cardManager.setDataDefaultBatchUpload();
                     int position = (int) v.getTag();
-                    if (position == 0) {
+                    if (position == 2) {
                         typeHost = "POS";
                         selectDataTransTemp("POS");
                         if (transTemp.size() > 0) {
                             if (transTempVoidFlag.size() != 0) {
 //                                cardManager.setDataSettlementAndSend("POS");
+                                cardManager.setDataDefaultUploadCradit();
                                 cardManager.setCheckTCUpload("POS", true);
                             } else {
 //                                cardManager.setDataSettlementAndSend("POS");
+                                cardManager.setDataDefaultUploadCradit();
                                 cardManager.setCheckTCUpload("POS", true);
-                            }
-                            dialogWaiting.show();
-                        } else {
-                            Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    } else if (position == 1) {
-                        typeHost = "EPS";
-                        selectDataTransTemp("EPS");
-                        if (transTemp.size() > 0) {
-                            if (transTempVoidFlag.size() != 0) {
-//                                cardManager.setDataSettlementAndSendEPS();
-                                cardManager.setCheckTCUpload("EPS", true);
-                            } else {
-//                                cardManager.setDataSettlementAndSendEPS();
-                                cardManager.setCheckTCUpload("EPS", true);
-                            }
-                            dialogWaiting.show();
-                        } else {
-                            Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    } else if (position == 2) {
-                        typeHost = "TMS";
-                        selectDataTransTemp("TMS");
-                        if (transTemp.size() > 0) {
-                            if (transTempVoidFlag.size() != 0) {
-                                cardManager.setDataSettlementAndSendTMS();
-                            } else {
-                                cardManager.setDataSettlementAndSendTMS();
                             }
                             dialogWaiting.show();
                         } else {
@@ -311,7 +361,56 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                             });
                         }
                     } else if (position == 3) {
+                        typeHost = "EPS";
+                        selectDataTransTemp("EPS");
+                        if (transTemp.size() > 0) {
+                            if (transTempVoidFlag.size() != 0) {
+//                                cardManager.setDataSettlementAndSendEPS();
+                                cardManager.setDataDefaultUploadCradit();
+                                cardManager.setCheckTCUpload("EPS", true);
+                            } else {
+//                                cardManager.setDataSettlementAndSendEPS();
+                                cardManager.setDataDefaultUploadCradit();
+                                cardManager.setCheckTCUpload("EPS", true);
+                            }
+                            dialogWaiting.show();
+                        } else {
+                            Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    } else if (position == 1) {
+                        typeHost = "TMS";
+                        selectDataTransTemp("TMS");
+                        if (transTemp.size() > 0) {
+                            if (transTempVoidFlag.size() != 0) {
+                                cardManager.setDataDefaultUploadCradit();
+                                cardManager.setDataSettlementAndSendTMS();
+                            } else {
+                                cardManager.setDataDefaultUploadCradit();
+                                cardManager.setDataSettlementAndSendTMS();
+                            }
+                            dialogWaiting.show();
+                        } else {
+                            Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    } else if (position == 4) {
                         selectSettlementQR();
+                    } else if (position == 0) {
+                        settlementPosition = 0;
+                        isSettlementAll = true;
+                        typeHost = "POS";
+                        dialogSettlement.show();
+                        progressBarStatus.setVisibility(View.VISIBLE);
+                        selectDataTransTempAll("POS");
                     }
                 }
             });
@@ -323,10 +422,11 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         } else {
             menuList.clear();
         }
-        menuList.add("KTB Off us");
-        menuList.add("BASE24 EPS");
-        menuList.add("KTB On Us");
-        menuList.add("QR");
+        menuList.add("Settlement All"); // 4 0
+        menuList.add("KTB On Us"); // 2 1
+        menuList.add("KTB Off us"); // 0 2
+        menuList.add("BASE24 EPS"); // 1 3
+        menuList.add("QR"); // 3 4
         menuSettlementAdapter.setItem(menuList);
         menuSettlementAdapter.notifyDataSetChanged();
 
@@ -357,15 +457,119 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         }*/
     }
 
-    public void doPrinting(final Bitmap slip) {
+    private void selectDataTransTempAll(final String typeHost) {
+        /*if (realm == null) {
+            realm = Realm.getDefaultInstance();
+        }*/
+
+        cardManager.setDataDefaultBatchUpload();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+                try {
+                    if (transTemp == null) {
+                        transTemp = new ArrayList<>();
+                    } else {
+                        transTemp.clear();
+                    }
+                    transTemp.addAll(realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).findAll());
+                    Log.d(TAG, "selectDataTransTemp: " + transTemp.size());
+
+                    if (transTemp.size() > 0) {
+                        if (!typeHost.equals("TMS")) {
+                            cardManager.setDataDefaultUploadCradit();
+                            cardManager.setCheckTCUpload(typeHost, true);
+//                            dialogWaiting.show();
+                        } else {
+                            cardManager.setDataDefaultUploadCradit();
+                            cardManager.setDataSettlementAndSendTMS();
+//                            dialogWaiting.show();
+                        }
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressBarStatus.setVisibility(View.GONE);
+                                if (settlementPosition == 0) {
+                                    statusLabel.setText("KTB offus ไม่มีข้อมูล");
+                                } else if (settlementPosition == 1) {
+                                    statusLabel.setText("BASE24 EPS ไม่มีข้อมูล");
+                                } else if (settlementPosition == 2) {
+                                    statusLabel.setText("KTB ONUS ไม่มีข้อมูล");
+                                } else if (settlementPosition == 3) {
+                                    statusLabel.setText("QR ไม่มีข้อมูล");
+                                }else {
+                                    statusLabel.setText("Settlement สำเร็จ");
+                                }
+                            }
+                        });
+
+                    }
+                } finally {
+                    if (realm != null) {
+                        realm.close();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    public void doPrinting(Bitmap slip) {
+        oldBitmap = slip;
         new Thread() {
             @Override
             public void run() {
                 try {
                     printDev.initPrinter();
-                    int ret = printDev.printBmpFastSync(slip, Constant.ALIGN.CENTER);
+                    printDev.printBmpFast(oldBitmap, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
+                        @Override
+                        public void onPrintFinish() throws RemoteException {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    settlementPosition++;
+                                    progressBarStatus.setVisibility(View.VISIBLE);
+                                    if (settlementPosition == 0) {
+                                        statusLabel.setText("Settlement KTB OFFUS");
+                                    } else if (settlementPosition == 1) {
+                                        statusLabel.setText("Settlement BASE24 EPS");
+                                    } else if (settlementPosition == 2) {
+                                        statusLabel.setText("Settlement KTB ONUS");
+                                    } else if (settlementPosition == 3) {
+                                        statusLabel.setText("Settlement QR");
+                                    }else {
+                                        statusLabel.setText("Settlement สำเร็จ");
+                                    }
+                                    if (settlementPosition == 1) {
+                                        typeHost = "EPS";
+                                        selectDataTransTempAll("EPS");
+                                    } else if (settlementPosition == 2) {
+                                        typeHost = "TMS";
+                                        selectDataTransTempAll("TMS");
+                                    } else if (settlementPosition == 3) {
+                                        selectSettlementQRAll();
+                                    } else {
+                                        dialogSettlement.dismiss();
+                                        Log.d(TAG, "success: " + settlementPosition);
+                                    }
+
+                                    Log.d(TAG, "onSettlementSuccess: " + settlementPosition);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onPrintError(int i) throws RemoteException {
+
+                        }
+
+                        @Override
+                        public void onPrintOutOfPaper() throws RemoteException {
+
+                        }
+                    });
 //                    int ret = printDev.printBarCodeSync("asdasd");
-                    Log.d(TAG, "after call printData ret = " + ret);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -393,7 +597,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                 RealmResults<QrCode> qrCode = realm.where(QrCode.class).equalTo("statusSuccess", "1").findAll();
                 Double amountSaleQr = 0.0;
                 float amountVoidQr = 0;
-                if (qrCode.size() > 0 ) {
+                if (qrCode.size() > 0) {
                     status = 0;
                     for (int i = 0; i < qrCode.size(); i++) {
                         amountSaleQr += Double.valueOf(qrCode.get(i).getAmount());
@@ -408,16 +612,16 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     cardAmountLabel.setText(String.format("%.2f", amountSaleQr));
                     dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
                     timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
-                    hostLabel.setText("OFFUS POS");
+                    hostLabel.setText("KTB QR");
                     batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
                     tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
                     midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
-                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_QR,dateLabel.getText().toString());
-                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TIME_QR,timeLabel.getText().toString());
-                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_QR,saleTotalLabel.getText().toString());
-                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_QR,saleCountLabel.getText().toString());
-                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_QR,voidSaleCountLabel.getText().toString());
-                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_QR,voidSaleAmountLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_QR, dateLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TIME_QR, timeLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_QR, saleTotalLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_QR, saleCountLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_QR, voidSaleCountLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_QR, voidSaleAmountLabel.getText().toString());
                     setMeasureQr();
                 } else {
                     status = 1;
@@ -436,6 +640,59 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                             dialog.dismiss();
                         }
                     });
+                }
+            }
+        });
+
+    }
+
+    private void selectSettlementQRAll() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                RealmResults<QrCode> qrCode = realm.where(QrCode.class).equalTo("statusSuccess", "1").findAll();
+                Double amountSaleQr = 0.0;
+                float amountVoidQr = 0;
+                if (qrCode.size() > 0) {
+                    status = 0;
+                    for (int i = 0; i < qrCode.size(); i++) {
+                        amountSaleQr += Double.valueOf(qrCode.get(i).getAmount());
+                    }
+
+                    Date date = new Date();
+                    voidSaleCountLabel.setText("0");
+                    voidSaleAmountLabel.setText(String.format("%.2f", 0.0));
+                    saleCountLabel.setText(qrCode.size() + "");
+                    saleTotalLabel.setText(String.format("%.2f", amountSaleQr));
+                    cardCountLabel.setText(qrCode.size() + "");
+                    cardAmountLabel.setText(String.format("%.2f", amountSaleQr));
+                    dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
+                    timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+                    hostLabel.setText("KTB QR");
+                    batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+                    tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
+                    midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_QR, dateLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TIME_QR, timeLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_QR, saleTotalLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_QR, saleCountLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_QR, voidSaleCountLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_QR, voidSaleAmountLabel.getText().toString());
+                    setMeasureQr();
+                } else {
+                    status = 1;
+                }
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                if (status == 0) {
+                    deleteQrAll();
+                    doPrinting(getBitmapFromView(settlementLinearLayout));
+                } else {
+                    progressBarStatus.setVisibility(View.GONE);
+                    statusLabel.setText("QR ไม่มีข้อมูล");
                 }
             }
         });
@@ -475,6 +732,58 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
             canvas.drawColor(Color.WHITE);
         view.draw(canvas);
         return returnedBitmap;
+    }
+    private void customDialogOutOfPaper() {
+        dialogOutOfPaper = new Dialog(this);
+        dialogOutOfPaper.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogOutOfPaper.setContentView(R.layout.dialog_custom_printer);
+        dialogOutOfPaper.setCancelable(false);
+        dialogOutOfPaper.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogOutOfPaper.getWindow().setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        okPaperBtn = dialogOutOfPaper.findViewById(R.id.okBtn);
+        msgLabel = dialogOutOfPaper.findViewById(R.id.msgLabel);
+        okPaperBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doPrinting(oldBitmap);
+                dialogOutOfPaper.dismiss();
+            }
+        });
+
+    }
+
+    private void customDialogSettlement() {
+        dialogSettlement = new Dialog(this);
+        dialogSettlement.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogSettlement.setCancelable(false);
+        dialogSettlement.setContentView(R.layout.dialog_custom_settlement);
+        dialogSettlement.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogSettlement.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        progressBarStatus = dialogSettlement.findViewById(R.id.progressBarStatus);
+        statusLabel = dialogSettlement.findViewById(R.id.statusLabel);
+        okBtn = dialogSettlement.findViewById(R.id.okBtn);
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "settlementPosition : " + settlementPosition);
+                progressBarStatus.setVisibility(View.VISIBLE);
+                settlementPosition++;
+                if (settlementPosition == 1) {
+                    statusLabel.setText("Settlement BASE24 EPS");
+                    typeHost = "EPS";
+                    selectDataTransTempAll("EPS");
+                } else if (settlementPosition == 2) {
+                    statusLabel.setText("Settlement KTB ONUS");
+                    typeHost = "TMS";
+                    selectDataTransTempAll("TMS");
+                } else if (settlementPosition == 3) {
+                    selectSettlementQRAll();
+                } else {
+                    dialogSettlement.dismiss();
+                    Log.d(TAG, "success: " + settlementPosition);
+                }
+            }
+        });
     }
 
     @Override

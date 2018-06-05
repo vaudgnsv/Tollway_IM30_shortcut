@@ -258,19 +258,22 @@ public class ReprintActivity extends SettingToolbarActivity {
         bankImageSettle = reportSettlementLast.findViewById(R.id.bankImage);
 
         merchantName1LabelSettle = reportSettlementLast.findViewById(R.id.merchantName1Label);
-        merchantName1LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
 
         merchantName2LabelSettle = reportSettlementLast.findViewById(R.id.merchantName2Label);
-        merchantName2LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
 
         merchantName3LabelSettle = reportSettlementLast.findViewById(R.id.merchantName3Label);
-        merchantName3LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
     }
 
     private void setDataViewSettle() {
         if (typeHost.equalsIgnoreCase("POS") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_POS).isEmpty()) {
-            hostLabelSettle.setText("OFFUS POS");
-            batchLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+            hostLabelSettle.setText("KTB OFFUS");
+            batchLabelSettle.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
             tidLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_POS));
             midLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_POS));
             saleCountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_COUNT_POS));
@@ -284,8 +287,8 @@ public class ReprintActivity extends SettingToolbarActivity {
             setMeasureSettle();
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
         } else if (typeHost.equalsIgnoreCase("EPS") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_EPS).isEmpty()) {
-            hostLabelSettle.setText("OFFUS EPS");
-            batchLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+            hostLabelSettle.setText("BASE24 EPS");
+            batchLabelSettle.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
             tidLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
             midLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
             saleCountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_COUNT_EPS));
@@ -300,7 +303,7 @@ public class ReprintActivity extends SettingToolbarActivity {
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
         } else if (typeHost.equalsIgnoreCase("TMS") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_TMS).isEmpty()) {
             hostLabelSettle.setText("KTB ONUS");
-            batchLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
+            batchLabelSettle.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
             tidLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
             midLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
             saleCountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_COUNT_TMS));
@@ -315,9 +318,9 @@ public class ReprintActivity extends SettingToolbarActivity {
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
         } else if (typeHost.equalsIgnoreCase("QR") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_QR).isEmpty()) {
             hostLabelSettle.setText("KTB ONUS");
-//            batchLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_QR));
-//            tidLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_QR));
-//            midLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_QR));
+            batchLabelSettle.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+            tidLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+            midLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
             saleCountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_COUNT_QR));
             saleTotalLabelSettle.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_TOTAL_QR)));
             dateLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_QR));
@@ -328,7 +331,7 @@ public class ReprintActivity extends SettingToolbarActivity {
             cardAmountLabelSettle.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_TOTAL_QR)));
             setMeasureSettle();
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
-        }else {
+        } else {
             Utility.customDialogAlert(this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
                 @Override
                 public void onClickImage(Dialog dialog) {

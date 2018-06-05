@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import org.centerm.land.utility.Utility;
 
 @SuppressWarnings("unused")
 public class MenuServiceFragment extends Fragment {
+
+    private final String TAG = "MenuServiceFragment";
 
     public static final String KEY_TYPE_PASSWORD = "key_type_password";
     public static String TYPE_NORMAL_PASSWORD = "type_normal_password";
@@ -86,16 +89,15 @@ public class MenuServiceFragment extends Fragment {
     @SuppressWarnings("UnusedParameters")
     private void initInstances(View rootView, Bundle savedInstanceState) {
         // Init 'View' instance(s) with rootView.findViewById here
-        cardManager = MainApplication.getCardManager();
         creditLinearLayout = rootView.findViewById(R.id.creditLinearLayout);
         qrLinearLayout = rootView.findViewById(R.id.qrLinearLayout);
         settingLinearLayout = rootView.findViewById(R.id.settingLinearLayout);
         creditLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),MenuServiceListActivity.class);
+                Intent intent = new Intent(getActivity(), MenuServiceListActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(0,0);
+                getActivity().overridePendingTransition(0, 0);
             }
         });
         qrLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +105,7 @@ public class MenuServiceFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), MenuQrActivity.class);
                 startActivity(intent);
-                getActivity().overridePendingTransition(0,0);
+                getActivity().overridePendingTransition(0, 0);
             }
         });
         settingLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -123,58 +125,62 @@ public class MenuServiceFragment extends Fragment {
         });
         customDialogPassword();
         customDialogHost();
-        cardManager.setTestHostLister(new CardManager.TestHostLister() {
-            @Override
-            public void onResponseCodeSuccess() {
-                if (isAdded()) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utility.customDialogAlertSuccess(getContext(), null, new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
-            }
+    }
 
-            @Override
-            public void onConnectTimeOut() {
-                if (isAdded()) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utility.customDialogAlertSuccess(getContext(), "ไม่สามารถเชื่อมต่อได้", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    });
+    private void onCheckHost() {
+        if (cardManager != null)
+            cardManager.setTestHostLister(new CardManager.TestHostLister() {
+                @Override
+                public void onResponseCodeSuccess() {
+                    if (isAdded() && !isHidden()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Utility.customDialogAlertSuccess(getContext(), null, new Utility.OnClickCloseImage() {
+                                    @Override
+                                    public void onClickImage(Dialog dialog) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
-            }
 
-            @Override
-            public void onTransactionTimeOut() {
-                if (isAdded()) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utility.customDialogAlertSuccess(getContext(), "ไม่สามารถเชื่อมต่อได้", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    });
+                @Override
+                public void onConnectTimeOut() {
+                    if (isAdded()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Utility.customDialogAlert(getContext(), "ไม่สามารถเชื่อมต่อได้", new Utility.OnClickCloseImage() {
+                                    @Override
+                                    public void onClickImage(Dialog dialog) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
-            }
-        });
+
+                @Override
+                public void onTransactionTimeOut() {
+                    if (isAdded() && !isHidden()) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Utility.customDialogAlert(getContext(), "ไม่สามารถเชื่อมต่อได้", new Utility.OnClickCloseImage() {
+                                    @Override
+                                    public void onClickImage(Dialog dialog) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            });
     }
 
     private void customDialogPassword() {
@@ -195,17 +201,17 @@ public class MenuServiceFragment extends Fragment {
                 } else {
                     if (Preference.getInstance(getContext()).getValueString(Preference.KEY_ADMIN_PASS_WORD).equalsIgnoreCase(passwordBox.getText().toString())) {
                         Intent intent = new Intent(getActivity(), SettingActivity.class);
-                        intent.putExtra(KEY_TYPE_PASSWORD,TYPE_ADMIN_PASSWORD);
+                        intent.putExtra(KEY_TYPE_PASSWORD, TYPE_ADMIN_PASSWORD);
                         startActivity(intent);
-                        getActivity().overridePendingTransition(0,0);
+                        getActivity().overridePendingTransition(0, 0);
                         dialogPassword.dismiss();
                     } else if (Preference.getInstance(getContext()).getValueString(Preference.KEY_NORMAL_PASS_WORD).equalsIgnoreCase(passwordBox.getText().toString())) {
                         Intent intent = new Intent(getActivity(), SettingActivity.class);
-                        intent.putExtra(KEY_TYPE_PASSWORD,TYPE_NORMAL_PASSWORD);
+                        intent.putExtra(KEY_TYPE_PASSWORD, TYPE_NORMAL_PASSWORD);
                         startActivity(intent);
-                        getActivity().overridePendingTransition(0,0);
+                        getActivity().overridePendingTransition(0, 0);
                         dialogPassword.dismiss();
-                    }else {
+                    } else {
                         passwordBox.setError("รหัสผิดพลาด");
                     }
                 }
@@ -261,11 +267,32 @@ public class MenuServiceFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        cardManager = MainApplication.getCardManager();
+        onCheckHost();
+
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        cardManager = null;
+        Log.d(TAG, "onPause: ");
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
+        Log.d(TAG, "onStop: ");
     }
 
     /*
@@ -285,4 +312,9 @@ public class MenuServiceFragment extends Fragment {
         // Restore Instance State here
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        Log.d(TAG, "setUserVisibleHint: " + isVisibleToUser);
+    }
 }

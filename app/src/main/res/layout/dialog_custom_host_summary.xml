@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:paddingBottom="20dp">
+    android:background="@android:color/white">
 
     <ImageView
         android:id="@+id/closeImage"
@@ -19,17 +18,6 @@
         android:layout_below="@+id/closeImage"
         android:layout_margin="30dp"
         android:orientation="vertical">
-
-        <Button
-            android:id="@+id/tmsBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/pressed_menu"
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:text="KTB On Us"
-            android:layout_marginBottom="8dp"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
 
         <Button
             android:id="@+id/posBtn"
@@ -54,12 +42,45 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/qrBtn"
+            android:id="@+id/tmsBtn"
+            android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/pressed_menu"
             android:fontFamily="@font/microsoft_sans_serif"
-            android:text="Qr"
+            android:text="KTB On Us"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:layout_marginBottom="8dp"
+            android:id="@+id/taxKtbOffUsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="TAX KTB OFFUS"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/taxBase24EpsBtn"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="TAX base24 eps"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/qrSummaryBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="QR"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </LinearLayout>

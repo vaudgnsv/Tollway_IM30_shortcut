@@ -82,6 +82,26 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     private RelativeLayout ref1RelativeLayout = null;
     private RelativeLayout ref2RelativeLayout = null;
     private RelativeLayout ref3RelativeLayout = null;
+
+    private TextView taxIdLayout = null;
+    private TextView taxAbbLayout = null;
+    private TextView traceTaxLayout = null;
+    private TextView batchTaxLayout = null;
+    private TextView dateTaxLayout = null;
+    private TextView timeTaxLayout = null;
+    private TextView feeTaxLayout = null;
+
+    private TextView appLabel = null;
+    private TextView tcLabel = null;
+    private TextView aidLabel = null;
+    private TextView nameEmvCardLabel = null;
+
+    private FrameLayout appFrameLabel = null;
+    private FrameLayout tcFrameLayout = null;
+    private FrameLayout aidFrameLayout = null;
+    private LinearLayout taxLinearLayout = null;
+    private TextView copyLabel = null;
+    private TextView typeInputCardLabel = null;
     /**
      * Slip Auto
      */
@@ -112,6 +132,27 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     private RelativeLayout ref1RelativeLayoutAuto = null;
     private RelativeLayout ref2RelativeLayoutAuto = null;
     private RelativeLayout ref3RelativeLayoutAuto = null;
+    private TextView taxIdLayoutAuto = null;
+    private TextView taxAbbLayoutAuto = null;
+    private TextView traceTaxLayoutAuto = null;
+    private TextView batchTaxLayoutAuto = null;
+    private TextView dateTaxLayoutAuto = null;
+    private TextView timeTaxLayoutAuto = null;
+    private TextView feeTaxLayoutAuto = null;
+
+    private TextView appLabelAuto = null;
+    private TextView tcLabelAuto = null;
+    private TextView aidLabelAuto = null;
+    private TextView nameEmvCardLabelAuto = null;
+
+
+    private FrameLayout appFrameLabelAuto = null;
+    private FrameLayout tcFrameLayoutAuto = null;
+    private FrameLayout aidFrameLayoutAuto = null;
+    private LinearLayout taxLinearLayoutAuto = null;
+    private TextView copyLabelAuto = null;
+
+    private TextView typeInputCardLabelAuto = null;
 
     private Button printBtn;
     private AidlPrinter printDev = null;
@@ -168,13 +209,16 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         bankImage = findViewById(R.id.bankImage);
         bank1Image = findViewById(R.id.bank1Image);
         merchantName1Label = findViewById(R.id.merchantName1Label);
-        merchantName1Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
 
         merchantName2Label = findViewById(R.id.merchantName2Label);
-        merchantName2Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
 
         merchantName3Label = findViewById(R.id.merchantName3Label);
-        merchantName3Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
 
         tidLabel = findViewById(R.id.tidLabel);
         midLabel = findViewById(R.id.midLabel);
@@ -198,7 +242,29 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         ref1RelativeLayout = findViewById(R.id.ref1RelativeLayout);
         ref2RelativeLayout = findViewById(R.id.ref2RelativeLayout);
         ref3RelativeLayout = findViewById(R.id.ref3RelativeLayout);
+
+        taxIdLayout = findViewById(R.id.taxIdLabel);
+        taxAbbLayout = findViewById(R.id.taxAbbLabel);
+        traceTaxLayout = findViewById(R.id.traceTaxLabel);
+        batchTaxLayout = findViewById(R.id.batchTaxLabel);
+        dateTaxLayout = findViewById(R.id.dateTaxLabel);
+        timeTaxLayout = findViewById(R.id.timeTaxLabel);
+        feeTaxLayout = findViewById(R.id.feeTaxLabel);
+
+        appLabel = findViewById(R.id.appLabel);
+        tcLabel = findViewById(R.id.tcLabel);
+        aidLabel = findViewById(R.id.aidLabel);
+        nameEmvCardLabel = findViewById(R.id.nameEmvCardLabel);
+
+        appFrameLabel = findViewById(R.id.appFrameLabel);
+        tcFrameLayout = findViewById(R.id.tcFrameLayout);
+        aidFrameLayout = findViewById(R.id.aidFrameLayout);
+        taxLinearLayout = findViewById(R.id.taxLinearLayout);
+        copyLabel = findViewById(R.id.copyLabel);
+        typeInputCardLabel = findViewById(R.id.typeInputCardLabel);
+
         printBtn.setOnClickListener(this);
+        printBtn.setEnabled(false);
         selectSALE();
     }
 
@@ -212,13 +278,16 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         bankImageAuto = printFirst.findViewById(R.id.bankImage);
         bank1ImageAuto = printFirst.findViewById(R.id.bank1Image);
         merchantName1LabelAuto = printFirst.findViewById(R.id.merchantName1Label);
-        merchantName1LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
 
         merchantName2LabelAuto = printFirst.findViewById(R.id.merchantName2Label);
-        merchantName2LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
 
         merchantName3LabelAuto = printFirst.findViewById(R.id.merchantName3Label);
-        merchantName3LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
 
         tidLabelAuto = printFirst.findViewById(R.id.tidLabel);
         midLabelAuto = printFirst.findViewById(R.id.midLabel);
@@ -243,6 +312,27 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         ref2RelativeLayoutAuto = printFirst.findViewById(R.id.ref2RelativeLayout);
         ref3RelativeLayoutAuto = printFirst.findViewById(R.id.ref3RelativeLayout);
 
+        taxIdLayoutAuto = printFirst.findViewById(R.id.taxIdLabel);
+        taxAbbLayoutAuto = printFirst.findViewById(R.id.taxAbbLabel);
+        traceTaxLayoutAuto = printFirst.findViewById(R.id.traceTaxLabel);
+        batchTaxLayoutAuto = printFirst.findViewById(R.id.batchTaxLabel);
+        dateTaxLayoutAuto = printFirst.findViewById(R.id.dateTaxLabel);
+        timeTaxLayoutAuto = printFirst.findViewById(R.id.timeTaxLabel);
+        feeTaxLayoutAuto = printFirst.findViewById(R.id.feeTaxLabel);
+
+
+        appLabelAuto = printFirst.findViewById(R.id.appLabel);
+        tcLabelAuto = printFirst.findViewById(R.id.tcLabel);
+        aidLabelAuto = printFirst.findViewById(R.id.aidLabel);
+        nameEmvCardLabelAuto = printFirst.findViewById(R.id.nameEmvCardLabel);
+
+        typeInputCardLabelAuto = printFirst.findViewById(R.id.typeInputCardLabel);
+
+        appFrameLabelAuto = printFirst.findViewById(R.id.appFrameLabel);
+        tcFrameLayoutAuto = printFirst.findViewById(R.id.tcFrameLayout);
+        aidFrameLayoutAuto = printFirst.findViewById(R.id.aidFrameLayout);
+        taxLinearLayoutAuto = printFirst.findViewById(R.id.taxLinearLayout);
+        copyLabelAuto = printFirst.findViewById(R.id.copyLabel);
 
     }
 
@@ -279,22 +369,72 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         midLabel.setText(item.getMid());
         traceLabel.setText(item.getEcr());
         systrcLabel.setText(item.getTraceNo());
+        Log.d(TAG, "setDataView getTraceNo: " + item.getTraceNo());
         if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("POS"))
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
         else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("EPS"))
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
         else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("TMS"))
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabel.setText(item.getRefNo());
-        dateLabel.setText(item.getTransDate());
+        String day = item.getTransDate().substring(4,6);
+        String mount = item.getTransDate().substring(2,4);
+        String year = item.getTransDate().substring(0,2);
+        dateLabel.setText(day + "/" + mount + "/" +year);
         timeLabel.setText(item.getTransTime());
-        typeLabel.setText(item.getTransStat());
+        if (item.getVoidFlag().equals("Y")) {
+            typeLabel.setText("VOID");
+        } else {
+            typeLabel.setText("SALE");
+        }
         typeCardLabel.setText(CardPrefix.getTypeCardName(item.getCardNo()));
         String cutCardStart = item.getCardNo().substring(0, 6);
         String cutCardEnd = item.getCardNo().substring(12, item.getCardNo().length());
-        cardNoLabel.setText(cutCardStart + "XXXXXX" + cutCardEnd);
+        String cardNo = cutCardStart + "XXXXXX" + cutCardEnd;
+        cardNoLabel.setText(cardNo.substring(0,4) + " " + cardNo.substring(4,8) + " " + cardNo.substring(8,12) + " " +cardNo.substring(12,16));
         apprCodeLabel.setText(item.getApprvCode());
         comCodeLabel.setText(item.getComCode());
+
+
+        if (item.getHostTypeCard().equalsIgnoreCase("POS"))
+            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
+        else if (item.getHostTypeCard().equalsIgnoreCase("EPS"))
+            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
+        else if (item.getHostTypeCard().equalsIgnoreCase("TMS"))
+            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+
+        if (!item.getHostTypeCard().equals("TMS")) {
+            dateTaxLayout.setText(item.getTransDate());
+            timeTaxLayout.setText(item.getTransTime());
+            feeTaxLayout.setText(item.getFee());
+
+            taxIdLayout.setText(Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAX_ID));
+            taxAbbLayout.setText(item.getTaxAbb());
+            traceTaxLayout.setText(item.getEcr());
+
+            appLabel.setText(item.getEmvAppLabel());
+            tcLabel.setText(item.getEmvTc());
+            aidLabel.setText(item.getEmvAid());
+            Log.d(TAG, "setDataView: " + item.getEmvAppLabel());
+            Log.d(TAG, "setDataView: " + item.getEmvTc());
+            Log.d(TAG, "setDataView: " + item.getEmvAid());
+            Log.d(TAG, "setDataView: " + item.getEmvNameCardHolder());
+        } else {
+            appFrameLabel.setVisibility(View.GONE);
+            tcFrameLayout.setVisibility(View.GONE);
+            aidFrameLayout.setVisibility(View.GONE);
+            taxLinearLayout.setVisibility(View.GONE);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0, 20, 0, 50);
+            copyLabel.setLayoutParams(lp);
+        }
+        nameEmvCardLabel.setText(item.getEmvNameCardHolder().trim());
+        if (item.getTransType().equals("I")) {
+            typeInputCardLabel.setText("C");
+        } else {
+            typeInputCardLabel.setText("S");
+        }
+
         if (typeSlip.equalsIgnoreCase(CalculatePriceActivity.TypeSale)) {
             amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView if : " + item.getAmount() + " Fee : " + item.getFee());
@@ -356,19 +496,65 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         traceLabelAuto.setText(item.getEcr());
         systrcLabelAuto.setText(item.getTraceNo());
         if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("POS"))
-            batchLabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+            batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
         else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("EPS"))
-            batchLabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+            batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
         else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("TMS"))
-            batchLabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
+            batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabelAuto.setText(item.getRefNo());
-        dateLabelAuto.setText(item.getTransDate());
+
+        String day = item.getTransDate().substring(4,6);
+        String mount = item.getTransDate().substring(2,4);
+        String year = item.getTransDate().substring(0,2);
+        dateLabelAuto.setText(day + "/" + mount + "/" +year);
         timeLabelAuto.setText(item.getTransTime());
-        typeLabelAuto.setText(item.getTransStat());
+
+        if (item.getHostTypeCard().equalsIgnoreCase("POS"))
+            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
+        else if (item.getHostTypeCard().equalsIgnoreCase("EPS"))
+            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
+        else if (item.getHostTypeCard().equalsIgnoreCase("TMS"))
+            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+
+        if (!item.getHostTypeCard().equals("TMS")) {
+            taxIdLayoutAuto.setText(Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAX_ID));
+            taxAbbLayoutAuto.setText(item.getTaxAbb());
+            traceTaxLayoutAuto.setText(item.getEcr());
+            dateTaxLayoutAuto.setText(item.getTransDate());
+            timeTaxLayoutAuto.setText(item.getTransTime());
+            feeTaxLayoutAuto.setText(item.getFee());
+
+            appLabelAuto.setText(item.getEmvAppLabel());
+            tcLabelAuto.setText(item.getEmvTc());
+            aidLabelAuto.setText(item.getEmvAid());
+        } else {
+            appFrameLabelAuto.setVisibility(View.GONE);
+            tcFrameLayoutAuto.setVisibility(View.GONE);
+            aidFrameLayoutAuto.setVisibility(View.GONE);
+            taxLinearLayoutAuto.setVisibility(View.GONE);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(0, 20, 0, 50);
+            copyLabelAuto.setLayoutParams(lp);
+        }
+
+        nameEmvCardLabelAuto.setText(item.getEmvNameCardHolder().trim());
+        if (item.getTransType().equals("I")) {
+            typeInputCardLabelAuto.setText("C");
+        } else {
+            typeInputCardLabelAuto.setText("S");
+        }
+//        typeLabelAuto.setText(item.getTransStat());
+        if (item.getVoidFlag().equals("Y")) {
+            typeLabelAuto.setText("VOID");
+        } else {
+            typeLabelAuto.setText("SALE");
+        }
         typeCardLabelAuto.setText(CardPrefix.getTypeCardName(item.getCardNo()));
         String cutCardStart = item.getCardNo().substring(0, 6);
         String cutCardEnd = item.getCardNo().substring(12, item.getCardNo().length());
-        cardNoLabelAuto.setText(cutCardStart + "XXXXXX" + cutCardEnd);
+        String cardNo = cutCardStart + "XXXXXX" + cutCardEnd;
+
+        cardNoLabelAuto.setText(cardNo.substring(0,4) + " " + cardNo.substring(4,8) + " " + cardNo.substring(8,12) + " " +cardNo.substring(12,16));
         apprCodeLabelAuto.setText(item.getApprvCode());
         comCodeLabelAuto.setText(item.getComCode());
         if (typeSlip.equalsIgnoreCase(CalculatePriceActivity.TypeSale)) {
@@ -474,6 +660,12 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                         @Override
                         public void onPrintFinish() throws RemoteException {
                             Log.d(TAG, "onPrintFinish: ");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    printBtn.setEnabled(true);
+                                }
+                            });
                             if (statusOutScress) {
                                 Intent intent = new Intent(SlipTemplateActivity.this, MenuServiceActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -545,6 +737,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     public void onClick(View v) {
         if (v == printBtn) {
             statusOutScress = true;
+            printBtn.setEnabled(false);
             doPrinting(getBitmapFromView(slipLinearLayout));
             if (timer != null) {
                 timer.cancel();

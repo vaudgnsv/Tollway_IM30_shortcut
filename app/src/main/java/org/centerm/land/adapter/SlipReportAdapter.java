@@ -12,6 +12,7 @@ import org.centerm.land.R;
 import org.centerm.land.database.TransTemp;
 import org.centerm.land.helper.CardPrefix;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,20 +28,33 @@ public class SlipReportAdapter extends RecyclerView.Adapter<SlipReportAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View contentView = LayoutInflater.from(context).inflate(R.layout.item_report_detail,parent,false);
+        View contentView = LayoutInflater.from(context).inflate(R.layout.item_report_detail, parent, false);
         return new ViewHolder(contentView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         holder.cardNameLabel.setText(CardPrefix.getTypeCardName(voidList.get(position).getCardNo()));
-        holder.expDateLabel.setText(voidList.get(position).getExpiry());
-        holder.transactionLabel.setText(voidList.get(position).getTransType());
+        holder.expDateLabel.setText("xx/xx");
+        if (voidList.get(position).getVoidFlag().equals("Y")) {
+            holder.transactionLabel.setText("VOID SALE");
+            holder.amountLabel.setText(" - " + voidList.get(position).getAmount());
+        } else {
+            holder.transactionLabel.setText("SALE");
+            holder.amountLabel.setText(decimalFormat.format(Double.valueOf(voidList.get(position).getAmount())));
+        }
         holder.approvalCodeLabel.setText(voidList.get(position).getApprvCode());
-        holder.cardNumberLabel.setText(voidList.get(position).getCardNo());
-        holder.traceNoLabel.setText(voidList.get(position).getTraceNo());
-        holder.amountLabel.setText(voidList.get(position).getAmount());
-        holder.dateTimeLabel.setText(voidList.get(position).getTransDate() + " " + voidList.get(position).getTransTime());
+        String cutCardStart = voidList.get(position).getCardNo().substring(0, 6);
+        String cutCardEnd = voidList.get(position).getCardNo().substring(12, voidList.get(position).getCardNo().length());
+        String cardNo = cutCardStart + "XXXXXX" + cutCardEnd;
+        holder.cardNumberLabel.setText(cardNo.substring(0,4) + " " + cardNo.substring(4,8) + " " + cardNo.substring(8,12) + " " +cardNo.substring(12,16));
+        holder.traceNoLabel.setText(voidList.get(position).getEcr());
+        String day = voidList.get(position).getTransDate().substring(6,8);
+        String mount = voidList.get(position).getTransDate().substring(4,6);
+        String year = voidList.get(position).getTransDate().substring(2,4);
+        holder.dateTimeLabel.setText(day+" / " +mount + "/" + year + " , " + voidList.get(position).getTransTime());
     }
 
     @Override
@@ -61,6 +75,7 @@ public class SlipReportAdapter extends RecyclerView.Adapter<SlipReportAdapter.Vi
         private TextView traceNoLabel;
         private TextView amountLabel;
         private TextView dateTimeLabel;
+
         public ViewHolder(View itemView) {
             super(itemView);
             cardNameLabel = itemView.findViewById(R.id.cardNameLabel);

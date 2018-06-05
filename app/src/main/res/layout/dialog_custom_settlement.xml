@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/closeImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:src="@drawable/cancel2_128x128" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/closeImage"
+        android:layout_margin="30dp"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/progressBarStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:textColor="@android:color/black"
+            android:id="@+id/statusLabel"
+            android:gravity="center"
+            android:text="Settlement KTB OFFUS"
+            android:textSize="26sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:text="ตกลง"
+            android:id="@+id/okBtn"
+            android:background="@drawable/pressed_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</RelativeLayout>

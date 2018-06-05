@@ -157,50 +157,6 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 finish();
                 overridePendingTransition(0, 0);
             }
-
-            @Override
-            public void onConnectTimeOut() {
-                if (dialogWaiting != null) {
-                    dialogWaiting.dismiss();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isFinishing()) {
-                            Utility.customDialogAlert(CalculatePriceActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                    finish();
-                                }
-                            });
-                        }
-                    }
-                });
-
-            }
-
-            @Override
-            public void onTransactionTimeOut() {
-                Log.d(TAG, "TransactionTimeOut: ");
-                if (dialogWaiting != null) {
-                    dialogWaiting.dismiss();
-                }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isFinishing()) {
-                            Utility.customDialogAlert(CalculatePriceActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                    finish();
-                                }
-                            });
-                        }
-                    }
-                });
-            }
         });
 
         responseCodeDialog();
@@ -237,12 +193,45 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
 
             @Override
             public void onConnectTimeOut() {
-
+                if (dialogWaiting != null) {
+                    dialogWaiting.dismiss();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isFinishing()) {
+                            Utility.customDialogAlert(CalculatePriceActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    }
+                });
             }
 
             @Override
             public void onTransactionTimeOut() {
-
+                Log.d(TAG, "TransactionTimeOut: ");
+                if (dialogWaiting != null) {
+                    dialogWaiting.dismiss();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isFinishing()) {
+                            Utility.customDialogAlert(CalculatePriceActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
     }
@@ -295,6 +284,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         if (!priceLabel.getText().toString().equalsIgnoreCase("0.00") &&
                 !priceLabel.getText().toString().equalsIgnoreCase("0")) {
             if (!cardManager.getHostCard().equalsIgnoreCase("POS")) {
+                pinBox.setText("");
                 dialogInputPin.show();
                 pinBox.requestFocus();
             } else {
@@ -369,6 +359,10 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
                 comCodeBox.setEnabled(true);
                 comCodeBox.requestFocus();
+            } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("2")) {
+                comCodeLinearLayout.setVisibility(View.GONE);
+                comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
+                comCodeBox.setEnabled(false);
             }
             if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("3")) {
                 ref1LinearLayout.setVisibility(View.VISIBLE);
@@ -379,6 +373,10 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
                 ref1Box.setEnabled(true);
                 ref1Box.requestFocus();
+            } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("2")) {
+                ref1LinearLayout.setVisibility(View.GONE);
+                ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
+                ref1Box.setEnabled(false);
             }
             if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("3")) {
                 ref2LinearLayout.setVisibility(View.VISIBLE);
@@ -389,6 +387,10 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 ref2Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1003));
                 ref2Box.setEnabled(true);
                 ref2Box.requestFocus();
+            } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("2")) {
+                ref2LinearLayout.setVisibility(View.GONE);
+                ref2Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1003));
+                ref2Box.setEnabled(false);
             }
             if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("3")) {
                 ref3LinearLayout.setVisibility(View.VISIBLE);
@@ -399,6 +401,10 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
                 ref3Box.setEnabled(true);
                 ref3Box.requestFocus();
+            } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("2")) {
+                ref3LinearLayout.setVisibility(View.GONE);
+                ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
+                ref3Box.setEnabled(false);
             }
         } else {
             Utility.customDialogAlert(CalculatePriceActivity.this, "กรุณา First Settlement ก่อนทำรายการ", new Utility.OnClickCloseImage() {
@@ -423,9 +429,9 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                         cardManager.setDataSalePIN(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                     } else {
                         if (typeCard.equalsIgnoreCase(MenuServiceListActivity.IC_CARD)) {
-                            cardManager.setImportAmount(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())));
+                            cardManager.setImportAmount(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())),ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                         } else {
-                            cardManager.setDataSaleFallBack(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())));
+                            cardManager.setDataSaleFallBack(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())),ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                         }
                     }
                 } else {

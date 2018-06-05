@@ -34,4 +34,11 @@
     <string name="slip_print">พิมพ์ ใบเสร็จรับเงิน</string>
     <string name="slip_pattern_amount">* %1$s</string>
     <string name="slip_pattern_amount_void"> * - %1$s</string>
+    <string name="date_qr">DATE : %1$s</string>
+    <string name="time_qr">TIME : %1$s</string>
+    <string name="tid_qr">TID : %1$s</string>
+    <string name="biller_id_qr">Biller ID : %1$s</string>
+    <string name="trace_no_qr">Trace No : %1$s</string>
+    <string name="ref1_qr">REF1 : %1$s</string>
+    <string name="ref2_qr">REF2 : %1$s</string>
 </resources>

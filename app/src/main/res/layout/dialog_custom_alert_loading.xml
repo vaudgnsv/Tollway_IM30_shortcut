@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:minHeight="300dp"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="#9d000000">
 
     <RelativeLayout
@@ -12,6 +11,7 @@
         android:orientation="vertical">
 
         <ProgressBar
+            style="@android:style/Widget.Holo.ProgressBar.Large"
             android:id="@+id/progressBar"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
             android:layout_below="@+id/progressBar"
             android:textSize="28sp"
             android:textColor="@android:color/white"
-            android:text="กำลังปริ้น....."
+            android:text="กรุณารอสักครู่....."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>

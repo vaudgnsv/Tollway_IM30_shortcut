@@ -38,7 +38,7 @@ public class VoidAdapter extends RecyclerView.Adapter<VoidAdapter.ViewHolder> {
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         holder.traceLabel.setText(voidList.get(position).getEcr());
         holder.cardNoLabel.setText(voidList.get(position).getCardNo());
-        holder.amountLabel.setText(decimalFormat.format(Float.valueOf(voidList.get(position).getAmount())));
+        holder.amountLabel.setText(decimalFormat.format(Double.valueOf(voidList.get(position).getAmount())));
         if (voidList.get(position).getVoidFlag().equals("Y")) {
             holder.typeLabel.setText("VOID");
         } else {

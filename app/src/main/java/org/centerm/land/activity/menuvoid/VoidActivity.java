@@ -135,18 +135,6 @@ public class VoidActivity extends SettingToolbarActivity {
             public void onInsertSuccess(int nextId) {
 
             }
-
-            @Override
-            public void onConnectTimeOut() {
-                if (dialogWaiting != null)
-                    dialogWaiting.dismiss();
-            }
-
-            @Override
-            public void onTransactionTimeOut() {
-                if (dialogWaiting != null)
-                    dialogWaiting.dismiss();
-            }
         });
 
         cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
@@ -353,6 +341,7 @@ public class VoidActivity extends SettingToolbarActivity {
         dialogPin = new Dialog(this);
         dialogPin.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogPin.setContentView(R.layout.dialog_custom_pin);
+        dialogPin.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialogPin.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogPin.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         EditText pinBox = dialogPin.findViewById(R.id.pinBox);
@@ -395,6 +384,7 @@ public class VoidActivity extends SettingToolbarActivity {
         dialogApprCode.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogApprCode.setContentView(R.layout.dialog_custom_appr_code);
         dialogApprCode.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogApprCode.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         dialogApprCode.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         final EditText apprCodeBox = dialogApprCode.findViewById(R.id.apprCodeBox);
         Button okBtn = dialogApprCode.findViewById(R.id.okBtn);

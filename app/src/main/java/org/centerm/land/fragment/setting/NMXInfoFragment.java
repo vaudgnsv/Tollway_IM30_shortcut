@@ -1,14 +1,11 @@
 package org.centerm.land.fragment.setting;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +18,9 @@ import android.widget.LinearLayout;
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
-import org.centerm.land.activity.MenuServiceListActivity;
 import org.centerm.land.database.ReversalTemp;
 import org.centerm.land.database.TransTemp;
+import org.centerm.land.utility.Utility;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -129,11 +126,31 @@ public class NMXInfoFragment extends Fragment implements View.OnClickListener {
         if (realm == null) {
             realm = Realm.getDefaultInstance();
         }
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<ReversalTemp> reversalTemp = realm.where(ReversalTemp.class).findAll();
                 reversalTemp.deleteAllFromRealm();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Utility.customDialogAlertSuccess(getContext(), "ลบข้อมูลสำเร็จ", new Utility.OnClickCloseImage() {
+                    @Override
+                    public void onClickImage(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Utility.customDialogAlert(getContext(), "ลบข้อมูลล้มเหลว", new Utility.OnClickCloseImage() {
+                    @Override
+                    public void onClickImage(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
         realm.close();
@@ -150,18 +167,38 @@ public class NMXInfoFragment extends Fragment implements View.OnClickListener {
         if (realm == null) {
             realm = Realm.getDefaultInstance();
         }
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<TransTemp> transTemps = realm.where(TransTemp.class).findAll();
                 transTemps.deleteAllFromRealm();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Utility.customDialogAlertSuccess(getContext(), "ลบข้อมูลสำเร็จ", new Utility.OnClickCloseImage() {
+                    @Override
+                    public void onClickImage(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Utility.customDialogAlert(getContext(), "ลบข้อมูลล้มเหลว", new Utility.OnClickCloseImage() {
+                    @Override
+                    public void onClickImage(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
         realm.close();
         realm = null;
     }
 
-    private void deleteBatchFirst(final String typeHOst) {
+    private void deleteBatch(final String typeHOst) {
         Realm.getDefaultInstance().refresh();
         if (realm != null) {
             if (!realm.isClosed()) {
@@ -171,12 +208,32 @@ public class NMXInfoFragment extends Fragment implements View.OnClickListener {
         if (realm == null) {
             realm = Realm.getDefaultInstance();
         }
-        realm.executeTransaction(new Realm.Transaction() {
+        realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                TransTemp transTemps = realm.where(TransTemp.class).equalTo("hostTypeCard",typeHOst).findFirst();
+                RealmResults<TransTemp> transTemps = realm.where(TransTemp.class).equalTo("hostTypeCard",typeHOst).findAll();
                 if (transTemps != null)
-                    transTemps.deleteFromRealm();
+                    transTemps.deleteAllFromRealm();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Utility.customDialogAlertSuccess(getContext(), "ลบข้อมูลสำเร็จ", new Utility.OnClickCloseImage() {
+                    @Override
+                    public void onClickImage(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Utility.customDialogAlert(getContext(), "ลบข้อมูลล้มเหลว", new Utility.OnClickCloseImage() {
+                    @Override
+                    public void onClickImage(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
         realm.close();
@@ -206,7 +263,7 @@ public class NMXInfoFragment extends Fragment implements View.OnClickListener {
                 if (typeClick.equals("REVERSAL")) {
                     deleteReversal();
                 } else {
-                    deleteBatchFirst("POS");
+                    deleteBatch("POS");
                 }
             }
         });
@@ -216,7 +273,7 @@ public class NMXInfoFragment extends Fragment implements View.OnClickListener {
                 if (typeClick.equals("REVERSAL")) {
                     deleteReversal();
                 } else {
-                    deleteBatchFirst("EPS");
+                    deleteBatch("EPS");
                 }
             }
         });
@@ -227,7 +284,7 @@ public class NMXInfoFragment extends Fragment implements View.OnClickListener {
                 if (typeClick.equals("REVERSAL")) {
                     deleteReversal();
                 } else {
-                    deleteBatchFirst("TMS");
+                    deleteBatch("TMS");
                 }
             }
         });

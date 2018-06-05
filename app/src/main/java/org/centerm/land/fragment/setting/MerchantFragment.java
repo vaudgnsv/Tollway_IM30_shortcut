@@ -27,6 +27,8 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
     private Button merchantL3Btn = null;
     private TextView feeLabel = null;
     private Button feeBtn = null;
+    private TextView texLabel = null;
+    private Button texBtn = null;
     private CustomDialog customDialog;
 
     public MerchantFragment() {
@@ -77,14 +79,21 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
         merchantL3Label.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_MERCHANT_3));
 
         merchantL3Btn = rootView.findViewById(R.id.merchantL3Btn);
+
         feeLabel = rootView.findViewById(R.id.feeLabel);
         feeLabel.setText(Preference.getInstance(getContext()).getValueFloat(Preference.KEY_FEE)+"");
         feeBtn = rootView.findViewById(R.id.feeBtn);
+
+        texLabel = rootView.findViewById(R.id.texLabel);
+        texLabel.setText(Preference.getInstance(getContext()).getValueFloat(Preference.KEY_FEE)+"");
+
+        texBtn = rootView.findViewById(R.id.texBtn);
 
         merchantL1Btn.setOnClickListener(this);
         merchantL2Btn.setOnClickListener(this);
         merchantL3Btn.setOnClickListener(this);
         feeBtn.setOnClickListener(this);
+        texBtn.setOnClickListener(this);
     }
 
     @Override
@@ -192,6 +201,28 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
             customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(feeLabel.getText().toString());
             customDialog.setMaxLength(20);
+            customDialog.setCancelable(false);
+            customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
+                @Override
+                public void onClickSave(Dialog dialog, String sEt) {
+                    feeLabel.setText(sEt);
+//                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_TERMINAL_ID,sEt);
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onClickCancel(Dialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+            customDialog.show();
+        } else if (v == texBtn) {
+            if (customDialog != null) {
+                customDialog = null;
+            }
+            customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
+            customDialog.setInitWidgetDialog(feeLabel.getText().toString());
+            customDialog.setMaxLength(10);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override

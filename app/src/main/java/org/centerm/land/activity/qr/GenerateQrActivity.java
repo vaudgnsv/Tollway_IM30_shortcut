@@ -1,6 +1,5 @@
 package org.centerm.land.activity.qr;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.RemoteException;
 import android.text.InputFilter;
 import android.util.Log;
@@ -25,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
 import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
@@ -36,13 +33,11 @@ import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.activity.MenuServiceActivity;
-import org.centerm.land.activity.SlipTemplateActivity;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.QrCode;
 import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.manager.HttpManager;
 import org.centerm.land.model.Check;
-import org.centerm.land.utility.DecimalDigitsInputFilter;
 import org.centerm.land.utility.MoneyValueFilter;
 import org.centerm.land.utility.Preference;
 import org.centerm.land.utility.Utility;
@@ -87,9 +82,9 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     private TextView merchantName1Label = null;
     private TextView merchantName2Label = null;
     private TextView merchantName3Label = null;
-    private TextView qrTidLabel = null;
-    private TextView billerLabel = null;
-    private TextView traceLabel = null;
+    private TextView tidLabel = null;
+    private TextView billerIdLabel = null;
+    private TextView traceNoLabel = null;
     private TextView dateLabel = null;
     private TextView timeLabel = null;
     private TextView comCodeLabel = null;
@@ -126,8 +121,11 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     private TextView merchantName2SlipLabel = null;
     private TextView merchantName3SlipLabel = null;
     private TextView qrTidSlipLabel = null;
+    private TextView midSlipLabel = null;
+    private TextView batchSlipLabel = null;
     private TextView billerSlipLabel = null;
-    private TextView traceSlipLabel = null;
+    private TextView traceSlipLabel = null;;
+    private TextView inquiryLabel = null;
     private TextView dateSlipLabel = null;
     private TextView timeSlipLabel = null;
     private TextView comCodeSlipLabel = null;
@@ -147,6 +145,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     private Button okBtn;
     private TextView msgLabel;
     private Bitmap bitmapOld;
+    private TextView apprCodeLabel;
 
 
     @Override
@@ -192,17 +191,16 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         merchantName1SlipLabel = tagView.findViewById(R.id.merchantName1Label);
         merchantName2SlipLabel = tagView.findViewById(R.id.merchantName2Label);
         merchantName3SlipLabel = tagView.findViewById(R.id.merchantName3Label);
+        apprCodeLabel = tagView.findViewById(R.id.apprCodeLabel);
+        midSlipLabel = tagView.findViewById(R.id.midLabel);
+        batchSlipLabel = tagView.findViewById(R.id.batchLabel);
         qrTidSlipLabel = tagView.findViewById(R.id.qrTidLabel);
         billerSlipLabel = tagView.findViewById(R.id.billerLabel);
         traceSlipLabel = tagView.findViewById(R.id.traceLabel);
+        inquiryLabel = tagView.findViewById(R.id.inquiryLabel);
         dateSlipLabel = tagView.findViewById(R.id.dateLabel);
         timeSlipLabel = tagView.findViewById(R.id.timeLabel);
-        comCodeSlipLabel = tagView.findViewById(R.id.comCodeLabel);
         amtThbSlipLabel = tagView.findViewById(R.id.amtThbLabel);
-        ref1SlipRelativeLayout = tagView.findViewById(R.id.ref1RelativeLayout);
-        ref1SlipLabel = tagView.findViewById(R.id.ref1Label);
-        ref2SlipRelativeLayout = tagView.findViewById(R.id.ref2RelativeLayout);
-        ref2SlipLabel = tagView.findViewById(R.id.ref2Label);
         slipSuccessLinearLayout = tagView.findViewById(R.id.slipLinearLayout);
         setViewPrintQr();
         customDialogAlertLoading();
@@ -373,77 +371,66 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     }
 
     private void generatorQr() {
-        if (!ref1Box.getText().toString().trim().isEmpty() && ref2SlipRelativeLayout.getVisibility() == View.GONE
-                || ref2SlipRelativeLayout.getVisibility() == View.VISIBLE && !ref1Box.getText().toString().trim().isEmpty() && !ref2Box.getText().toString().trim().isEmpty()) {
-            DecimalFormat decimalFormat = new DecimalFormat("###0.00");
-            Date date = new Date();
-            dateFormat = new SimpleDateFormat("dd/MM/yyyy").format(date);
-            timeFormat = new SimpleDateFormat("hhMMss").format(date);
-            dateFormatDef = new SimpleDateFormat("yyMMdd").format(date);
 
-            aid = Preference.getInstance(this).getValueString(Preference.KEY_QR_AID);
-            billerId = "010352102131870";
-            qrTid = Preference.getInstance(this).getValueString(Preference.KEY_QR_TERMINAL_ID) +
-                    CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_QR_TRACE_NO), 6) +
-                    dateFormatDef; //"00025068000023180517";  //tid trace yymmdd
-            Log.d(TAG, "onClick: " + qrTid);
-            Log.d(TAG, "onClick: " + billerId);
-            Log.d(TAG, "onClick: " + aid);
-            nameCompany = "NAKHONRATCHASIMA PCG.";
-
-            tagAll = Utility.idValue("", "00", "01");
-            tagAll = Utility.idValue(tagAll, "01", "11");
-            String tagIn30 = Utility.idValue("", "00", aid);
-            tagIn30 = Utility.idValue(tagIn30, "01", billerId);
-            tagIn30 = Utility.idValue(tagIn30, "02", ref1Box.getText().toString());
-            if (!ref2Box.getText().toString().isEmpty()) {
-                tagIn30 = Utility.idValue(tagIn30, "03", ref2Box.getText().toString());
-            }
-            String tag30 = Utility.idValue("", "30", tagIn30);
-            tagAll += tag30;
-            tagAll = Utility.idValue(tagAll, "53", "764");
-            tagAll = Utility.idValue(tagAll, "54", decimalFormat.format(Double.valueOf(amountBox.getText().toString())));
-            tagAll = Utility.idValue(tagAll, "58", "TH");
-            tagAll = Utility.idValue(tagAll, "59", nameCompany);
-            String tagIn62 = Utility.idValue("", "07", qrTid);
-            String tag62 = Utility.idValue("", "62", tagIn62);
-            tagAll += tag62;
-//                tagAll = Utility.idValue(tagAll, "63", "");
-            tagAll += "6304";
-            tagAll += Utility.CheckSumCrcCCITT(tagAll);
-            Log.d(TAG, "initWidget: " + tagAll);
-            qrImage.setImageBitmap(Utility.createQRImage(tagAll, 300, 300,GenerateQrActivity.this));
-//            thaiQrImage.setVisibility(View.VISIBLE);
-            insertGenerateQr();
-        } else {
-
-            if (ref1Box.getText().toString().trim().isEmpty()) {
-                Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref1 ", new Utility.OnClickCloseImage() {
-                    @Override
-                    public void onClickImage(Dialog dialog) {
-                        dialog.dismiss();
-                    }
-                });
-            } else if (ref2LinearLayout.getVisibility() == View.VISIBLE && ref1Box.getText().toString().trim().isEmpty()
-                    || ref2Box.getText().toString().trim().isEmpty()) {
-                if (ref1Box.getText().toString().trim().isEmpty()) {
-                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref1 ", new Utility.OnClickCloseImage() {
-                        @Override
-                        public void onClickImage(Dialog dialog) {
-                            dialog.dismiss();
-                        }
-                    });
-                } else {
-                    Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref2 ", new Utility.OnClickCloseImage() {
-                        @Override
-                        public void onClickImage(Dialog dialog) {
-                            dialog.dismiss();
-                        }
-                    });
+       /* if (ref1Box.getText().toString().trim().isEmpty()) {
+            Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref1 ", new Utility.OnClickCloseImage() {
+                @Override
+                public void onClickImage(Dialog dialog) {
+                    dialog.dismiss();
                 }
-            }
+            });
+        } else if (ref2Box.getText().toString().isEmpty()) {
+            Utility.customDialogAlert(GenerateQrActivity.this, "กรุณากรอก Ref2 ", new Utility.OnClickCloseImage() {
+                @Override
+                public void onClickImage(Dialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+        } else {*/
 
+        DecimalFormat decimalFormat = new DecimalFormat("###0.00");
+        Date date = new Date();
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy").format(date);
+        timeFormat = new SimpleDateFormat("hhMMss").format(date);
+        dateFormatDef = new SimpleDateFormat("yyMMdd").format(date);
+
+        aid = Preference.getInstance(this).getValueString(Preference.KEY_QR_AID);
+        billerId = "010352102131870";
+        qrTid = Preference.getInstance(this).getValueString(Preference.KEY_QR_TERMINAL_ID) +
+                CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_QR_TRACE_NO), 6) +
+                dateFormatDef; //"00025068000023180517";  //tid trace yymmdd
+        Log.d(TAG, "onClick: " + qrTid);
+        Log.d(TAG, "onClick: " + billerId);
+        Log.d(TAG, "onClick: " + aid);
+        nameCompany = "NAKHONRATCHASIMA PCG.";
+
+        tagAll = Utility.idValue("", "00", "01");
+        tagAll = Utility.idValue(tagAll, "01", "11");
+        String tagIn30 = Utility.idValue("", "00", aid);
+        tagIn30 = Utility.idValue(tagIn30, "01", billerId);
+        tagIn30 = Utility.idValue(tagIn30, "02", ref1Box.getText().toString());
+        if (!ref2Box.getText().toString().isEmpty()) {
+            tagIn30 = Utility.idValue(tagIn30, "03", ref2Box.getText().toString());
         }
+        String tag30 = Utility.idValue("", "30", tagIn30);
+        tagAll += tag30;
+        tagAll = Utility.idValue(tagAll, "53", "764");
+        tagAll = Utility.idValue(tagAll, "54", decimalFormat.format(Double.valueOf(amountBox.getText().toString())));
+        tagAll = Utility.idValue(tagAll, "58", "TH");
+        tagAll = Utility.idValue(tagAll, "59", nameCompany);
+        String tagIn62 = Utility.idValue("", "07", qrTid);
+        String tag62 = Utility.idValue("", "62", tagIn62);
+        tagAll += tag62;
+//                tagAll = Utility.idValue(tagAll, "63", "");
+        tagAll += "6304";
+        tagAll += Utility.CheckSumCrcCCITT(tagAll);
+        Log.d(TAG, "initWidget: " + tagAll);
+        qrImage.setImageBitmap(Utility.createQRImage(tagAll, 300, 300, GenerateQrActivity.this));
+//            thaiQrImage.setVisibility(View.VISIBLE);
+        insertGenerateQr();
+        /*
+        }*/
+
     }
 
 
@@ -458,9 +445,9 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         merchantName1Label = tagViewQr.findViewById(R.id.merchantName1Label);
         merchantName2Label = tagViewQr.findViewById(R.id.merchantName2Label);
         merchantName3Label = tagViewQr.findViewById(R.id.merchantName3Label);
-        qrTidLabel = tagViewQr.findViewById(R.id.qrTidLabel);
-        billerLabel = tagViewQr.findViewById(R.id.billerLabel);
-        traceLabel = tagViewQr.findViewById(R.id.traceLabel);
+        tidLabel = tagViewQr.findViewById(R.id.tidLabel);
+        billerIdLabel = tagViewQr.findViewById(R.id.billerIdLabel);
+        traceNoLabel = tagViewQr.findViewById(R.id.traceNoLabel);
         dateLabel = tagViewQr.findViewById(R.id.dateLabel);
         timeLabel = tagViewQr.findViewById(R.id.timeLabel);
         comCodeLabel = tagViewQr.findViewById(R.id.comCodeLabel);
@@ -475,43 +462,43 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     }
 
     private void insertGenerateQr() {
-            Number currentId = realm.where(QrCode.class).max("id");
-            if (currentId == null) {
-                nextId = 1;
-            } else {
-                currentIdObl = currentId.intValue();
-                nextId = currentId.intValue() + 1;
+        Number currentId = realm.where(QrCode.class).max("id");
+        if (currentId == null) {
+            nextId = 1;
+        } else {
+            currentIdObl = currentId.intValue();
+            nextId = currentId.intValue() + 1;
+        }
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                String traceId = Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_TRACE_NO);
+                QrCode qrCode = realm.createObject(QrCode.class, nextId);
+                qrCode.setAid(aid);
+                qrCode.setQrTid(qrTid);
+                qrCode.setBillerId(billerId);
+                qrCode.setTrace(CardPrefix.calLen(traceId, 6));
+                qrCode.setDate(dateFormat);
+                qrCode.setTime(timeFormat);
+                qrCode.setComCode(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1001));
+                qrCode.setRef1(ref1Box.getText().toString());
+                qrCode.setRef2(ref2Box.getText().toString());
+                qrCode.setNameCompany(nameCompany);
+                qrCode.setTextQrGenerateAll(tagAll);
+                qrCode.setAmount(amountBox.getText().toString());
+                qrCode.setStatusPrint("0");
+                qrCode.setStatusSuccess("0");
+                realm.copyFromRealm(qrCode);
             }
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    String traceId = Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_TRACE_NO);
-                    QrCode qrCode = realm.createObject(QrCode.class, nextId);
-                    qrCode.setAid(aid);
-                    qrCode.setQrTid(qrTid);
-                    qrCode.setBillerId(billerId);
-                    qrCode.setTrace(CardPrefix.calLen(traceId, 6));
-                    qrCode.setDate(dateFormat);
-                    qrCode.setTime(timeFormat);
-                    qrCode.setComCode(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1001));
-                    qrCode.setRef1(ref1Box.getText().toString());
-                    qrCode.setRef2(ref2Box.getText().toString());
-                    qrCode.setNameCompany(nameCompany);
-                    qrCode.setTextQrGenerateAll(tagAll);
-                    qrCode.setAmount(amountBox.getText().toString());
-                    qrCode.setStatusPrint("0");
-                    qrCode.setStatusSuccess("0");
-                    realm.copyFromRealm(qrCode);
-                }
-            }, new Realm.Transaction.OnSuccess() {
-                @Override
-                public void onSuccess() {
-                    String traceIdOld = Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_TRACE_NO);
-                    Preference.getInstance(GenerateQrActivity.this).setValueString(Preference.KEY_QR_TRACE_NO, String.valueOf(Integer.valueOf(traceIdOld) + 1));
-                    Log.d(TAG, "onSuccess: ");
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                String traceIdOld = Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_TRACE_NO);
+                Preference.getInstance(GenerateQrActivity.this).setValueString(Preference.KEY_QR_TRACE_NO, String.valueOf(Integer.valueOf(traceIdOld) + 1));
+                Log.d(TAG, "onSuccess: ");
 
-                }
-            });
+            }
+        });
 
     }
 
@@ -521,39 +508,31 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
             public void execute(Realm realm) {
                 qrCode = realm.where(QrCode.class).equalTo("id", nextId).findFirst();
                 Log.d(TAG, "execute: " + qrCode.toString());
-                qrTidLabel.setText(qrCode.getQrTid());
-                billerLabel.setText(qrCode.getBillerId());
-                traceLabel.setText(qrCode.getTrace());
-                dateLabel.setText(qrCode.getDate());
-                timeLabel.setText(qrCode.getTime());
-                comCodeLabel.setText(qrCode.getComCode());
+                tidLabel.setText(getString(R.string.tid_qr, Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS)));
+                billerIdLabel.setText(getString(R.string.biller_id_qr, qrCode.getBillerId()));
+                traceNoLabel.setText(getString(R.string.trace_no_qr, qrCode.getTrace()));
+                dateLabel.setText(getString(R.string.date_qr, qrCode.getDate()));
+                timeLabel.setText(getString(R.string.time_qr, qrCode.getTime()));
+//                comCodeLabel.setText(qrCode.getComCode());
                 amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
                 if (qrCode.getRef1() != null) {
-                    ref1RelativeLayout.setVisibility(View.VISIBLE);
-                    ref1Label.setText(qrCode.getRef1());
+                    ref1Label.setVisibility(View.VISIBLE);
+                    ref1Label.setText(getString(R.string.ref1_qr, qrCode.getRef1()));
                 }
                 if (qrCode.getRef2() != null) {
-                    ref2RelativeLayout.setVisibility(View.VISIBLE);
-                    ref2Label.setText(qrCode.getRef2());
+                    ref2Label.setVisibility(View.VISIBLE);
+                    ref2Label.setText(getString(R.string.ref2_qr, qrCode.getRef2()));
                 }
-                qrSilpImage.setImageBitmap(Utility.createQRImage(qrCode.getTextQrGenerateAll(), 300, 300,GenerateQrActivity.this));
+                qrSilpImage.setImageBitmap(Utility.createQRImage(qrCode.getTextQrGenerateAll(), 300, 300, GenerateQrActivity.this));
 
-                qrTidSlipLabel.setText(qrCode.getQrTid());
+                qrTidSlipLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
                 billerSlipLabel.setText(qrCode.getBillerId());
                 traceSlipLabel.setText(qrCode.getTrace());
                 dateSlipLabel.setText(qrCode.getDate());
                 timeSlipLabel.setText(qrCode.getTime());
-                comCodeSlipLabel.setText(qrCode.getComCode());
+//                comCodeSlipLabel.setText(qrCode.getComCode());
                 amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
-                if (qrCode.getRef1() != null || !qrCode.getRef2().isEmpty()) {
-                    ref1SlipRelativeLayout.setVisibility(View.VISIBLE);
-                    ref1SlipLabel.setText(qrCode.getRef1());
-                }
-                if (qrCode.getRef2() != null || !qrCode.getRef2().isEmpty()) {
-                    ref2SlipRelativeLayout.setVisibility(View.VISIBLE);
-                    ref2SlipLabel.setText(qrCode.getRef2());
-                }
-                QrCode qrCode = realm.where(QrCode.class).equalTo("id",nextId).findFirst();
+                QrCode qrCode = realm.where(QrCode.class).equalTo("id", nextId).findFirst();
                 if (qrCode != null) {
                     qrCode.setStatusPrint("1");
                     realm.copyToRealmOrUpdate(qrCode);
@@ -577,23 +556,27 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 qrCode = realm.where(QrCode.class).equalTo("id", nextId).findFirst();
                 Log.d(TAG, "execute: " + qrCode.toString());
 
-                qrTidSlipLabel.setText(qrCode.getQrTid());
+                qrTidSlipLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
                 billerSlipLabel.setText(qrCode.getBillerId());
+                midSlipLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+                apprCodeLabel.setText("000000");
+                batchSlipLabel.setText(CardPrefix.calLen(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
                 traceSlipLabel.setText(qrCode.getTrace());
                 dateSlipLabel.setText(qrCode.getDate());
                 timeSlipLabel.setText(qrCode.getTime());
-                comCodeSlipLabel.setText(qrCode.getComCode());
+                inquiryLabel.setText(qrCode.getQrTid());
+//                comCodeSlipLabel.setText(qrCode.getComCode());
                 amtThbSlipLabel.setText(getString(R.string.slip_pattern_amount, qrCode.getAmount()));
-                if (qrCode.getRef1() != null) {
+                /*if (qrCode.getRef1() != null) {
                     ref1SlipRelativeLayout.setVisibility(View.VISIBLE);
                     ref1SlipLabel.setText(qrCode.getRef1());
                 }
                 if (qrCode.getRef2() != null) {
                     ref2SlipRelativeLayout.setVisibility(View.VISIBLE);
                     ref2SlipLabel.setText(qrCode.getRef2());
-                }
+                }*/
 
-                QrCode qrCode = realm.where(QrCode.class).equalTo("id",nextId).findFirst();
+                QrCode qrCode = realm.where(QrCode.class).equalTo("id", nextId).findFirst();
                 if (qrCode != null) {
                     qrCode.setStatusSuccess("1");
                     realm.copyToRealmOrUpdate(qrCode);

@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.CountDownTimer;
 import android.os.RemoteException;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,9 +33,12 @@ import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.adapter.MenuReportAdapter;
 import org.centerm.land.adapter.ReportTaxDetailAdapter;
+import org.centerm.land.adapter.SlipQrReportAdapter;
 import org.centerm.land.adapter.SlipReportAdapter;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
+import org.centerm.land.database.QrCode;
 import org.centerm.land.database.TransTemp;
+import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.utility.Preference;
 import org.centerm.land.utility.Utility;
 
@@ -59,6 +63,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     private Button posBtn;
     private Button epsBtn;
     private Button tmsBtn;
+    private Button qrBtn;
     private ImageView closeImage;
 
     private Realm realm;
@@ -120,6 +125,53 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     private TextView countGrandLabel;
     private TextView totalCountGrandLabel;
 
+    private Dialog dialogHostSummary;
+    private Button posSummaryBtn;
+    private Button epsSummaryBtn;
+    private ImageView closeSummaryImage;
+    private Button taxKtbOffUsSummaryBtn;
+    private Button taxBase24EpsSummaryBtn;
+    private Button tmsSummaryBtn;
+    private Dialog dialogLoading;
+    private TextView countReportLabel;
+    private TextView amountReportLabel;
+    private Button qrSummaryBtn;
+    /**
+     * Slip QR
+     */
+    private View reportViewQr;
+    private RecyclerView recyclerViewReportDetailQr;
+    private LinearLayout reportDetailLinearLayoutQr;
+    private TextView countReportLabelQr;
+    private TextView amountReportLabelQr;
+    private TextView dateLabelQr;
+    private TextView timeLabelQr;
+    private TextView midLabelQr;
+    private TextView tidLabelQr;
+    private TextView batchLabelQr;
+    private TextView hostLabelQr;
+    private SlipQrReportAdapter slipQrReportAdapter;
+
+    private ArrayList<QrCode> qrCodeList = null;
+    private View reportSummaryViewQr;
+    private LinearLayout summaryLinearLayoutSmQr;
+    private TextView merchantName1LabelSmQr;
+    private TextView merchantName2LabelSmQr;
+    private TextView merchantName3LabelSmQr;
+    private TextView dateLabelSmQr;
+    private TextView timeLabelSmQr;
+    private TextView midLabelSmQr;
+    private TextView tidLabelSmQr;
+    private TextView batchLabelSmQr;
+    private TextView hostLabelSmQr;
+    private TextView saleCountLabelSmQr;
+    private TextView saleTotalLabelSmQr;
+    private TextView voidSaleCountLabelSmQr;
+    private TextView voidSaleAmountLabelSmQr;
+    private TextView cardCountLabelSmQr;
+    private TextView cardAmountLabelSmQr;
+    private NestedScrollView slipNestedScrollViewSmQr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,12 +189,16 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         menuRecyclerView = findViewById(R.id.menuRecyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         menuRecyclerView.setLayoutManager(layoutManager);
+        reportSummaryView();
         setMenuList();
         customDialogOutOfPaper();
         customDialogHost();
         customDialogHostTwo();
+        customDialogHostSummaryReport();
+        customDialogLoading();
         reportView();
-        reportSummaryView();
+        reportViewQr();
+        reportSummaryViewQr();
         setViewReportTaxDetail();
     }
 
@@ -156,6 +212,28 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this);
         recyclerViewReportDetail.setLayoutManager(layoutManager1);
         recyclerViewReportDetail.setAdapter(slipReportAdapter);
+        countReportLabel = reportView.findViewById(R.id.countReportLabel);
+        amountReportLabel = reportView.findViewById(R.id.amountReportLabel);
+    }
+
+    private void reportViewQr() {
+        LayoutInflater inflater =
+                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        reportViewQr = inflater.inflate(R.layout.view_slip_qr_report_detail, null);
+        recyclerViewReportDetailQr = reportViewQr.findViewById(R.id.recyclerViewReportDetail);
+        reportDetailLinearLayoutQr = reportViewQr.findViewById(R.id.reportDetailLinearLayout);
+        slipQrReportAdapter = new SlipQrReportAdapter(this);
+        RecyclerView.LayoutManager layoutManager1 = new LinearLayoutManager(this);
+        recyclerViewReportDetailQr.setLayoutManager(layoutManager1);
+        recyclerViewReportDetailQr.setAdapter(slipQrReportAdapter);
+        countReportLabelQr = reportViewQr.findViewById(R.id.countReportLabel);
+        amountReportLabelQr = reportViewQr.findViewById(R.id.amountReportLabel);
+        dateLabelQr = reportViewQr.findViewById(R.id.dateLabel);
+        timeLabelQr = reportViewQr.findViewById(R.id.timeLabel);
+        midLabelQr = reportViewQr.findViewById(R.id.midLabel);
+        tidLabelQr = reportViewQr.findViewById(R.id.tidLabel);
+        batchLabelQr = reportViewQr.findViewById(R.id.batchLabel);
+        hostLabelQr = reportViewQr.findViewById(R.id.hostLabel);
     }
 
     private void reportSummaryView() {
@@ -181,16 +259,50 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
 
     }
 
+    private void reportSummaryViewQr() {
+        LayoutInflater inflater =
+                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        reportSummaryViewQr = inflater.inflate(R.layout.view_silp_qr_report_summary, null);
+        slipNestedScrollViewSmQr = reportSummaryViewQr.findViewById(R.id.slipNestedScrollView);
+        summaryLinearLayoutSmQr = reportSummaryViewQr.findViewById(R.id.summaryLinearLayout);
+        merchantName1LabelSmQr = reportSummaryViewQr.findViewById(R.id.merchantName1Label);
+        merchantName2LabelSmQr = reportSummaryViewQr.findViewById(R.id.merchantName2Label);
+        merchantName3LabelSmQr = reportSummaryViewQr.findViewById(R.id.merchantName3Label);
+        dateLabelSmQr = reportSummaryViewQr.findViewById(R.id.dateLabel);
+        timeLabelSmQr = reportSummaryViewQr.findViewById(R.id.timeLabel);
+        midLabelSmQr = reportSummaryViewQr.findViewById(R.id.midLabel);
+        tidLabelSmQr = reportSummaryViewQr.findViewById(R.id.tidLabel);
+        batchLabelSmQr = reportSummaryViewQr.findViewById(R.id.batchLabel);
+        hostLabelSmQr = reportSummaryViewQr.findViewById(R.id.hostLabel);
+        saleCountLabelSmQr = reportSummaryViewQr.findViewById(R.id.saleCountLabel);
+        saleTotalLabelSmQr = reportSummaryViewQr.findViewById(R.id.saleTotalLabel);
+        voidSaleCountLabelSmQr = reportSummaryViewQr.findViewById(R.id.voidSaleCountLabel);
+        voidSaleAmountLabelSmQr = reportSummaryViewQr.findViewById(R.id.voidSaleAmountLabel);
+        cardCountLabelSmQr = reportSummaryViewQr.findViewById(R.id.cardCountLabel);
+        cardAmountLabelSmQr = reportSummaryViewQr.findViewById(R.id.cardAmountLabel);
+
+    }
+
     private void setMeasure() {
         reportView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         reportView.layout(0, 0, reportView.getMeasuredWidth(), reportView.getMeasuredHeight());
     }
+    private void setMeasureQr() {
+        reportViewQr.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        reportViewQr.layout(0, 0, reportViewQr.getMeasuredWidth(), reportViewQr.getMeasuredHeight());
+    }
 
     private void setMeasureSummary() {
-        summaryLinearLayout.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+        reportSummaryView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        summaryLinearLayout.layout(0, 0, summaryLinearLayout.getMeasuredWidth(), summaryLinearLayout.getMeasuredHeight());
+        reportSummaryView.layout(0, 0, reportSummaryView.getMeasuredWidth(), reportSummaryView.getMeasuredHeight());
+    }
+    private void setMeasureSummaryQr() {
+        reportSummaryViewQr.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        reportSummaryViewQr.layout(0, 0, reportSummaryViewQr.getMeasuredWidth(), reportSummaryViewQr.getMeasuredHeight());
     }
 
     private void setMenuList() {
@@ -206,7 +318,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                         dialogHost.show();
                     } else if (position == 1) {
                         typeClick = "SummaryReport";
-                        dialogHost.show();
+                        dialogHostSummary.show();
                     } else if (position == 2) {
                         typeClick = "TAX";
                         dialogMenuHostTwo.show();
@@ -231,6 +343,39 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         menuReportAdapter.notifyDataSetChanged();
     }
 
+    private void dismissAllDialog() {
+        if (dialogMenu != null) {
+            if (dialogMenu.isShowing()) {
+                dialogMenu.dismiss();
+            }
+        }
+        if (dialogHostSummary != null) {
+            if (dialogHostSummary.isShowing()) {
+                dialogHostSummary.dismiss();
+            }
+        }
+        if (dialogHost != null) {
+            if (dialogHost.isShowing()) {
+                dialogHost.dismiss();
+            }
+        }
+        if (dialogMenuHostTwo != null) {
+            if (dialogMenuHostTwo.isShowing()) {
+                dialogMenuHostTwo.dismiss();
+            }
+        }
+        if (dialogOutOfPaper != null) {
+            if (dialogOutOfPaper.isShowing()) {
+                dialogOutOfPaper.dismiss();
+            }
+        }
+        if (dialogLoading != null) {
+            if (dialogLoading.isShowing()) {
+                dialogLoading.dismiss();
+            }
+        }
+    }
+
     private void customDialogMenu() {
         dialogMenu = new Dialog(this);
         dialogMenu.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -251,6 +396,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     }
 
     private void selectDetailReport(String typeHost) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         if (transTempList == null) {
             transTempList = new ArrayList<>();
         } else {
@@ -260,7 +406,18 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         slipReportAdapter.setItem(transTempList);
         slipReportAdapter.notifyDataSetChanged();
 
+        Double amountAll = 0.0;
+        for (int i = 0; i < transTempList.size(); i++) {
+            if (transTempList.get(i).getVoidFlag().equals("N")) {
+                amountAll += Double.valueOf(transTempList.get(i).getAmount());
+            }
+        }
+
+        countReportLabel.setText(transTempList.size() + "");
+        amountReportLabel.setText(decimalFormat.format(amountAll));
+
         setMeasure();
+        dialogLoading.show();
         new CountDownTimer(1500, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -276,6 +433,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                         @Override
                         public void onClickImage(Dialog dialog) {
                             dialog.dismiss();
+                            dialogLoading.dismiss();
                         }
                     });
                 }
@@ -285,6 +443,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     }
 
     private void selectSummaryReport(String typeHost) {
+        dialogLoading.show();
         final RealmResults<TransTemp> transTempSale = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "N").findAll();
 
         final RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "Y").findAll();
@@ -298,14 +457,47 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             totalVoid += Double.valueOf(transTempVoid.get(i).getAmount());
         }
 
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        dateLabel.setText(dateFormat.format(date));
+        timeLabel.setText(timeFormat.format(date));
+        switch (typeHost) {
+            case "POS":
+                midLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+                tidLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS)), 6));
+                hostLabel.setText("KTB Off US");
+                break;
+            case "EPS":
+                midLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
+                tidLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS)), 6));
+                hostLabel.setText("BASE24 EPS");
+                break;
+            default:
+                midLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+                tidLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)), 6));
+                hostLabel.setText("KTB ON US");
+                break;
+        }
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+
         saleCountLabel.setText(String.valueOf(transTempSale.size()));
-        saleTotalLabel.setText(totalSale + "");
+        saleTotalLabel.setText(decimalFormat.format(totalSale));
         voidSaleCountLabel.setText(transTempVoid.size() + "");
-        voidSaleAmountLabel.setText(totalVoid + "");
+        voidSaleAmountLabel.setText(decimalFormat.format(totalVoid));
         countAll = transTempSale.size() + transTempVoid.size();
         cardCountLabel.setText(countAll + "");
-        totalAll = totalSale - totalVoid;
-        cardAmountLabel.setText(totalAll + "");
+        cardAmountLabel.setText(decimalFormat.format(totalSale));
 
         setMeasureSummary();
         new CountDownTimer(1500, 1000) {
@@ -323,6 +515,146 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                         @Override
                         public void onClickImage(Dialog dialog) {
                             dialog.dismiss();
+                            dialogLoading.dismiss();
+                        }
+                    });
+                }
+            }
+        }.start();
+
+    }
+
+    private void selectSummaryTAXReport(String typeHost) {
+        dialogLoading.show();
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        final RealmResults<TransTemp> transTempSale = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "N").findAll();
+
+        final RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "Y").findAll();
+        Log.d(TAG, "selectSummaryReport: " + transTempSale.size());
+        Log.d(TAG, "selectSummaryReport: " + transTempVoid.size());
+        for (int i = 0; i < transTempSale.size(); i++) {
+            totalSale += Double.valueOf(transTempSale.get(i).getAmount());
+        }
+
+        for (int i = 0; i < transTempVoid.size(); i++) {
+            totalVoid += Double.valueOf(transTempVoid.get(i).getAmount());
+        }
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        dateLabel.setText(dateFormat.format(date));
+        timeLabel.setText(timeFormat.format(date));
+        switch (typeHost) {
+            case "POS":
+                midLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+                tidLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS)), 6));
+                hostLabel.setText("KTB Off US");
+                break;
+            case "EPS":
+                midLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
+                tidLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS)), 6));
+                hostLabel.setText("BASE24 EPS");
+                break;
+            default:
+                midLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+                tidLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)), 6));
+                hostLabel.setText("KTB ONUS");
+                break;
+        }
+
+        saleCountLabel.setText(String.valueOf(transTempSale.size()));
+        saleTotalLabel.setText(decimalFormat.format(totalSale));
+        voidSaleCountLabel.setText(transTempVoid.size() + "");
+        voidSaleAmountLabel.setText(decimalFormat.format(totalVoid));
+        countAll = transTempSale.size() + transTempVoid.size();
+        cardCountLabel.setText(countAll + "");
+        cardAmountLabel.setText(decimalFormat.format(totalSale));
+
+        setMeasureSummary();
+        new CountDownTimer(1500, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.d(TAG, "millisUntilFinished : " + millisUntilFinished);
+            }
+
+            @Override
+            public void onFinish() {
+                if (transTempSale.size() > 0 || transTempVoid.size() > 0) {
+                    doPrinting(getBitmapFromView(summaryLinearLayout));
+                } else {
+                    Utility.customDialogAlert(MenuDetailReportActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                            dialogLoading.dismiss();
+                        }
+                    });
+                }
+            }
+        }.start();
+
+    }
+
+    private void selectSummaryQrReport() {
+        dialogLoading.show();
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        final RealmResults<QrCode> qrCodes = realm.where(QrCode.class).equalTo("statusSuccess", "1").findAll();
+
+        Log.d(TAG, "selectSummaryReport: " + qrCodes.size());
+        for (int i = 0; i < qrCodes.size(); i++) {
+            totalSale += Double.valueOf(qrCodes.get(i).getAmount());
+        }
+
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1LabelSmQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2LabelSmQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3LabelSmQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        dateLabelSmQr.setText(dateFormat.format(date));
+        timeLabelSmQr.setText(timeFormat.format(date));
+
+        midLabelSmQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+        tidLabelSmQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+        batchLabelSmQr.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)), 6));
+        hostLabelSmQr.setText("KTB ON US");
+
+        saleCountLabelSmQr.setText(qrCodes.size() + "");
+        saleTotalLabelSmQr.setText(decimalFormat.format(totalSale));
+        voidSaleCountLabelSmQr.setText("0");
+        voidSaleAmountLabelSmQr.setText(decimalFormat.format(totalVoid));
+        cardCountLabelSmQr.setText(qrCodes.size() + "");
+        cardAmountLabelSmQr.setText(decimalFormat.format(totalSale));
+
+        setMeasureSummaryQr();
+        new CountDownTimer(1500, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.d(TAG, "millisUntilFinished : " + millisUntilFinished);
+            }
+
+            @Override
+            public void onFinish() {
+                if (qrCodes.size() > 0) {
+                    doPrinting(getBitmapFromView(summaryLinearLayoutSmQr));
+                } else {
+                    Utility.customDialogAlert(MenuDetailReportActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
+                        @Override
+                        public void onClickImage(Dialog dialog) {
+                            dialog.dismiss();
+                            dialogLoading.dismiss();
                         }
                     });
                 }
@@ -335,12 +667,13 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         dialogHost = new Dialog(this);
         dialogHost.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogHost.setCancelable(false);
-        dialogHost.setContentView(R.layout.dialog_custom_host);
+        dialogHost.setContentView(R.layout.dialog_custom_host_qr);
         dialogHost.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogHost.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         posBtn = dialogHost.findViewById(R.id.posBtn);
         epsBtn = dialogHost.findViewById(R.id.epsBtn);
         tmsBtn = dialogHost.findViewById(R.id.tmsBtn);
+        qrBtn = dialogHost.findViewById(R.id.qrBtn);
         closeImage = dialogHost.findViewById(R.id.closeImage);
         closeImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -351,24 +684,32 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         posBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (typeClick.equals("DetailReport")) {
-                    selectDetailReport("POS");
-                } else if (typeClick.equals("SummaryReport")) {
-                    selectSummaryReport("POS");
-                } else {
+                switch (typeClick) {
+                    case "DetailReport":
+                        selectDetailReport("POS");
+                        break;
+                    case "SummaryReport":
+                        selectSummaryReport("POS");
+                        break;
+                    default:
 
+                        break;
                 }
             }
         });
         epsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (typeClick.equals("DetailReport")) {
-                    selectDetailReport("EPS");
-                } else if (typeClick.equals("SummaryReport")) {
-                    selectSummaryReport("EPS");
-                } else {
-                    dialogMenuHostTwo.show();
+                switch (typeClick) {
+                    case "DetailReport":
+                        selectDetailReport("EPS");
+                        break;
+                    case "SummaryReport":
+                        selectSummaryReport("EPS");
+                        break;
+                    default:
+                        dialogMenuHostTwo.show();
+                        break;
                 }
             }
         });
@@ -376,13 +717,23 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         tmsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (typeClick.equals("DetailReport")) {
-                    selectDetailReport("TMS");
-                } else if (typeClick.equals("SummaryReport")) {
-                    selectSummaryReport("TMS");
-                } else {
+                switch (typeClick) {
+                    case "DetailReport":
+                        selectDetailReport("TMS");
+                        break;
+                    case "SummaryReport":
+                        selectSummaryReport("TMS");
+                        break;
+                    default:
 
+                        break;
                 }
+            }
+        });
+        qrBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getQrReport();
             }
         });
     }
@@ -418,6 +769,65 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         });
     }
 
+    private void customDialogHostSummaryReport() {
+        dialogHostSummary = new Dialog(this);
+        dialogHostSummary.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogHostSummary.setCancelable(false);
+        dialogHostSummary.setContentView(R.layout.dialog_custom_host_summary);
+        dialogHostSummary.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogHostSummary.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        posSummaryBtn = dialogHostSummary.findViewById(R.id.posBtn);
+        epsSummaryBtn = dialogHostSummary.findViewById(R.id.epsBtn);
+        tmsSummaryBtn = dialogHostSummary.findViewById(R.id.tmsBtn);
+        qrSummaryBtn = dialogHostSummary.findViewById(R.id.qrSummaryBtn);
+        closeSummaryImage = dialogHostSummary.findViewById(R.id.closeImage);
+        taxKtbOffUsSummaryBtn = dialogHostSummary.findViewById(R.id.taxKtbOffUsBtn);
+        taxBase24EpsSummaryBtn = dialogHostSummary.findViewById(R.id.taxBase24EpsBtn);
+        closeSummaryImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogHostSummary.dismiss();
+            }
+        });
+        posSummaryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectSummaryReport("POS");
+
+            }
+        });
+        epsSummaryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectSummaryReport("EPS");
+            }
+        });
+        tmsSummaryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectSummaryReport("TMS");
+            }
+        });
+        taxKtbOffUsSummaryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectSummaryTAXReport("POS");
+            }
+        });
+        taxBase24EpsSummaryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectSummaryTAXReport("EPS");
+            }
+        });
+        qrSummaryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectSummaryQrReport();
+            }
+        });
+    }
+
 
     private void setViewReportTaxDetail() {
         LayoutInflater inflater =
@@ -441,16 +851,17 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     }
 
     private void getDatabaseTax(String typeHost) {
+        dialogLoading.show();
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         DateFormat timeFormat = new SimpleDateFormat("hh:MM:ss");
         taxIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TAX_ID));
         if (typeHost.equalsIgnoreCase("EPS")) {
-            batchIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+            batchIdLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
             hostTaxLabel.setText("BASE24 EPS");
         } else {
-            batchIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+            batchIdLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
             hostTaxLabel.setText("KTB OFFUS");
         }
         dateTaxLabel.setText(dateFormat.format(date));
@@ -505,6 +916,77 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                     doPrinting(getBitmapFromView(reportTaxDetailLinearLayout));
                 }
             }.start();
+        } else {
+            Utility.customDialogAlert(MenuDetailReportActivity.this, typeHost + " ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
+                @Override
+                public void onClickImage(Dialog dialog) {
+                    dialog.dismiss();
+                    dialogLoading.dismiss();
+                }
+            });
+        }
+
+    }
+
+    private void getQrReport() {
+        dialogLoading.show();
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        RealmResults<QrCode> qrCodes = realm.where(QrCode.class).equalTo("statusSuccess", "1").findAll();
+        if (qrCodes.size() > 0) {
+            Double amount = 0.0;
+
+            for (int i = 0; i < qrCodes.size(); i++) {
+                amount += Double.valueOf(qrCodes.get(i).getAmount());
+            }
+
+            Date date = new Date();
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat timeFormat = new SimpleDateFormat("hh:MM:ss");
+            taxIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TAX_ID));
+            dateLabelQr.setText(dateFormat.format(date));
+            timeLabelQr.setText(timeFormat.format(date));
+
+            midLabelQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+            tidLabelQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+            batchLabelQr.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)), 6));
+            hostLabelQr.setText("KTB QR");
+            amountReportLabelQr.setText(decimalFormat.format(amount));
+            countReportLabelQr.setText(qrCodes.size() + "");
+            /*totalFeeLabel.setText(decimalFormat.format(amount));
+            countVoidFeeLabel.setText(feeVoidSize + "");
+            totalVoidFeeLabel.setText(decimalFormat.format(amountVoid));
+            countGrandLabel.setText(feeSize + feeVoidSize + "");
+            totalCountGrandLabel.setText(decimalFormat.format(amount));*/
+            if (qrCodeList == null) {
+                qrCodeList = new ArrayList<>();
+            } else {
+                qrCodeList.clear();
+            }
+            qrCodeList.addAll(qrCodes);
+            slipQrReportAdapter.setItem(qrCodeList);
+            slipQrReportAdapter.notifyDataSetChanged();
+
+            setMeasureQr();
+
+            new CountDownTimer(1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    doPrinting(getBitmapFromView(reportDetailLinearLayoutQr));
+                }
+            }.start();
+        } else {
+            Utility.customDialogAlert(MenuDetailReportActivity.this, " ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
+                @Override
+                public void onClickImage(Dialog dialog) {
+                    dialog.dismiss();
+                    dialogLoading.dismiss();
+                }
+            });
         }
 
     }
@@ -537,6 +1019,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                     printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
                         @Override
                         public void onPrintFinish() throws RemoteException {
+                            dismissAllDialog();
                             Intent intent = new Intent(MenuDetailReportActivity.this, MenuServiceActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -554,7 +1037,13 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
 
                         @Override
                         public void onPrintOutOfPaper() throws RemoteException {
-                            dialogOutOfPaper.show();
+                            dialogLoading.dismiss();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogOutOfPaper.show();
+                                }
+                            });
                         }
                     });
                 } catch (RemoteException e) {
@@ -578,10 +1067,21 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             public void onClick(View v) {
                 doPrinting(bitmapOld);
                 dialogOutOfPaper.dismiss();
+                dialogLoading.show();
             }
         });
 
     }
+
+    private void customDialogLoading() {
+        dialogLoading = new Dialog(this);
+        dialogLoading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogLoading.setContentView(R.layout.dialog_custom_alert_loading);
+        dialogLoading.setCancelable(false);
+        dialogLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogLoading.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+    }
+
 
     @Override
     protected void onResume() {

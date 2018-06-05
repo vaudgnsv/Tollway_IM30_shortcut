@@ -18,68 +18,51 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/cardNameLabel"
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
-                android:text="CARD NAME"
+                android:text="TRACE"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/expDateLabel"
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
-                android:text="EXP DATE"
+                android:text="AMOUNT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/transactionLabel"
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
-                android:text="TRANSACTION"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/approvalCodeLabel"
-                android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:text="APPROVAL CODE"
+                android:text="DATE , TIME"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="end"
-            android:layout_gravity="end"
+            android:gravity="start"
+            android:layout_gravity="start"
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/cardNumberLabel"
+                android:id="@+id/traceQrLabel"
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="Card Number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/traceNoLabel"
+                android:id="@+id/amountQrLabel"
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="Trace No"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:id="@+id/amountLabel"
+                android:id="@+id/dateTimeQrLabel"
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="TRANSACTION"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-            <TextView
-                android:id="@+id/dateTimeLabel"
-                android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:text="APPROVAL CODE"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

@@ -36,9 +36,11 @@ import org.centerm.land.activity.MenuServiceActivity;
 import org.centerm.land.activity.settlement.SlipSettlementActivity;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.QrCode;
+import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.manager.HttpManager;
 import org.centerm.land.model.Check;
 import org.centerm.land.utility.DecimalDigitsInputFilter;
+import org.centerm.land.utility.Preference;
 import org.centerm.land.utility.Utility;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,6 +97,10 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
     private Button okBtn;
     private TextView msgLabel;
     private Bitmap bitmapOld;
+    private TextView midLabel;
+    private TextView batchLabel;
+    private TextView apprCodeLabel;
+    private TextView inquiryLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,21 +148,25 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
             public void execute(Realm realm) {
                 qrCode = realm.where(QrCode.class).equalTo("trace", traceId).findFirst();
                 if (qrCode != null) {
-                    qrTidLabel.setText(qrCode.getQrTid());
+                    qrTidLabel.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+                    midLabel.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+                    batchLabel.setText(CardPrefix.calLen(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+                    apprCodeLabel.setText("000000");
+                    inquiryLabel.setText(qrCode.getQrTid());
                     billerLabel.setText(qrCode.getBillerId());
                     traceLabel.setText(qrCode.getTrace());
                     dateLabel.setText(qrCode.getDate());
                     timeLabel.setText(qrCode.getTime());
-                    comCodeLabel.setText(qrCode.getComCode());
+//                    comCodeLabel.setText(qrCode.getComCode());
                     amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
-                    if (qrCode.getRef1() != null) {
+                    /*if (qrCode.getRef1() != null) {
                         ref1RelativeLayout.setVisibility(View.VISIBLE);
                         ref1Label.setText(qrCode.getRef1());
                     }
                     if (qrCode.getRef2() != null) {
                         ref2RelativeLayout.setVisibility(View.VISIBLE);
                         ref2Label.setText(qrCode.getRef2());
-                    }
+                    }*/
 //                qrImage.setImageBitmap(Utility.createQRImage(qrCode.getTextQrGenerateAll(), 300, 300));
                     setMeasureSlip();
 
@@ -207,6 +217,10 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
         merchantName1Label = slipView.findViewById(R.id.merchantName1Label);
         merchantName2Label = slipView.findViewById(R.id.merchantName2Label);
         merchantName3Label = slipView.findViewById(R.id.merchantName3Label);
+        midLabel = slipView.findViewById(R.id.midLabel);
+        batchLabel = slipView.findViewById(R.id.batchLabel);
+        apprCodeLabel = slipView.findViewById(R.id.apprCodeLabel);
+        inquiryLabel = slipView.findViewById(R.id.inquiryLabel);
         qrTidLabel = slipView.findViewById(R.id.qrTidLabel);
         billerLabel = slipView.findViewById(R.id.billerLabel);
         traceLabel = slipView.findViewById(R.id.traceLabel);

@@ -31,6 +31,7 @@ import org.centerm.land.activity.MenuServiceActivity;
 import org.centerm.land.activity.SlipTemplateActivity;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.TransTemp;
+import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.utility.Preference;
 
 import java.text.SimpleDateFormat;
@@ -113,13 +114,16 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
         bankImage = findViewById(R.id.bankImage);
 
         merchantName1Label = findViewById(R.id.merchantName1Label);
-        merchantName1Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
 
         merchantName2Label = findViewById(R.id.merchantName2Label);
-        merchantName2Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
 
         merchantName3Label = findViewById(R.id.merchantName3Label);
-        merchantName3Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3Label.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
 
         customDialogAlertLoading();
         customDialogOutOfPaper();
@@ -156,61 +160,61 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
         if (realm == null) {
             realm = Realm.getDefaultInstance();
         }
-        RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag","N").equalTo("hostTypeCard",typeHost).findAll();
+        RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll();
         float amountSale = 0;
         float amountVoid = 0;
         for (int i = 0; i < transTemp.size(); i++) {
             amountSale += Float.valueOf(transTemp.get(i).getAmount());
         }
-        RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("voidFlag","Y").equalTo("hostTypeCard",typeHost).findAll();
+        RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("voidFlag", "Y").equalTo("hostTypeCard", typeHost).findAll();
         for (int i = 0; i < transTempVoid.size(); i++) {
             amountVoid += Float.valueOf(transTempVoid.get(i).getAmount());
         }
         Date date = new Date();
 
-        voidSaleCountLabel.setText(transTempVoid.size()+"");
-        voidSaleAmountLabel.setText(String.format("%.2f",amountVoid));
-        saleCountLabel.setText(transTemp.size()+"");
-        saleTotalLabel.setText(String.format("%.2f",amountSale));
+        voidSaleCountLabel.setText(transTempVoid.size() + "");
+        voidSaleAmountLabel.setText(String.format("%.2f", amountVoid));
+        saleCountLabel.setText(transTemp.size() + "");
+        saleTotalLabel.setText(String.format("%.2f", amountSale));
         cardCountLabel.setText((transTemp.size() + transTempVoid.size()) + "");
-        cardAmountLabel.setText(String.format("%.2f",amountSale));
+        cardAmountLabel.setText(String.format("%.2f", amountSale));
         dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
         timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
 
 
         if (typeHost.equalsIgnoreCase("POS")) {
             hostLabel.setText("KTB Off us");
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS),6));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_POS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_POS));
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_POS,dateLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_POS,timeLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_POS,saleTotalLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_POS,saleCountLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_POS,voidSaleCountLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS,voidSaleAmountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_POS, dateLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_POS, timeLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_POS, saleTotalLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_POS, saleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_POS, voidSaleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS, voidSaleAmountLabel.getText().toString());
         } else if (typeHost.equalsIgnoreCase("EPS")) {
             hostLabel.setText("BASE24 EPS");
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS),6));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_EPS,dateLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_EPS,timeLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_EPS,saleTotalLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_EPS,saleCountLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_EPS,voidSaleCountLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS,voidSaleAmountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_EPS, dateLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_EPS, timeLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_EPS, saleTotalLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_EPS, saleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_EPS, voidSaleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS, voidSaleAmountLabel.getText().toString());
         } else {
             hostLabel.setText("KTB On Us");
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_TMS,dateLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_TMS,timeLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_TMS,saleTotalLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_TMS,saleCountLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_TMS,voidSaleCountLabel.getText().toString());
-            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_TMS,voidSaleAmountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_TMS, dateLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_TIME_TMS, timeLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_TMS, saleTotalLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_TMS, saleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_TMS, voidSaleCountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_TMS, voidSaleAmountLabel.getText().toString());
         }
         realm.close();
         realm = null;
