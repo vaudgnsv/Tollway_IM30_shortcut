@@ -541,10 +541,10 @@ public class CardManager {
                         public void onFindICCard() throws RemoteException {
                             Log.d(TAG, "pboc2 FindICCard");
                             MAG_TRX_RECV = false;
-                            CheckCardCallback(CHECKCARD_ONFINDICCARD);
-                            if (operateId == SALE) {
-                                //  Create message field
+//                            CheckCardCallback(CHECKCARD_ONFINDICCARD);
 
+                             if (operateId == SALE) {
+                                //  Create message field
                                 mBlockDataSend = new String[64];
                                 mBlockDataSend[3 - 1] = SALE_PROCESSING_CODE;
                                 PROCESSING_CODE = mBlockDataSend[3 - 1];    // Paul_20180523
@@ -560,7 +560,7 @@ public class CardManager {
 //                                tagOf55List.add("4F");
 //                                tagOf55List.add("9F12");
                                 //  Find card info
-                                allProcess(operateId, ICCARD, msg, isCheckMag, isCheckIC, isChecRF, msgPrompt);
+                               allProcess(operateId, ICCARD, msg, isCheckMag, isCheckIC, isChecRF, msgPrompt);
                                 Log.d(TAG, "onFindICCard: \n OperateId = " + operateId + "\n ICCARD = " + ICCARD + "\n MSG = " + msg + "\n isCheckMsg = " + isCheckMag);
                             }
 
@@ -658,6 +658,9 @@ public class CardManager {
                             MAG_TRX_RECV = false;
                             CheckCardCallback(CHECKCARD_ONSWIPECARDFAIL);
                             Log.d(TAG, "onSwipeCardFail");
+                            if (cardHelperListener != null) {
+                                cardHelperListener.onSwipeCardFail();
+                            }
                         }
 
                         @Override
@@ -1583,13 +1586,17 @@ public class CardManager {
             case PROCESS_REQUEST_CONNECTION_FAILED:
                 break;
             case PROCESS_TRANS_RESULT_FALLBACK:
-                FALLBACK_HAPPEN = true;
+
                 if (cardHelperListener != null) {
                     cardHelperListener.onTransResultFallBack();
                 }
                 break;
 
         }
+    }
+
+    public void setFallBackHappen() {
+        FALLBACK_HAPPEN = true;
     }
 
     //region - Operation method
@@ -2315,6 +2322,7 @@ public class CardManager {
                     terminalCERT + checkSum;
             mBlockDataSend[61 - 1] = CardPrefix.calLen(mBlock61.length() + "", 4) + BlockCalculateUtil.getHexString(mBlock61);
             mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(payCount, amountPayAllToStr);
+            Log.d(TAG, "setDataSettlementAndSendTMS: " + mBlockDataSend[63 - 1] );
             settlement61 = mBlockDataSend[61 - 1];
             settlement63 = mBlockDataSend[63 - 1];
             MTI = MESSAGE_SETTLEMENT;
@@ -2965,7 +2973,7 @@ public class CardManager {
         String terId = CardPrefix.getTerminalId(context, HOST_CARD);
         String tex = TAX_ABB_NEW;
         Log.d(TAG, "setOnlineUploadCredit TAX_ABB_NEW : " + TAX_ABB_NEW);
-        String posID = CardPrefix.calSpenLen("2222", 20);
+        String posID = CardPrefix.calSpenLen(Preference.getInstance(context).getValueString(Preference.KEY_POS_ID), 20);
         String merchantID = CardPrefix.getMerchantId(context, HOST_CARD);
         String texId = Preference.getInstance(context).getValueString(Preference.KEY_TAX_ID);
         String random = CardPrefix.calSpenLen("", 2);
@@ -4679,6 +4687,8 @@ public class CardManager {
         public void onSwapCardIc();
 
         public void onSwapCardMag();
+
+        public void onSwipeCardFail();
     }
 
     public interface InsertOrUpdateDatabase {

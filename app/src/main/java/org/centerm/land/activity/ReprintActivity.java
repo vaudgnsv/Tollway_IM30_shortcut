@@ -375,6 +375,7 @@ public class ReprintActivity extends SettingToolbarActivity {
                 @Override
                 public void onClickImage(Dialog dialog) {
                     dialog.dismiss();
+                    dialogLoading.dismiss();
                 }
             });
         }
@@ -672,6 +673,7 @@ public class ReprintActivity extends SettingToolbarActivity {
                             @Override
                             public void onClickImage(Dialog dialog) {
                                 dialog.dismiss();
+                                dialogLoading.dismiss();
                             }
                         });
                     }

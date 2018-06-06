@@ -256,7 +256,7 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
             }
             customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(posIdLabel.getText().toString());
-            customDialog.setMaxLength(4);
+            customDialog.setMaxLength(20);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override

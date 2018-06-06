@@ -132,7 +132,7 @@ public class MenuServiceActivity extends AppCompatActivity {
                 String termSeq = jsonObject.getString("termSeq");    //"termSeq":"D1V0250000022",
 
                 String merchantNameLine1 = jsonObject.getString("merchantNameLine1");
-                Preference.getInstance(MenuServiceActivity.this).setValueString(Preference.KEY_MERCHANT_1,merchantNameLine1);
+                Preference.getInstance(MenuServiceActivity.this).setValueString(Preference.KEY_MERCHANT_1, merchantNameLine1);
 
                 String merchantNameLine2 = jsonObject.getString("merchantNameLine2");
                 String merchantNameLine3 = jsonObject.getString("merchantNameLine3");

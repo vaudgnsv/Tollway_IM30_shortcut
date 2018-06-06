@@ -200,6 +200,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     private TextView voidSaleAmountFeeLabel;
     private TextView cardCountFeeLabel;
     private TextView cardAmountFeeLabel;
+    private TextView taxIdFeeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -314,6 +315,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         voidSaleAmountFeeLabel = reportSummaryFeeView.findViewById(R.id.voidSaleAmountLabel);
         cardCountFeeLabel = reportSummaryFeeView.findViewById(R.id.cardCountLabel);
         cardAmountFeeLabel = reportSummaryFeeView.findViewById(R.id.cardAmountLabel);
+        taxIdFeeLabel = reportSummaryFeeView.findViewById(R.id.taxIdLabel);
 
     }
 
@@ -535,7 +537,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             merchantName3Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         dateLabel.setText(dateFormat.format(date));
         timeLabel.setText(timeFormat.format(date));
         switch (typeHost) {
@@ -606,6 +608,12 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             totalSale += Double.valueOf(transTempSale.get(i).getFee());
         }
 
+        if (typeHost.equalsIgnoreCase("POS")) {
+            hostFeeLabel.setText("KTB OFFUS");
+        } else {
+            hostFeeLabel.setText("BASE24 EPS");
+        }
+
         for (int i = 0; i < transTempVoid.size(); i++) {
             totalVoid += Double.valueOf(transTempVoid.get(i).getFee());
         }
@@ -617,7 +625,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             merchantName3FeeLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         dateFeeLabel.setText(dateFormat.format(date));
         timeFeeLabel.setText(timeFormat.format(date));
         /*switch (typeHost) {
@@ -640,7 +648,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                 hostLabel.setText("KTB ONUS");
                 break;
         }*/
-
+        taxIdFeeLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TAX_ID));
         saleCountFeeLabel.setText(String.valueOf(transTempSale.size()));
         saleTotalFeeLabel.setText(decimalFormat.format(totalSale));
         voidSaleCountFeeLabel.setText(transTempVoid.size() + "");
@@ -692,7 +700,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             merchantName3LabelSmQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
-        DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         dateLabelSmQr.setText(dateFormat.format(date));
         timeLabelSmQr.setText(timeFormat.format(date));
 
@@ -928,7 +936,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        DateFormat timeFormat = new SimpleDateFormat("hh:MM:ss");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         taxIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TAX_ID));
         if (typeHost.equalsIgnoreCase("EPS")) {
             batchIdLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
@@ -1021,7 +1029,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
 
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            DateFormat timeFormat = new SimpleDateFormat("hh:MM:ss");
+            DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
             taxIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TAX_ID));
             dateLabelQr.setText(dateFormat.format(date));
             timeLabelQr.setText(timeFormat.format(date));

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -65,6 +66,12 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
     private String typeCard = null;
     private String typeClick = null;
 
+    private int numFallBack = 0;
+    private TextView msgFallBackLabel;
+    private ImageView closeFallBackImage;
+    private Button okBtn;
+    private Dialog dialogFallBackCheck;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +99,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
         customDialogFallBack();
         customDialog();
         customDialogWaiting();
+        customDialogCheckFallBack();
         cardManager = MainApplication.getCardManager();
         cardManager.setCardHelperListener(new CardManager.CardHelperListener() {
             @Override
@@ -120,23 +128,41 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
 
             @Override
             public void onTransResultFallBack() {
-                isFallBack = true;
-                Log.d(TAG, "onTransResultFallBack: ");
-                if (dialogWaiting != null)
-                    dialogWaiting.dismiss();
-                if (timer != null)
-                    timer.cancel();
-                if (dialogInsertCard != null)
-                    dialogInsertCard.cancel();
-                cardManager.stopTransaction();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        dialogFallBack.show();
-                        cardManager.startTransaction(CardManager.SALE);
-                        setTimer(15000, 1);
-                    }
-                });
+                if (numFallBack > 1) {
+                    cardManager.setFallBackHappen();
+                }
+                if (numFallBack > 1) {
+                    numFallBack = 0;
+                    isFallBack = true;
+                    Log.d(TAG, "onTransResultFallBack: ");
+                    if (dialogWaiting != null)
+                        dialogWaiting.dismiss();
+                    if (timer != null)
+                        timer.cancel();
+                    if (dialogInsertCard != null)
+                        dialogInsertCard.cancel();
+                    cardManager.stopTransaction();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialogFallBack.show();
+                            cardManager.startTransaction(CardManager.SALE);
+                            setTimer(15000, 1);
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            ++numFallBack;
+
+                            cardManager.stopTransaction();
+                            dialogFallBackCheck.show();
+
+                        }
+                    });
+                }
             }
 
             @Override
@@ -198,6 +224,27 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                                     public void onClick(DialogInterface dialog, int id) {
                                         dialogFallBack.show();
                                         setTimer(15000, 1);
+                                        cardManager.startTransaction(CardManager.SALE);
+                                    }
+                                });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onSwipeCardFail() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MenuServiceListActivity.this);
+                        builder.setMessage("สไลด์กาดล้มเหลว")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setCancelable(false)
+                                .setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dismissDialogAll();
                                         cardManager.startTransaction(CardManager.SALE);
                                     }
                                 });
@@ -358,6 +405,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                 @Override
                 public void onClick(View v) {
                     int position = (int) v.getTag();
+                    numFallBack = 0;
                     if (position == 0) {
                         cardManager.setFalseFallbackHappen();
                         if (checkReversal("SALE")) {
@@ -531,6 +579,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
         closeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                numFallBack = 0;
                 dialogFallBack.dismiss();
                 if (timer != null) {
                     timer.cancel();
@@ -540,10 +589,50 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
         });
     }
 
+    private void customDialogCheckFallBack() {
+        dialogFallBackCheck = new Dialog(this);
+        dialogFallBackCheck.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogFallBackCheck.setCancelable(false);
+        dialogFallBackCheck.setContentView(R.layout.dialog_custom_alert_fall_back);
+        dialogFallBackCheck.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogFallBackCheck.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        msgFallBackLabel = dialogFallBackCheck.findViewById(R.id.msgLabel);
+        closeFallBackImage = dialogFallBackCheck.findViewById(R.id.closeImage);
+        okBtn = dialogFallBackCheck.findViewById(R.id.okBtn);
+        closeFallBackImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*dialogFallBack.dismiss();
+                if (timer != null) {
+                    timer.cancel();
+                }
+                cardManager.stopTransaction();*/
+                numFallBack = 0;
+                dialogFallBack.dismiss();
+                if (dialogWaiting != null)
+                    dialogWaiting.dismiss();
+                if (timer != null)
+                    timer.cancel();
+                if (dialogInsertCard != null)
+                    dialogInsertCard.cancel();
+                cardManager.stopTransaction();
+
+            }
+        });
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogFallBackCheck.dismiss();
+                cardManager.startTransaction(CardManager.SALE);
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         realm = Realm.getDefaultInstance();
+        numFallBack = 0;
     }
 
     @Override

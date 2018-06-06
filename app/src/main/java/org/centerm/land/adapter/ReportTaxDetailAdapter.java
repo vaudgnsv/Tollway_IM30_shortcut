@@ -39,6 +39,12 @@ public class ReportTaxDetailAdapter extends RecyclerView.Adapter<ReportTaxDetail
         } else {
             holder.productNameLabel.setText("FEE");
         }
+        String cutCardStart = taxList.get(position).getCardNo().substring(0, 6);
+        String cutCardEnd = taxList.get(position).getCardNo().substring(12, taxList.get(position).getCardNo().length());
+        String cardAll = cutCardStart + "XXXXXX" + cutCardEnd;
+
+        holder.cardLabel.setText(cardAll.substring(0, 4) + " " +
+                cardAll.substring(4, 8) + " " + cardAll.substring(8, 12) + " " + cardAll.substring(12, 16));
         holder.traceLabel.setText(taxList.get(position).getEcr());
         String dateTime = taxList.get(position).getTransDate().substring(6, 8)
                 + "/"

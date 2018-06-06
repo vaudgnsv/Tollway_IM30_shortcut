@@ -41,7 +41,10 @@ public class SlipQrReportAdapter extends RecyclerView.Adapter<SlipQrReportAdapte
         holder.amountQrLabel.setText(decimalFormat.format(Double.valueOf(qrCodeList.get(position).getAmount())));
         holder.traceQrLabel.setText(qrCodeList.get(position).getTrace());
         Log.d(TAG, "onBindViewHolder: " + qrCodeList.get(position).getDate());
-        holder.dateTimeQrLabel.setText(qrCodeList.get(position).getDate()+" , " + qrCodeList.get(position).getTime());
+        String timeHH = qrCodeList.get(position).getTime().substring(0,2);
+        String timeMM = qrCodeList.get(position).getTime().substring(2,4);
+        String timeSS = qrCodeList.get(position).getTime().substring(4,6);
+        holder.dateTimeQrLabel.setText(qrCodeList.get(position).getDate()+" , " + timeHH +":" +timeMM +":" +timeSS);
     }
 
     @Override

@@ -397,7 +397,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         DecimalFormat decimalFormat = new DecimalFormat("###0.00");
         Date date = new Date();
         dateFormat = new SimpleDateFormat("dd/MM/yyyy").format(date);
-        timeFormat = new SimpleDateFormat("hhMMss").format(date);
+        timeFormat = new SimpleDateFormat("HHmmss").format(date);
         dateFormatDef = new SimpleDateFormat("yyMMdd").format(date);
 
         aid = Preference.getInstance(this).getValueString(Preference.KEY_QR_AID);
@@ -538,7 +538,10 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 billerSlipLabel.setText(qrCode.getBillerId());
                 traceSlipLabel.setText(qrCode.getTrace());
                 dateSlipLabel.setText(qrCode.getDate());
-                timeSlipLabel.setText(qrCode.getTime());
+                String timeHHSlip = qrCode.getTime().substring(0,2);
+                String timeMMSlip = qrCode.getTime().substring(2,4);
+                String timeSSSlip = qrCode.getTime().substring(4,6);
+                timeSlipLabel.setText(timeHHSlip+ ":" + timeMMSlip +":" + timeSSSlip);
 //                comCodeSlipLabel.setText(qrCode.getComCode());
                 amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
                 QrCode qrCode = realm.where(QrCode.class).equalTo("id", nextId).findFirst();

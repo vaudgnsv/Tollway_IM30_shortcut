@@ -38,6 +38,7 @@ import org.centerm.land.adapter.MenuSettlementAdapter;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.QrCode;
 import org.centerm.land.database.TransTemp;
+import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.utility.Preference;
 import org.centerm.land.utility.Utility;
 
@@ -307,7 +308,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     cardAmountLabel.setText(decimalFormat.format(amountSale));
                     dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
                     timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
-                    if (typeHost.equalsIgnoreCase("POS")) {
+                    /*if (typeHost.equalsIgnoreCase("POS")) {
                         hostLabel.setText("KTB OFFUS");
                         batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
                         tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
@@ -322,6 +323,41 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
                         tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
                         midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+                    }*/
+
+                    if (typeHost.equalsIgnoreCase("POS")) {
+                        hostLabel.setText("KTB Off us");
+                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS),6));
+                        tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
+                        midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_POS, dateLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TIME_POS, timeLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_POS, saleTotalLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_POS, saleCountLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_POS, voidSaleCountLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS, voidSaleAmountLabel.getText().toString());
+                    } else if (typeHost.equalsIgnoreCase("EPS")) {
+                        hostLabel.setText("BASE24 EPS");
+                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS),6));
+                        tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
+                        midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_EPS, dateLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TIME_EPS, timeLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_EPS, saleTotalLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_EPS, saleCountLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_EPS, voidSaleCountLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS, voidSaleAmountLabel.getText().toString());
+                    } else {
+                        hostLabel.setText("KTB On Us");
+                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+                        tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+                        midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_TMS, dateLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TIME_TMS, timeLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_TMS, saleTotalLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_TMS, saleCountLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_TMS, voidSaleCountLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_TMS, voidSaleAmountLabel.getText().toString());
                     }
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -658,6 +694,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     deleteQrAll();
                     doPrinting(getBitmapFromView(settlementLinearLayout));
                 } else {
+                    okBtn.setVisibility(View.VISIBLE);
                     Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
                         @Override
                         public void onClickImage(Dialog dialog) {

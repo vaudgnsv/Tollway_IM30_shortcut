@@ -120,6 +120,101 @@
                         android:textSize="13sp" />
                 </LinearLayout>
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.6">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:text="TAX ID"
+                            android:textAllCaps="true"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="2dp"
+                            android:text=":"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:gravity="end"
+                        android:id="@+id/taxIdLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.4"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:text="3123123123"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+
+                    <TextView
+                        android:layout_weight="0.55"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:text="Batch"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_weight="0.2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_weight="2.3"
+                        android:gravity="end"
+                        android:id="@+id/batchLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:text="000473"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+
+                </LinearLayout>
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,130 +263,6 @@
                         android:text="09:54:33"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.6">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/microsoft_sans_serif"
-                            android:text="MID"
-                            android:textAllCaps="true"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="2dp"
-                            android:text=":"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                    </FrameLayout>
-
-                    <TextView
-                        android:id="@+id/midLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.4"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="111111212424123"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.6">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/microsoft_sans_serif"
-                            android:text="TID"
-                            android:textAllCaps="true"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="2dp"
-                            android:text=":"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                    </FrameLayout>
-
-                    <TextView
-                        android:id="@+id/tidLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2.4"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="3123123123"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-
-                    <TextView
-                        android:layout_weight="0.55"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="Batch"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:id="@+id/batchLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="000473"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
 
                 </LinearLayout>
 
