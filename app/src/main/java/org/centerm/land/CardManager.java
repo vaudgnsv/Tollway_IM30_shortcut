@@ -2267,7 +2267,7 @@ public class CardManager {
                 }
             }
             RealmResults<TransTemp> transTempVoidYFlag = realm.where(TransTemp.class).equalTo("voidFlag", "Y").equalTo("hostTypeCard", HOST_CARD).findAll();
-            if (transTempVoidFlag.size() != 0) {
+            if (transTempVoidYFlag.size() != 0) {
                 voidCount = transTempVoidYFlag.size();
 //                for (int i = 0; i < transTempVoidYFlag.size(); i++) {
 ////                    amountVoidAll += Float.valueOf(transTempVoidYFlag.get(i).getAmount());
@@ -2284,7 +2284,7 @@ public class CardManager {
             String msgVer = Preference.getInstance(context).getValueString(Preference.KEY_MESSAGE_VERSION);
             String tranCode = "6012";
             String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, HOST_CARD), 8);
-            String transaction = CardPrefix.calLen(String.valueOf((payCount + voidCount)), 5);
+            String transaction = CardPrefix.calLen(String.valueOf((payCount /*+ voidCount*/)), 5);
             String totalPayCount = CardPrefix.calLen(String.valueOf(payCount), 5);
 
             String amountPayAllToStr = String.format("%.2f", amountAll).replace(".", "");

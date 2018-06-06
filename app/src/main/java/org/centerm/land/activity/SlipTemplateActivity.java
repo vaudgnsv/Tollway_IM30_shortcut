@@ -381,9 +381,9 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("TMS"))
             batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabel.setText(item.getRefNo());
-        String day = item.getTransDate().substring(4, 6);
-        String mount = item.getTransDate().substring(2, 4);
-        String year = item.getTransDate().substring(0, 2);
+        String day = item.getTransDate().substring(6, 8);
+        String mount = item.getTransDate().substring(4, 6);
+        String year = item.getTransDate().substring(2, 4);
         dateLabel.setText(day + "/" + mount + "/" + year);
         timeLabel.setText(item.getTransTime());
         if (item.getVoidFlag().equals("Y")) {
@@ -407,7 +407,10 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
 
         if (!item.getHostTypeCard().equals("TMS")) {
-            dateTaxLayout.setText(item.getTransDate());
+            String dayTax = item.getTransDate().substring(6, 8);
+            String mountTax = item.getTransDate().substring(4, 6);
+            String yearTax = item.getTransDate().substring(2, 4);
+            dateTaxLayout.setText(dayTax + "/" + mountTax + "/" + yearTax);
             timeTaxLayout.setText(item.getTransTime());
 
             taxIdLayout.setText(Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAX_ID));
@@ -550,10 +553,12 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabelAuto.setText(item.getRefNo());
 
-        String day = item.getTransDate().substring(4, 6);
-        String mount = item.getTransDate().substring(2, 4);
-        String year = item.getTransDate().substring(0, 2);
+        String day = item.getTransDate().substring(6, 8);
+        String mount = item.getTransDate().substring(4, 6);
+        String year = item.getTransDate().substring(2, 4);
         dateLabelAuto.setText(day + "/" + mount + "/" + year);
+
+        dateTaxLayoutAuto.setText(day + "/" + mount + "/" + year);
         timeLabelAuto.setText(item.getTransTime());
 
         if (item.getHostTypeCard().equalsIgnoreCase("POS"))
@@ -567,7 +572,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             taxIdLayoutAuto.setText(Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAX_ID));
             taxAbbLayoutAuto.setText(item.getTaxAbb());
             traceTaxLayoutAuto.setText(item.getEcr());
-            dateTaxLayoutAuto.setText(item.getTransDate());
+//            dateTaxLayoutAuto.setText(item.getTransDate());
             timeTaxLayoutAuto.setText(item.getTransTime());
 
             appLabelAuto.setText(item.getEmvAppLabel());

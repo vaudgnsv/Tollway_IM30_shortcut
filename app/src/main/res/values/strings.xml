@@ -41,4 +41,5 @@
     <string name="trace_no_qr">Trace No : %1$s</string>
     <string name="ref1_qr">REF1 : %1$s</string>
     <string name="ref2_qr">REF2 : %1$s</string>
+    <string name="slip_text">โปรดตรวจสอบความถูกต้องในทันทีที่ได้รับเอกสารนี้ \n หากไม่ทักท้วงจะถือว่ารายการดังกล่าวข้างต้น \n ถูกต้องสมบูรณ์</string>
 </resources>

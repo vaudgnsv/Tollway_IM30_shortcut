@@ -644,9 +644,7 @@ TOTAL AMOUNT"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/microsoft_sans_serif"
-                android:text="โปรดตรวจสอบความถูกต้องในทันทีที่ได้รับเอกสารนี้
-หากไม่ทักท้วงจะถือว่ารายการดังกล่าวข้างต้น
-ถูกต้องสมบูรณ์"
+                android:text="@string/slip_text"
                 android:textColor="@android:color/black"
                 android:textSize="10sp" />
 

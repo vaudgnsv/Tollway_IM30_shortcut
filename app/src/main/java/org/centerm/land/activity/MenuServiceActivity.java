@@ -113,7 +113,7 @@ public class MenuServiceActivity extends AppCompatActivity {
     }
 
     private void getStringJsonCAPK() {
-        File file = new File("sdcard/print_param.json");
+        File file = new File("sdcard/print_param_.json");
         String getDirectoryPath = String.valueOf(file.length());
         FileInputStream stream = null;
         try {

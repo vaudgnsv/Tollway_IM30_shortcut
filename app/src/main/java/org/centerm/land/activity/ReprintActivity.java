@@ -396,7 +396,7 @@ public class ReprintActivity extends SettingToolbarActivity {
         refNoLabel.setText(transTemp.getRefNo());
         String date = transTemp.getTransDate().substring(6, 8);
         String mount = transTemp.getTransDate().substring(4, 6);
-        String year = transTemp.getTransDate().substring(0, 4);
+        String year = transTemp.getTransDate().substring(2, 4);
         dateLabel.setText(date + "/" + mount + "/" + year);
         timeLabel.setText(transTemp.getTransTime());
 
@@ -447,6 +447,11 @@ public class ReprintActivity extends SettingToolbarActivity {
                 String mount = transTemp.getTransDate().substring(4,6);
                 String year = transTemp.getTransDate().substring(0,4);
                 dateLabel.setText(date +"/" +mount + "/" + year);*/
+                String dateTax = transTemp.getTransDate().substring(6, 8);
+                String mountTax = transTemp.getTransDate().substring(4, 6);
+                String yearTax = transTemp.getTransDate().substring(2, 4);
+                dateTaxLabel.setText(dateTax + "/" + mountTax + "/" + yearTax);
+
                 timeTaxLabel.setText(transTemp.getTransTime());
                 copyLabel.setText("**** สำเนาร้านค้า ****");
                 typeCopyLabel.setText("**** MERCHANT COPY ****");
@@ -494,8 +499,11 @@ public class ReprintActivity extends SettingToolbarActivity {
                     batchTaxLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
                 else if (transTemp.getHostTypeCard().equalsIgnoreCase("TMS"))
                     batchTaxLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
-
-                /*dateTaxLabel.setText(transTemp.getTransDate());*/
+                String dateTax = transTemp.getTransDate().substring(6, 8);
+                String mountTax = transTemp.getTransDate().substring(4, 6);
+                String yearTax = transTemp.getTransDate().substring(2, 4);
+                dateTaxLabel.setText(dateTax + "/" + mountTax + "/" + yearTax);
+//                dateTaxLabel.setText(transTemp.getTransDate());
                 timeTaxLabel.setText(transTemp.getTransTime());
 //                feeTaxLabel.setText(transTemp.getFee());
                 copyLabel.setText("**** สำเนาร้านค้า ****");
