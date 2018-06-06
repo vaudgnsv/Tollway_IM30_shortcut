@@ -94,6 +94,10 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
     private Dialog dialogOutOfPaper;
     private Button okPaperBtn;
     private TextView msgLabel;
+    private TextView merchantName1Label;
+    private TextView merchantName2Label;
+    private TextView merchantName3Label;
+    private ImageView closeImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +168,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                                 public void onClickImage(Dialog dialog) {
                                     dialog.dismiss();
                                     settlementPosition++;
+                                    okBtn.setVisibility(View.VISIBLE);
                                     if (settlementPosition == 0) {
                                         statusLabel.setText("KTB offus ไม่มีข้อมูล");
                                     } else if (settlementPosition == 1) {
@@ -182,6 +187,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                                     } else if (settlementPosition == 3) {
                                         selectSettlementQR();
                                     } else {
+                                        dialogSettlement.dismiss();
                                         Log.d(TAG, "success: " + settlementPosition);
                                     }
                                 }
@@ -262,6 +268,9 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         voidSaleAmountLabel = qrView.findViewById(R.id.voidSaleAmountLabel);
         cardCountLabel = qrView.findViewById(R.id.cardCountLabel);
         cardAmountLabel = qrView.findViewById(R.id.cardAmountLabel);
+        merchantName1Label = qrView.findViewById(R.id.merchantName1Label);
+        merchantName2Label = qrView.findViewById(R.id.merchantName2Label);
+        merchantName3Label = qrView.findViewById(R.id.merchantName3Label);
     }
 
     private void setViewSlip() {
@@ -283,6 +292,13 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     }
                     Date date = new Date();
 
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+                        merchantName1Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+                        merchantName2Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+                        merchantName3Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+
                     voidSaleCountLabel.setText(transTempVoid.size() + "");
                     voidSaleAmountLabel.setText(decimalFormat.format(amountVoid));
                     saleTotalLabel.setText(decimalFormat.format(amountSale));
@@ -290,7 +306,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     cardCountLabel.setText((transTemp.size() + transTempVoid.size()) + "");
                     cardAmountLabel.setText(decimalFormat.format(amountSale));
                     dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
-                    dateLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+                    timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
                     if (typeHost.equalsIgnoreCase("POS")) {
                         hostLabel.setText("KTB OFFUS");
                         batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
@@ -490,6 +506,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                okBtn.setVisibility(View.VISIBLE);
                                 progressBarStatus.setVisibility(View.GONE);
                                 if (settlementPosition == 0) {
                                     statusLabel.setText("KTB offus ไม่มีข้อมูล");
@@ -603,6 +620,13 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         amountSaleQr += Double.valueOf(qrCode.get(i).getAmount());
                     }
 
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+                        merchantName1Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+                        merchantName2Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+                        merchantName3Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+
                     Date date = new Date();
                     voidSaleCountLabel.setText("0");
                     voidSaleAmountLabel.setText(String.format("%.2f", 0.0));
@@ -659,6 +683,15 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     for (int i = 0; i < qrCode.size(); i++) {
                         amountSaleQr += Double.valueOf(qrCode.get(i).getAmount());
                     }
+
+
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+                        merchantName1Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+                        merchantName2Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+                    if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+                        merchantName3Label.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+
 
                     Date date = new Date();
                     voidSaleCountLabel.setText("0");
@@ -762,6 +795,8 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         progressBarStatus = dialogSettlement.findViewById(R.id.progressBarStatus);
         statusLabel = dialogSettlement.findViewById(R.id.statusLabel);
         okBtn = dialogSettlement.findViewById(R.id.okBtn);
+        closeImage = dialogSettlement.findViewById(R.id.closeImage);
+        okBtn.setVisibility(View.GONE);
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -782,6 +817,12 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     dialogSettlement.dismiss();
                     Log.d(TAG, "success: " + settlementPosition);
                 }
+            }
+        });
+        closeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogSettlement.dismiss();
             }
         });
     }

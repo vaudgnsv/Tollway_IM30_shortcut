@@ -146,6 +146,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     private TextView msgLabel;
     private Bitmap bitmapOld;
     private TextView apprCodeLabel;
+    private Dialog dialogLoading;
 
 
     @Override
@@ -182,7 +183,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
             ref2LinearLayout.setVisibility(View.GONE);
         }
         customDialogOutOfPaper();
-
+        customDialogLoading();
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         tagView = inflater.inflate(R.layout.view_slip_qr, null);
@@ -268,6 +269,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                     Log.d(TAG, "billerId: " + billerId + " ref1Box : " + ref1Box.getText().toString()
                             + " ref2Box :" + ref2Box.getText().toString() +
                             " qrTid : " + qrTid);
+                    dialogLoading.show();
                     HttpManager.getInstance().getService().checkQr(check)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -284,8 +286,10 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                                             JSONObject object = new JSONObject(jsonElementResponse.body().toString());
                                             String code = object.getString("code");
                                             if (code.equalsIgnoreCase("00000")) {
+                                                dialogLoading.dismiss();
                                                 selectQrSlip();
                                             } else {
+                                                dialogLoading.dismiss();
                                                 String dec = object.getString("desc");
                                                 Utility.customDialogAlert(GenerateQrActivity.this, dec, new Utility.OnClickCloseImage() {
                                                     @Override
@@ -295,6 +299,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                                                 });
                                             }
                                         } else {
+                                            dialogLoading.dismiss();
                                             Utility.customDialogAlert(GenerateQrActivity.this, "ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้", new Utility.OnClickCloseImage() {
                                                 @Override
                                                 public void onClickImage(Dialog dialog) {
@@ -310,6 +315,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                                 @Override
                                 public void onError(Throwable e) {
                                     Log.d(TAG, "onError: " + e.getMessage());
+                                    dialogLoading.dismiss();
                                     Utility.customDialogAlert(GenerateQrActivity.this, "ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้", new Utility.OnClickCloseImage() {
                                         @Override
                                         public void onClickImage(Dialog dialog) {
@@ -320,7 +326,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
 
                                 @Override
                                 public void onComplete() {
-
+                                    dialogLoading.dismiss();
                                 }
                             });
                 } else {
@@ -512,14 +518,17 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 billerIdLabel.setText(getString(R.string.biller_id_qr, qrCode.getBillerId()));
                 traceNoLabel.setText(getString(R.string.trace_no_qr, qrCode.getTrace()));
                 dateLabel.setText(getString(R.string.date_qr, qrCode.getDate()));
-                timeLabel.setText(getString(R.string.time_qr, qrCode.getTime()));
+                String timeHH = qrCode.getTime().substring(0,2);
+                String timeMM = qrCode.getTime().substring(2,4);
+                String timeSS = qrCode.getTime().substring(4,6);
+                timeLabel.setText(getString(R.string.time_qr, timeHH + ":" + timeMM + ":" +timeSS));
 //                comCodeLabel.setText(qrCode.getComCode());
                 amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
-                if (qrCode.getRef1() != null) {
+                if (!qrCode.getRef1().isEmpty()) {
                     ref1Label.setVisibility(View.VISIBLE);
                     ref1Label.setText(getString(R.string.ref1_qr, qrCode.getRef1()));
                 }
-                if (qrCode.getRef2() != null) {
+                if (!qrCode.getRef2().isEmpty()) {
                     ref2Label.setVisibility(View.VISIBLE);
                     ref2Label.setText(getString(R.string.ref2_qr, qrCode.getRef2()));
                 }
@@ -553,8 +562,16 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
                 qrCode = realm.where(QrCode.class).equalTo("id", nextId).findFirst();
                 Log.d(TAG, "execute: " + qrCode.toString());
+
+                if (!Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+                    merchantName1SlipLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+                if (!Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+                    merchantName2SlipLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+                if (!Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+                    merchantName3SlipLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_MERCHANT_3));
 
                 qrTidSlipLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
                 billerSlipLabel.setText(qrCode.getBillerId());
@@ -563,10 +580,13 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 batchSlipLabel.setText(CardPrefix.calLen(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
                 traceSlipLabel.setText(qrCode.getTrace());
                 dateSlipLabel.setText(qrCode.getDate());
-                timeSlipLabel.setText(qrCode.getTime());
+                String timeHH = qrCode.getTime().substring(0,2);
+                String timeMM = qrCode.getTime().substring(2,4);
+                String timeSS = qrCode.getTime().substring(4,6);
+                timeLabel.setText(getString(R.string.time_qr, timeHH + ":" + timeMM + ":" +timeSS));
                 inquiryLabel.setText(qrCode.getQrTid());
 //                comCodeSlipLabel.setText(qrCode.getComCode());
-                amtThbSlipLabel.setText(getString(R.string.slip_pattern_amount, qrCode.getAmount()));
+                amtThbSlipLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(qrCode.getAmount()))));
                 /*if (qrCode.getRef1() != null) {
                     ref1SlipRelativeLayout.setVisibility(View.VISIBLE);
                     ref1SlipLabel.setText(qrCode.getRef1());
@@ -681,6 +701,15 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
             }
         });
 
+    }
+
+    private void customDialogLoading() {
+        dialogLoading = new Dialog(this);
+        dialogLoading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogLoading.setContentView(R.layout.dialog_custom_alert_loading);
+        dialogLoading.setCancelable(false);
+        dialogLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogLoading.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
     }
 
     @Override

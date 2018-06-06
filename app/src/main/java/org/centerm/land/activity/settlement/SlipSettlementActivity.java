@@ -34,6 +34,7 @@ import org.centerm.land.database.TransTemp;
 import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.utility.Preference;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -161,23 +162,23 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
             realm = Realm.getDefaultInstance();
         }
         RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", typeHost).findAll();
-        float amountSale = 0;
-        float amountVoid = 0;
+        double amountSale = 0;
+        double amountVoid = 0;
         for (int i = 0; i < transTemp.size(); i++) {
-            amountSale += Float.valueOf(transTemp.get(i).getAmount());
+            amountSale += Double.valueOf(transTemp.get(i).getAmount());
         }
         RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("voidFlag", "Y").equalTo("hostTypeCard", typeHost).findAll();
         for (int i = 0; i < transTempVoid.size(); i++) {
-            amountVoid += Float.valueOf(transTempVoid.get(i).getAmount());
+            amountVoid += Double.valueOf(transTempVoid.get(i).getAmount());
         }
         Date date = new Date();
-
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         voidSaleCountLabel.setText(transTempVoid.size() + "");
-        voidSaleAmountLabel.setText(String.format("%.2f", amountVoid));
+        voidSaleAmountLabel.setText(getString(R.string.slip_pattern_amount_void,decimalFormat.format(amountVoid)));
         saleCountLabel.setText(transTemp.size() + "");
-        saleTotalLabel.setText(String.format("%.2f", amountSale));
+        saleTotalLabel.setText(decimalFormat.format(amountSale));
         cardCountLabel.setText((transTemp.size() + transTempVoid.size()) + "");
-        cardAmountLabel.setText(String.format("%.2f", amountSale));
+        cardAmountLabel.setText(decimalFormat.format(amountSale));
         dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
         timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
 

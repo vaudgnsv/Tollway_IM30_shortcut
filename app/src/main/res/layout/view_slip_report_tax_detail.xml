@@ -87,19 +87,37 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/merchantNameTax1Label"
+                    android:id="@+id/merchantName1Label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_marginBottom="5dp"
                     android:fontFamily="@font/timeburnerbold"
-                    android:text="35 SUKHUMVIT ROAD,KLONG TOEY NUA
-SUBDISTEICT,WATTANA DISTRICT,
-BANGKOK 10110 THAILAND
-TEL. 0-2255-2222 FAX. 0-2255-9391-3"
+                    android:text="Header Line1"
                     android:textColor="@android:color/black"
-                    android:textSize="8sp" />
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/merchantName2Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="Header Line2"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/merchantName3Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:text="Header Line3"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout

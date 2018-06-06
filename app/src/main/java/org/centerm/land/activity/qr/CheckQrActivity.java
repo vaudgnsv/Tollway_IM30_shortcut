@@ -101,6 +101,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
     private TextView batchLabel;
     private TextView apprCodeLabel;
     private TextView inquiryLabel;
+    private Dialog dialogLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +121,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
         checkBtn = findViewById(R.id.checkBtn);
         setViewPrintSlip();
         customDialogOutOfPaper();
+        customDialogLoading();
         checkBtn.setOnClickListener(this);
     }
 
@@ -148,6 +150,14 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
             public void execute(Realm realm) {
                 qrCode = realm.where(QrCode.class).equalTo("trace", traceId).findFirst();
                 if (qrCode != null) {
+
+                    if (!Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+                        merchantName1Label.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+                    if (!Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+                        merchantName2Label.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+                    if (!Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+                        merchantName3Label.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+
                     qrTidLabel.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
                     midLabel.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
                     batchLabel.setText(CardPrefix.calLen(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
@@ -156,7 +166,10 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
                     billerLabel.setText(qrCode.getBillerId());
                     traceLabel.setText(qrCode.getTrace());
                     dateLabel.setText(qrCode.getDate());
-                    timeLabel.setText(qrCode.getTime());
+                    String timeHH = qrCode.getTime().substring(0,2);
+                    String timeMM = qrCode.getTime().substring(2,4);
+                    String timeSS = qrCode.getTime().substring(4,6);
+                    timeLabel.setText(getString(R.string.time_qr, timeHH + ":" + timeMM + ":" +timeSS));
 //                    comCodeLabel.setText(qrCode.getComCode());
                     amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
                     /*if (qrCode.getRef1() != null) {
@@ -287,6 +300,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
     }
 
     private void requestCheckSlip() {
+        dialogLoading.show();
         HttpManager.getInstance().getService().checkQr(check)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -303,9 +317,11 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
                                 JSONObject object = new JSONObject(jsonElementResponse.body().toString());
                                 String code = object.getString("code");
                                 if (code.equalsIgnoreCase("00000")) {
+                                    dialogLoading.dismiss();
                                     setDataSuccess();
                                     doPrinting(getBitmapFromView(slipLinearLayout));
                                 } else {
+                                    dialogLoading.dismiss();
                                     String dec = object.getString("desc");
                                     Utility.customDialogAlert(CheckQrActivity.this, dec, new Utility.OnClickCloseImage() {
                                         @Override
@@ -315,6 +331,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
                                     });
                                 }
                             } else {
+                                dialogLoading.dismiss();
                                 Utility.customDialogAlert(CheckQrActivity.this, "ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้", new Utility.OnClickCloseImage() {
                                     @Override
                                     public void onClickImage(Dialog dialog) {
@@ -329,6 +346,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
 
                     @Override
                     public void onError(Throwable e) {
+                        dialogLoading.dismiss();
                         Log.d(TAG, "onError: " + e.getMessage());
                         Utility.customDialogAlert(CheckQrActivity.this, "ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้", new Utility.OnClickCloseImage() {
                             @Override
@@ -340,7 +358,7 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
 
                     @Override
                     public void onComplete() {
-
+                        dialogLoading.dismiss();
                     }
                 });
     }
@@ -405,6 +423,16 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
             }
         });
 
+    }
+
+
+    private void customDialogLoading() {
+        dialogLoading = new Dialog(this);
+        dialogLoading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogLoading.setContentView(R.layout.dialog_custom_alert_loading);
+        dialogLoading.setCancelable(false);
+        dialogLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogLoading.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
     }
 
     @Override

@@ -37,6 +37,10 @@ public class MainApplication extends Application {
         if (normalPassword.isEmpty()) {
             Preference.getInstance(this).setValueString(Preference.KEY_NORMAL_PASS_WORD, "11111111");
         }
+        String posId = Preference.getInstance(this).getValueString(Preference.KEY_POS_ID);
+        if (posId.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_POS_ID, "2222");
+        }
         setTexABB();
 
         setFee();

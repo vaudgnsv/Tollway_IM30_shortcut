@@ -16,6 +16,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v4.widget.NestedScrollView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -358,10 +359,13 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     private void setDataView(TransTemp item) {
         if (item.getHostTypeCard().equalsIgnoreCase("POS")) {
             Preference.getInstance(SlipTemplateActivity.this).setValueInt(Preference.KEY_SALE_VOID_PRINT_ID_POS, item.getId());
+            Preference.getInstance(SlipTemplateActivity.this).setValueString(Preference.KEY_SETTLE_TYPE_POS, typeSlip);
         } else if (item.getHostTypeCard().equalsIgnoreCase("EPS")) {
             Preference.getInstance(SlipTemplateActivity.this).setValueInt(Preference.KEY_SALE_VOID_PRINT_ID_EPS, item.getId());
+            Preference.getInstance(SlipTemplateActivity.this).setValueString(Preference.KEY_SETTLE_TYPE_EPS, typeSlip);
         } else {
             Preference.getInstance(SlipTemplateActivity.this).setValueInt(Preference.KEY_SALE_VOID_PRINT_ID_TMS, item.getId());
+            Preference.getInstance(SlipTemplateActivity.this).setValueString(Preference.KEY_SETTLE_TYPE_TMS, typeSlip);
         }
         DecimalFormat decimalFormatShow = new DecimalFormat("#,##0.00");
         DecimalFormat decimalFormat = new DecimalFormat("###0.00");
@@ -377,10 +381,10 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("TMS"))
             batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabel.setText(item.getRefNo());
-        String day = item.getTransDate().substring(4,6);
-        String mount = item.getTransDate().substring(2,4);
-        String year = item.getTransDate().substring(0,2);
-        dateLabel.setText(day + "/" + mount + "/" +year);
+        String day = item.getTransDate().substring(4, 6);
+        String mount = item.getTransDate().substring(2, 4);
+        String year = item.getTransDate().substring(0, 2);
+        dateLabel.setText(day + "/" + mount + "/" + year);
         timeLabel.setText(item.getTransTime());
         if (item.getVoidFlag().equals("Y")) {
             typeLabel.setText("VOID");
@@ -391,9 +395,8 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         String cutCardStart = item.getCardNo().substring(0, 6);
         String cutCardEnd = item.getCardNo().substring(12, item.getCardNo().length());
         String cardNo = cutCardStart + "XXXXXX" + cutCardEnd;
-        cardNoLabel.setText(cardNo.substring(0,4) + " " + cardNo.substring(4,8) + " " + cardNo.substring(8,12) + " " +cardNo.substring(12,16));
+        cardNoLabel.setText(cardNo.substring(0, 4) + " " + cardNo.substring(4, 8) + " " + cardNo.substring(8, 12) + " " + cardNo.substring(12, 16));
         apprCodeLabel.setText(item.getApprvCode());
-        comCodeLabel.setText(item.getComCode());
 
 
         if (item.getHostTypeCard().equalsIgnoreCase("POS"))
@@ -406,7 +409,6 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         if (!item.getHostTypeCard().equals("TMS")) {
             dateTaxLayout.setText(item.getTransDate());
             timeTaxLayout.setText(item.getTransTime());
-            feeTaxLayout.setText(item.getFee());
 
             taxIdLayout.setText(Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAX_ID));
             taxAbbLayout.setText(item.getTaxAbb());
@@ -424,11 +426,14 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             tcFrameLayout.setVisibility(View.GONE);
             aidFrameLayout.setVisibility(View.GONE);
             taxLinearLayout.setVisibility(View.GONE);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 20, 0, 50);
             copyLabel.setLayoutParams(lp);
+            copyLabel.setGravity(Gravity.CENTER_HORIZONTAL);
         }
-        nameEmvCardLabel.setText(item.getEmvNameCardHolder().trim());
+        if (item.getEmvNameCardHolder() != null) {
+            nameEmvCardLabel.setText(item.getEmvNameCardHolder().trim());
+        }
         if (item.getTransType().equals("I")) {
             typeInputCardLabel.setText("C");
         } else {
@@ -436,9 +441,21 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         }
 
         if (typeSlip.equalsIgnoreCase(CalculatePriceActivity.TypeSale)) {
+            feeTaxLayout.setText(getString(R.string.slip_pattern_amount,item.getFee()));
             amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView if : " + item.getAmount() + " Fee : " + item.getFee());
-            if (item.getFee() != null) {
+            if (item.getHostTypeCard().equals("TMS")) {
+                if (!item.getEmciFree().isEmpty()) {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Float.valueOf(item.getEmciFree()))));
+                    float fee = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getEmciFree())));
+                    float amount = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getAmount())));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format((float) (amount + fee))));
+                } else {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                }
+                Log.d(TAG, "setDataView Else : " + item.getAmount() + " Fee : " + item.getEmciFree());
+            } else if (item.getFee() != null) {
                 feeThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(item.getFee()))));
                 double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(item.getFee())));
                 double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(item.getAmount())));
@@ -448,6 +465,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                 totThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
             }
         } else {
+            feeTaxLayout.setText(getString(R.string.slip_pattern_amount_void,item.getFee()));
             amtThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getAmount()))));
 
             if (item.getHostTypeCard().equals("TMS")) {
@@ -473,17 +491,46 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                 }
             }
         }
-        if (!item.getRef1().isEmpty()) {
+        String valueParameterEnable = Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAG_1000);
+        if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("3")) {
+            comCodeLabel.setVisibility(View.VISIBLE);
+            comCodeLabel.setText(item.getComCode());
+        } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("4")) {
+            comCodeLabel.setVisibility(View.VISIBLE);
+            comCodeLabel.setText(item.getComCode());
+        } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("2")) {
+            comCodeLabel.setVisibility(View.GONE);
+            comCodeLabel.setText(item.getComCode());
+        }
+        if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("3")) {
             ref1RelativeLayout.setVisibility(View.VISIBLE);
             ref1Label.setText(item.getRef1());
+        } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("4")) {
+            ref1RelativeLayout.setVisibility(View.VISIBLE);
+            ref1Label.setText(item.getRef1());
+        } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("2")) {
+            ref1RelativeLayout.setVisibility(View.GONE);
+            ref1Label.setText(item.getRef1());
         }
-        if (!item.getRef2().isEmpty()) {
+        if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("3")) {
             ref2RelativeLayout.setVisibility(View.VISIBLE);
             ref2Label.setText(item.getRef2());
+        } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("4")) {
+            ref2RelativeLayout.setVisibility(View.VISIBLE);
+            ref2Label.setText(item.getRef2());
+        } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("2")) {
+            ref2RelativeLayout.setVisibility(View.GONE);
+            ref2Label.setText(item.getRef2());
         }
-        if (!item.getRef3().isEmpty()) {
+        if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("3")) {
             ref3RelativeLayout.setVisibility(View.VISIBLE);
             ref3Label.setText(item.getRef3());
+        } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("4")) {
+            ref3RelativeLayout.setVisibility(View.VISIBLE);
+            ref3Label.setText(item.getRef3());
+        } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("2")) {
+            ref3RelativeLayout.setVisibility(View.GONE);
+            ref3LabelAuto.setText(item.getRef3());
         }
     }
 
@@ -503,10 +550,10 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabelAuto.setText(item.getRefNo());
 
-        String day = item.getTransDate().substring(4,6);
-        String mount = item.getTransDate().substring(2,4);
-        String year = item.getTransDate().substring(0,2);
-        dateLabelAuto.setText(day + "/" + mount + "/" +year);
+        String day = item.getTransDate().substring(4, 6);
+        String mount = item.getTransDate().substring(2, 4);
+        String year = item.getTransDate().substring(0, 2);
+        dateLabelAuto.setText(day + "/" + mount + "/" + year);
         timeLabelAuto.setText(item.getTransTime());
 
         if (item.getHostTypeCard().equalsIgnoreCase("POS"))
@@ -522,7 +569,6 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             traceTaxLayoutAuto.setText(item.getEcr());
             dateTaxLayoutAuto.setText(item.getTransDate());
             timeTaxLayoutAuto.setText(item.getTransTime());
-            feeTaxLayoutAuto.setText(item.getFee());
 
             appLabelAuto.setText(item.getEmvAppLabel());
             tcLabelAuto.setText(item.getEmvTc());
@@ -532,12 +578,15 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             tcFrameLayoutAuto.setVisibility(View.GONE);
             aidFrameLayoutAuto.setVisibility(View.GONE);
             taxLinearLayoutAuto.setVisibility(View.GONE);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             lp.setMargins(0, 20, 0, 50);
             copyLabelAuto.setLayoutParams(lp);
+            copyLabelAuto.setGravity(Gravity.CENTER_HORIZONTAL);
         }
 
-        nameEmvCardLabelAuto.setText(item.getEmvNameCardHolder().trim());
+        if (item.getEmvNameCardHolder() != null) {
+            nameEmvCardLabelAuto.setText(item.getEmvNameCardHolder().trim());
+        }
         if (item.getTransType().equals("I")) {
             typeInputCardLabelAuto.setText("C");
         } else {
@@ -554,13 +603,24 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         String cutCardEnd = item.getCardNo().substring(12, item.getCardNo().length());
         String cardNo = cutCardStart + "XXXXXX" + cutCardEnd;
 
-        cardNoLabelAuto.setText(cardNo.substring(0,4) + " " + cardNo.substring(4,8) + " " + cardNo.substring(8,12) + " " +cardNo.substring(12,16));
+        cardNoLabelAuto.setText(cardNo.substring(0, 4) + " " + cardNo.substring(4, 8) + " " + cardNo.substring(8, 12) + " " + cardNo.substring(12, 16));
         apprCodeLabelAuto.setText(item.getApprvCode());
-        comCodeLabelAuto.setText(item.getComCode());
+//        comCodeLabelAuto.setText(item.getComCode());
         if (typeSlip.equalsIgnoreCase(CalculatePriceActivity.TypeSale)) {
+            feeTaxLayoutAuto.setText(getString(R.string.slip_pattern_amount,item.getFee()));
             amtThbLabelAuto.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView if : " + item.getAmount() + " Fee : " + item.getFee());
-            if (item.getFee() != null) {
+            if (item.getHostTypeCard().equals("TMS")) {
+                if (!item.getEmciFree().isEmpty()) {
+                    feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Float.valueOf(item.getEmciFree()))));
+                    float fee = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getEmciFree())));
+                    float amount = Float.parseFloat(decimalFormat.format(Float.valueOf(item.getAmount())));
+                    totThbLabelAuto.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format((float) (amount + fee))));
+                } else {
+                    feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                    totThbLabelAuto.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                }
+            } else if (item.getFee() != null) {
                 feeThbLabelAuto.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(item.getFee()))));
                 double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(item.getFee())));
                 double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(item.getAmount())));
@@ -570,6 +630,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                 totThbLabelAuto.setText(getString(R.string.slip_pattern_amount, "0.00"));
             }
         } else {
+            feeTaxLayoutAuto.setText(getString(R.string.slip_pattern_amount_void,item.getFee()));
             amtThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView Else : " + item.getAmount() + " Fee : " + item.getFee());
             if (item.getHostTypeCard().equals("TMS")) {
@@ -594,16 +655,45 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                 }
             }
         }
-        if (!item.getRef1().isEmpty()) {
+        String valueParameterEnable = Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAG_1000);
+        if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("3")) {
+            comCodeLabelAuto.setVisibility(View.VISIBLE);
+            comCodeLabelAuto.setText(item.getComCode());
+        } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("4")) {
+            comCodeLabelAuto.setVisibility(View.VISIBLE);
+            comCodeLabelAuto.setText(item.getComCode());
+        } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("2")) {
+            comCodeLabelAuto.setVisibility(View.GONE);
+            comCodeLabelAuto.setText(item.getComCode());
+        }
+        if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("3")) {
             ref1RelativeLayoutAuto.setVisibility(View.VISIBLE);
             ref1LabelAuto.setText(item.getRef1());
+        } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("4")) {
+            ref1RelativeLayoutAuto.setVisibility(View.VISIBLE);
+            ref1LabelAuto.setText(item.getRef1());
+        } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("2")) {
+            ref1RelativeLayoutAuto.setVisibility(View.GONE);
+            ref1LabelAuto.setText(item.getRef1());
         }
-        if (!item.getRef2().isEmpty()) {
+        if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("3")) {
             ref2RelativeLayoutAuto.setVisibility(View.VISIBLE);
             ref2LabelAuto.setText(item.getRef2());
+        } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("4")) {
+            ref2RelativeLayoutAuto.setVisibility(View.VISIBLE);
+            ref2LabelAuto.setText(item.getRef2());
+        } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("2")) {
+            ref2RelativeLayoutAuto.setVisibility(View.GONE);
+            ref2LabelAuto.setText(item.getRef2());
         }
-        if (!item.getRef3().isEmpty()) {
+        if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("3")) {
             ref3RelativeLayoutAuto.setVisibility(View.VISIBLE);
+            ref3LabelAuto.setText(item.getRef3());
+        } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("4")) {
+            ref3RelativeLayoutAuto.setVisibility(View.VISIBLE);
+            ref3LabelAuto.setText(item.getRef3());
+        } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("2")) {
+            ref3RelativeLayoutAuto.setVisibility(View.GONE);
             ref3LabelAuto.setText(item.getRef3());
         }
 

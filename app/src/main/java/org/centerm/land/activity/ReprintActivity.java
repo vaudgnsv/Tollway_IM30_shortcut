@@ -8,11 +8,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.CountDownTimer;
 import android.os.RemoteException;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +87,7 @@ public class ReprintActivity extends SettingToolbarActivity {
     private RelativeLayout ref2RelativeLayout = null;
     private RelativeLayout ref3RelativeLayout = null;
     private LinearLayout slipLinearLayout = null;
+    private TextView sigatureLabel = null;
 
     /**
      * SETTLEMENT
@@ -136,6 +140,23 @@ public class ReprintActivity extends SettingToolbarActivity {
     private Button qrBtn;
     private ImageView closeQrImage;
 
+    private TextView taxIdLabel;
+    private TextView taxAbbLabel;
+    private TextView traceTaxLabel;
+    private TextView batchTaxLabel;
+    private TextView dateTaxLabel;
+    private TextView timeTaxLabel;
+    private TextView feeTaxLabel;
+    private TextView copyLabel;
+    private TextView typeCopyLabel;
+    private TextView nameEmvCardLabel;
+    private LinearLayout taxLinearLayout;
+
+    private boolean isStatusPrintLastSlip = false;
+    private TextView typeInputCardLabel;
+    private final String TAG = "ReprintActivity";
+    private Dialog dialogLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,12 +165,15 @@ public class ReprintActivity extends SettingToolbarActivity {
         printDev = cardManager.getInstancesPrint();
         initWidget();
         initBtnExit();
-
+        customDialogLoading();
         customDialogOutOfPaper();
 
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         printLastView = inflater.inflate(R.layout.view_sale_void, null);
+        merchantName1Label = printLastView.findViewById(R.id.merchantName1Label);
+        merchantName2Label = printLastView.findViewById(R.id.merchantName2Label);
+        merchantName3Label = printLastView.findViewById(R.id.merchantName3Label);
         slipLinearLayout = printLastView.findViewById(R.id.slipLinearLayout);
         tidLabel = printLastView.findViewById(R.id.tidLabel);
         midLabel = printLastView.findViewById(R.id.midLabel);
@@ -173,6 +197,20 @@ public class ReprintActivity extends SettingToolbarActivity {
         ref1RelativeLayout = printLastView.findViewById(R.id.ref1RelativeLayout);
         ref2RelativeLayout = printLastView.findViewById(R.id.ref2RelativeLayout);
         ref3RelativeLayout = printLastView.findViewById(R.id.ref3RelativeLayout);
+
+        taxIdLabel = printLastView.findViewById(R.id.taxIdLabel);
+        taxAbbLabel = printLastView.findViewById(R.id.taxAbbLabel);
+        traceTaxLabel = printLastView.findViewById(R.id.traceTaxLabel);
+        batchTaxLabel = printLastView.findViewById(R.id.batchTaxLabel);
+        dateTaxLabel = printLastView.findViewById(R.id.dateTaxLabel);
+        timeTaxLabel = printLastView.findViewById(R.id.timeTaxLabel);
+        feeTaxLabel = printLastView.findViewById(R.id.feeTaxLabel);
+        copyLabel = printLastView.findViewById(R.id.copyLabel);
+        typeCopyLabel = printLastView.findViewById(R.id.typeCopyLabel);
+        nameEmvCardLabel = printLastView.findViewById(R.id.nameEmvCardLabel);
+        taxLinearLayout = printLastView.findViewById(R.id.taxLinearLayout);
+        sigatureLabel = printLastView.findViewById(R.id.sigatureLabel);
+        typeInputCardLabel = printLastView.findViewById(R.id.typeInputCardLabel);
     }
 
     private void setMeasure() {
@@ -271,6 +309,7 @@ public class ReprintActivity extends SettingToolbarActivity {
     }
 
     private void setDataViewSettle() {
+        dialogLoading.show();
         if (typeHost.equalsIgnoreCase("POS") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_POS).isEmpty()) {
             hostLabelSettle.setText("KTB OFFUS");
             batchLabelSettle.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
@@ -317,7 +356,7 @@ public class ReprintActivity extends SettingToolbarActivity {
             setMeasureSettle();
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
         } else if (typeHost.equalsIgnoreCase("QR") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_QR).isEmpty()) {
-            hostLabelSettle.setText("KTB ONUS");
+            hostLabelSettle.setText("KTB QR");
             batchLabelSettle.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
             tidLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
             midLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
@@ -349,32 +388,190 @@ public class ReprintActivity extends SettingToolbarActivity {
         traceLabel.setText(transTemp.getEcr());
         systrcLabel.setText(transTemp.getTraceNo());
         if (transTemp.getHostTypeCard().equalsIgnoreCase("POS"))
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
         else if (transTemp.getHostTypeCard().equalsIgnoreCase("EPS"))
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
         else if (transTemp.getHostTypeCard().equalsIgnoreCase("TMS"))
-            batchLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS));
+            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabel.setText(transTemp.getRefNo());
-        dateLabel.setText(transTemp.getTransDate());
+        String date = transTemp.getTransDate().substring(6, 8);
+        String mount = transTemp.getTransDate().substring(4, 6);
+        String year = transTemp.getTransDate().substring(0, 4);
+        dateLabel.setText(date + "/" + mount + "/" + year);
         timeLabel.setText(transTemp.getTransTime());
-        typeLabel.setText(transTemp.getTransStat());
+
         typeCardLabel.setText(CardPrefix.getTypeCardName(transTemp.getCardNo()));
         String cutCardStart = transTemp.getCardNo().substring(0, 6);
         String cutCardEnd = transTemp.getCardNo().substring(12, transTemp.getCardNo().length());
-        cardNoLabel.setText(cutCardStart + "XXXXXX" + cutCardEnd);
+        String cardNo = cutCardStart + "XXXXXX" + cutCardEnd;
+        cardNoLabel.setText(cardNo.substring(0, 4) + " " + cardNo.substring(4, 8) + " " + cardNo.substring(8, 12) + " " + cardNo.substring(12, 16));
         apprCodeLabel.setText(transTemp.getApprvCode());
-        comCodeLabel.setText(transTemp.getComCode());
-        amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(transTemp.getAmount()))));
-        if (transTemp.getFee() != null) {
-            feeThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(transTemp.getFee()))));
-            double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getFee())));
-            double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getAmount())));
-            totThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format((float) (amount + fee))));
+//        comCodeLabel.setText(transTemp.getComCode());
+        String typeVoidOrSale = "";
+        if (!Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1Label.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2Label.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3Label.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+
+        if (typeHost.equalsIgnoreCase("POS")) {
+            typeVoidOrSale = Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_SETTLE_TYPE_POS);
+        } else if (typeHost.equalsIgnoreCase("EPS")) {
+            typeVoidOrSale = Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_SETTLE_TYPE_EPS);
         } else {
-            feeThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
-            totThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
+            typeVoidOrSale = Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_SETTLE_TYPE_TMS);
         }
-        if (!transTemp.getRef1().isEmpty()) {
+        if (transTemp.getTransType().equals("I")) {
+            typeInputCardLabel.setText("C");
+        } else {
+            typeInputCardLabel.setText("S");
+        }
+        if (typeVoidOrSale.equals(CalculatePriceActivity.TypeSale)) {
+            feeTaxLabel.setText(getString(R.string.slip_pattern_amount,transTemp.getFee()));
+            typeLabel.setText("SALE");
+            amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(transTemp.getAmount()))));
+            if (!transTemp.getHostTypeCard().equals("TMS")) {
+                taxIdLabel.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_TAX_ID));
+                taxAbbLabel.setText(transTemp.getTaxAbb());
+                traceTaxLabel.setText(transTemp.getEcr());
+
+                if (transTemp.getHostTypeCard().equalsIgnoreCase("POS"))
+                    batchTaxLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
+                else if (transTemp.getHostTypeCard().equalsIgnoreCase("EPS"))
+                    batchTaxLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
+                else if (transTemp.getHostTypeCard().equalsIgnoreCase("TMS"))
+                    batchTaxLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+
+                /*String date = transTemp.getTransDate().substring(6,8);
+                String mount = transTemp.getTransDate().substring(4,6);
+                String year = transTemp.getTransDate().substring(0,4);
+                dateLabel.setText(date +"/" +mount + "/" + year);*/
+                timeTaxLabel.setText(transTemp.getTransTime());
+                copyLabel.setText("**** สำเนาร้านค้า ****");
+                typeCopyLabel.setText("**** MERCHANT COPY ****");
+                if (transTemp.getEmvNameCardHolder() != null)
+                    nameEmvCardLabel.setText(transTemp.getEmvNameCardHolder().trim());
+
+                if (transTemp.getFee() != null) {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(transTemp.getFee()))));
+                    double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getFee())));
+                    double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getAmount())));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format((float) (amount + fee))));
+                } else {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                }
+            } else {
+
+                copyLabel.setText("**** สำเนาร้านค้า ****");
+                typeCopyLabel.setText("**** MERCHANT COPY ****");
+                nameEmvCardLabel.setText(transTemp.getEmvNameCardHolder().trim());
+
+                taxLinearLayout.setVisibility(View.GONE);
+                if (transTemp.getEmciFree() != null) {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(transTemp.getEmciFree()))));
+                    double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getEmciFree())));
+                    double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getAmount())));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format((double) (amount + fee))));
+                } else {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
+                }
+            }
+        } else {
+            feeTaxLabel.setText(getString(R.string.slip_pattern_amount_void,transTemp.getFee()));
+            typeLabel.setText("VOID");
+            amtThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Double.valueOf(transTemp.getAmount()))));
+            if (!transTemp.getHostTypeCard().equals("TMS")) {
+
+                taxIdLabel.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_TAX_ID));
+                taxAbbLabel.setText(transTemp.getTaxAbb());
+                traceTaxLabel.setText(transTemp.getEcr());
+                if (transTemp.getHostTypeCard().equalsIgnoreCase("POS"))
+                    batchTaxLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
+                else if (transTemp.getHostTypeCard().equalsIgnoreCase("EPS"))
+                    batchTaxLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
+                else if (transTemp.getHostTypeCard().equalsIgnoreCase("TMS"))
+                    batchTaxLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+
+                /*dateTaxLabel.setText(transTemp.getTransDate());*/
+                timeTaxLabel.setText(transTemp.getTransTime());
+//                feeTaxLabel.setText(transTemp.getFee());
+                copyLabel.setText("**** สำเนาร้านค้า ****");
+                typeCopyLabel.setText("**** MERCHANT COPY ****");
+                if (transTemp.getEmvNameCardHolder() != null)
+                    nameEmvCardLabel.setText(transTemp.getEmvNameCardHolder().trim());
+
+                if (transTemp.getFee() != null) {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format(Double.valueOf(transTemp.getFee()))));
+                    double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getFee())));
+                    double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getAmount())));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format((float) (amount + fee))));
+                } else {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
+                }
+            } else {
+                taxLinearLayout.setVisibility(View.GONE);
+
+                copyLabel.setText("**** สำเนาร้านค้า ****");
+                typeCopyLabel.setText("**** MERCHANT COPY ****");
+                nameEmvCardLabel.setText(transTemp.getEmvNameCardHolder().trim());
+                if (transTemp.getEmciFree() != null) {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format(Double.valueOf(transTemp.getEmciFree()))));
+                    double fee = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getEmciFree())));
+                    double amount = Double.parseDouble(decimalFormat.format(Double.valueOf(transTemp.getAmount())));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format((double) (amount + fee))));
+                } else {
+                    feeThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
+                    totThbLabel.setText(getString(R.string.slip_pattern_amount_void, "0.00"));
+                }
+            }
+        }
+
+        String valueParameterEnable = Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_TAG_1000);
+        if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("3")) {
+            comCodeLabel.setVisibility(View.VISIBLE);
+            comCodeLabel.setText(transTemp.getComCode());
+        } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("4")) {
+            comCodeLabel.setVisibility(View.VISIBLE);
+            comCodeLabel.setText(transTemp.getComCode());
+        } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("2")) {
+            comCodeLabel.setVisibility(View.GONE);
+            comCodeLabel.setText(transTemp.getComCode());
+        }
+        if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("3")) {
+            ref1RelativeLayout.setVisibility(View.VISIBLE);
+            ref1Label.setText(transTemp.getRef1());
+        } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("4")) {
+            ref1RelativeLayout.setVisibility(View.VISIBLE);
+            ref1Label.setText(transTemp.getRef1());
+        } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("2")) {
+            ref1RelativeLayout.setVisibility(View.GONE);
+            ref1Label.setText(transTemp.getRef1());
+        }
+        if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("3")) {
+            ref2RelativeLayout.setVisibility(View.VISIBLE);
+            ref2Label.setText(transTemp.getRef2());
+        } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("4")) {
+            ref2RelativeLayout.setVisibility(View.VISIBLE);
+            ref2Label.setText(transTemp.getRef2());
+        } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("2")) {
+            ref2RelativeLayout.setVisibility(View.GONE);
+            ref2Label.setText(transTemp.getRef2());
+        }
+        if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("3")) {
+            ref3RelativeLayout.setVisibility(View.VISIBLE);
+            ref3Label.setText(transTemp.getRef3());
+        } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("4")) {
+            ref3RelativeLayout.setVisibility(View.VISIBLE);
+            ref3Label.setText(transTemp.getRef3());
+        } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("2")) {
+            ref3RelativeLayout.setVisibility(View.GONE);
+            ref3Label.setText(transTemp.getRef3());
+        }
+        /*if (!transTemp.getRef1().isEmpty()) {
             ref1RelativeLayout.setVisibility(View.VISIBLE);
             ref1Label.setText(transTemp.getRef1());
         }
@@ -385,10 +582,26 @@ public class ReprintActivity extends SettingToolbarActivity {
         if (!transTemp.getRef3().isEmpty()) {
             ref3RelativeLayout.setVisibility(View.VISIBLE);
             ref3Label.setText(transTemp.getRef3());
-        }
+        }*/
         setMeasure();
-
+        isStatusPrintLastSlip = true;
         doPrinting(getBitmapFromView(slipLinearLayout));
+
+        rePrintLast(transTemp);
+    }
+
+    private void rePrintLast(TransTemp transTemp) {
+        sigatureLabel.setVisibility(View.GONE);
+        if (transTemp.getEmvNameCardHolder() != null)
+            nameEmvCardLabel.setText(transTemp.getEmvNameCardHolder().trim());
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, 0, 0, 0);
+        nameEmvCardLabel.setLayoutParams(lp);
+        nameEmvCardLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+        copyLabel.setText("**** สำเนาต้นฉบับ ****");
+        typeCopyLabel.setText("**** CUSTOMER COPY ****");
+
+        setMeasure();
     }
 
     private void customDialogSearch() {
@@ -410,17 +623,17 @@ public class ReprintActivity extends SettingToolbarActivity {
                             for (int i = invoiceEt.getText().toString().length(); i < 6; i++) {
                                 traceNoAddZero += "0";
                             }
-                        } else {
-                            traceNoAddZero = invoiceEt.getText().toString();
                         }
-                        TransTemp transTemp = realm.where(TransTemp.class).equalTo("ecr", traceNoAddZero).findFirst();
+                        TransTemp transTemp = realm.where(TransTemp.class).equalTo("ecr", traceNoAddZero+invoiceEt.getText().toString()).findFirst();
                         if (transTemp != null) {
+                            dialogLoading.show();
                             setPrintLast(transTemp);
                         } else {
                             Utility.customDialogAlert(ReprintActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
                                 @Override
                                 public void onClickImage(Dialog dialog) {
                                     dialog.dismiss();
+                                    dialogLoading.dismiss();
                                 }
                             });
                         }
@@ -442,10 +655,8 @@ public class ReprintActivity extends SettingToolbarActivity {
                         for (int i = invoiceEt.getText().toString().length(); i < 6; i++) {
                             traceNoAddZero += "0";
                         }
-                    } else {
-                        traceNoAddZero = invoiceEt.getText().toString();
                     }
-                    TransTemp transTemp = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("ecr", traceNoAddZero).findFirst();
+                    TransTemp transTemp = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("ecr", traceNoAddZero+invoiceEt.getText().toString()).findFirst();
                     if (transTemp != null) {
                         setPrintLast(transTemp);
                     } else {
@@ -585,12 +796,16 @@ public class ReprintActivity extends SettingToolbarActivity {
     }
 
     private void selectReportLast(String typeHost) {
+        dialogLoading.show();
         int voidSaleId = 0;
         if (typeHost.equalsIgnoreCase("POS")) {
+            this.typeHost = typeHost;
             voidSaleId = Preference.getInstance(ReprintActivity.this).getValueInt(Preference.KEY_SALE_VOID_PRINT_ID_POS);
         } else if (typeHost.equalsIgnoreCase("EPS")) {
+            this.typeHost = typeHost;
             voidSaleId = Preference.getInstance(ReprintActivity.this).getValueInt(Preference.KEY_SALE_VOID_PRINT_ID_EPS);
         } else {
+            this.typeHost = typeHost;
             voidSaleId = Preference.getInstance(ReprintActivity.this).getValueInt(Preference.KEY_SALE_VOID_PRINT_ID_TMS);
         }
         TransTemp transTemp = realm.where(TransTemp.class).equalTo("id", voidSaleId).findFirst();
@@ -601,6 +816,7 @@ public class ReprintActivity extends SettingToolbarActivity {
                 @Override
                 public void onClickImage(Dialog dialog) {
                     dialog.dismiss();
+                    dialogLoading.dismiss();
                 }
             });
         }
@@ -616,14 +832,35 @@ public class ReprintActivity extends SettingToolbarActivity {
                     printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
                         @Override
                         public void onPrintFinish() throws RemoteException {
-                            Intent intent = new Intent(ReprintActivity.this, MenuServiceActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
-                            overridePendingTransition(0, 0);
+                            if (isStatusPrintLastSlip) {
+                                isStatusPrintLastSlip = false;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        new CountDownTimer(6000, 1000) {
+                                            @Override
+                                            public void onTick(long millisUntilFinished) {
+                                                Log.d(TAG, "onTick: " + millisUntilFinished);
+                                            }
+
+                                            @Override
+                                            public void onFinish() {
+                                                doPrinting(getBitmapFromView(slipLinearLayout));
+                                            }
+                                        }.start();
+                                    }
+                                });
+                            } else {
+                                dialogLoading.dismiss();
+                                Intent intent = new Intent(ReprintActivity.this, MenuServiceActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                                overridePendingTransition(0, 0);
+                            }
                         }
 
                         @Override
@@ -673,6 +910,15 @@ public class ReprintActivity extends SettingToolbarActivity {
             }
         });
 
+    }
+
+    private void customDialogLoading() {
+        dialogLoading = new Dialog(this);
+        dialogLoading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogLoading.setContentView(R.layout.dialog_custom_alert_loading);
+        dialogLoading.setCancelable(false);
+        dialogLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogLoading.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
     }
 
     @Override

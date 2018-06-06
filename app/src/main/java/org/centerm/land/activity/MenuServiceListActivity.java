@@ -544,15 +544,11 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
     protected void onResume() {
         super.onResume();
         realm = Realm.getDefaultInstance();
-        if (cardManager != null) {
-            cardManager.abortPBOCProcess();
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        cardManager.stopTransaction();
     }
 
     @Override

@@ -746,7 +746,7 @@ public class CardManager {
         try {
             DecimalFormat decimalFormat = new DecimalFormat("###0.00");
             Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
-            Double amountFee = (Double.valueOf(amount) * fee.intValue()) / 100;
+            Double amountFee = (Double.valueOf(amount) * fee) / 100;
             Double amountAll = Double.valueOf(amount) + amountFee;
             Log.d(TAG, "setImportAmount: " + amountAll);
             COMCODE = comCode;
@@ -1012,6 +1012,9 @@ public class CardManager {
                             Log.d(TAG, "pboc_trans_abort");
                             tempSavedAllData = readKernelData(EMVTAGS.getF55Taglist());
                             processCallback(PROCESS_TRANS_RESULT_ABORT);
+                            if (transResultAbortLister != null) {
+                                transResultAbortLister.onTransResultAbort();
+                            }
                             break;
                         case EMVConstant.TransResult.TRANS_RESULT_APPROVE:
                             Log.d(TAG, "pboc_trans_accept");
@@ -2446,9 +2449,9 @@ public class CardManager {
                 mBlockDataSend[3 - 1] = VOID_PROCESSING_CODE;
             }
             PROCESSING_CODE = mBlockDataSend[3 - 1];    // Paul_20180523
-            float fee = Preference.getInstance(context).getValueFloat(Preference.KEY_FEE);
-            float amountFee1 = (Float.valueOf(reversalTemp.getAmount()) * fee) / 100;
-            float amountAll = Float.valueOf(reversalTemp.getAmount()) + amountFee1;
+            Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
+            Double amountFee1 = (Float.valueOf(reversalTemp.getAmount()) * fee) / 100;
+            Double amountAll = Float.valueOf(reversalTemp.getAmount()) + amountFee1;
             mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
             mBlockDataSend[11 - 1] = reversalTemp.getTraceNo();
             if (HOST_CARD.equalsIgnoreCase("POS")) {
@@ -3067,7 +3070,7 @@ public class CardManager {
         String cardNo = transTemp.getCardNo();
         String feeAmount = CardPrefix.calLen(decimalFormat.format(Double.valueOf(amountFee1)).replace(".", ""), 10);
         Log.d(TAG, "setOnlineUploadCreditVoid Fee Amount : " + feeAmount);
-        String feeRate = CardPrefix.calLen(decimalFormat.format(Preference.getInstance(context).getValueFloat(Preference.KEY_FEE)).replace(".", ""), 4);
+        String feeRate = CardPrefix.calLen(decimalFormat.format(Preference.getInstance(context).getValueDouble(Preference.KEY_FEE)).replace(".", ""), 4);
         String feeType = "F";
         String terId = CardPrefix.getTerminalId(context, HOST_CARD);
         String tex = transTemp.getTaxAbb();
@@ -3114,7 +3117,7 @@ public class CardManager {
             MERCHANT_NUMBER = CardPrefix.getMerchantId(context, "TMS");
             TERMINAL_ID = CardPrefix.getTerminalId(context, "TMS");
             RealmResults<TransTemp> transTemp = realm.where(TransTemp.class).equalTo("hostTypeCard", HOST_CARD).equalTo("voidFlag", "N").findAll();
-            float fee = Preference.getInstance(context).getValueFloat(Preference.KEY_FEE);
+            Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
             uploadCreditSize = transTemp.size();
             if (transTemp.size() > 0) {
                 Double amountFee = (Double.valueOf(transTemp.get(uploadCreditPosition).getAmount()) * fee) / 100;
@@ -3552,7 +3555,7 @@ public class CardManager {
             Log.d(TAG, "RESULT:" + response_code);
             Log.d(TAG, "dealWithTheResponse 3 - 1: " + mBlockDataSend[3 - 1] + " receivedMessageType : " + receivedMessageType);
 
-            if (response_code.equals("00") && receivedMessageType.equals("0810") && mBlockDataSend[3 - 1].equals("990000")) {
+            if (receivedMessageType.equals("0810") && mBlockDataSend[3 - 1].equals("990000")) {
                 if (testHostLister != null) {
                     testHostLister.onResponseCodeSuccess();
                 }
@@ -4028,21 +4031,25 @@ public class CardManager {
     private void deleteReversal() {
         Log.d(TAG, "deleteReversal: ");
         Realm.getDefaultInstance().refresh();
-        if (realm == null) {
-            realm = Realm.getDefaultInstance();
-        }
-        realm.executeTransaction(new Realm.Transaction() {
+        new Thread(new Runnable() {
             @Override
-            public void execute(Realm realm) {
-                Log.d(TAG, "execute: " + HOST_CARD);
-                Log.d(TAG, "execute: DeleteReversal");
-                RealmResults<ReversalTemp> reversalTemp = realm.where(ReversalTemp.class).equalTo("hostTypeCard", HOST_CARD).findAll();
-                Log.d(TAG, "execute: " + reversalTemp.size());
-                reversalTemp.deleteAllFromRealm();
+            public void run() {
+                Realm realm = Realm.getDefaultInstance();
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Log.d(TAG, "execute: " + HOST_CARD);
+                        Log.d(TAG, "execute: DeleteReversal");
+                        RealmResults<ReversalTemp> reversalTemp = realm.where(ReversalTemp.class).equalTo("hostTypeCard", HOST_CARD).findAll();
+                        Log.d(TAG, "execute: " + reversalTemp.size());
+                        reversalTemp.deleteAllFromRealm();
+                    }
+                });
+                realm.close();
             }
-        });
-        realm.close();
-        realm = null;
+        }).start();
+
     }
 
     private void insertTransaction(String typeCard) {
@@ -4109,8 +4116,13 @@ public class CardManager {
         if (HOST_CARD.equalsIgnoreCase("TMS")) {
             transTemp.setApprvCode(BlockCalculateUtil.hexToString(EMCI_ID));
             transTemp.setEmciId(BlockCalculateUtil.hexToString(EMCI_ID));
-            transTemp.setEmciFree(BlockCalculateUtil.hexToString(EMCI_Fee));
+            String hexFee = BlockCalculateUtil.hexToString(EMCI_Fee);
+            String emciFeeStart = hexFee.substring(0, hexFee.length() - 2);
+            String emciFeeEnd = hexFee.substring(hexFee.length() - 2, hexFee.length());
+            Double emciFee = Double.valueOf(emciFeeStart + "." + emciFeeEnd);
             Log.d(TAG, "insertTransaction: " + BlockCalculateUtil.hexToString(EMCI_ID) + " setEmciFree = " + BlockCalculateUtil.hexToString(EMCI_Fee));
+            Log.d(TAG, "String.valueOf(emciFee) : " + String.valueOf(emciFee));
+            transTemp.setEmciFree(String.valueOf(emciFee));
         } else {
             transTemp.setApprvCode(BlockCalculateUtil.hexToString(mBlockDataReceived[38 - 1]));
         }
@@ -4197,84 +4209,87 @@ public class CardManager {
 //        }
     }
 
-    private void insertReversalSaleTransaction(String typeCard) {
-        // Paul_20180523
-        System.out.printf("utility:: insertReversalSaleTransaction 001 \n");
-        if (mBlockDataSend[3 - 1] == null) {
-            System.out.printf("utility:: insertReversalSaleTransaction mBlockDataSend[3 - 1] null \n");
-            return;
-        }
-        if ((!mBlockDataSend[3 - 1].equals(SALE_PROCESSING_CODE)) && (!mBlockDataSend[3 - 1].equals(VOID_PROCESSING_CODE))) {
-            System.out.printf("utility:: insertReversalSaleTransaction None SALE_PROCESSING_CODE VOID_PROCESSING_CODE \n");
-            return;
-        }
+    private void insertReversalSaleTransaction(final String typeCard) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.printf("utility:: insertReversalSaleTransaction 001 \n");
+                if (mBlockDataSend[3 - 1] == null) {
+                    System.out.printf("utility:: insertReversalSaleTransaction mBlockDataSend[3 - 1] null \n");
+                    return;
+                }
+                if ((!mBlockDataSend[3 - 1].equals(SALE_PROCESSING_CODE)) && (!mBlockDataSend[3 - 1].equals(VOID_PROCESSING_CODE))) {
+                    System.out.printf("utility:: insertReversalSaleTransaction None SALE_PROCESSING_CODE VOID_PROCESSING_CODE \n");
+                    return;
+                }
 
-        if (realm == null) {
-            realm = Realm.getDefaultInstance();
-        }
-        String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
-        String traceId = CardPrefix.geTraceId(context, HOST_CARD);
-        realm.beginTransaction();
-        DecimalFormat decimalFormat = new DecimalFormat("###0.00");
-        Number currentId = realm.where(ReversalTemp.class).max("id");
-        int nextId;
-        if (currentId == null) {
-            nextId = 1;
-        } else {
-            nextId = currentId.intValue() + 1;
-        }
-        ReversalTemp reversalTemp = realm.createObject(ReversalTemp.class, nextId);
-        reversalTemp.setAppid("000001");
-        reversalTemp.setTid(CardPrefix.getTerminalId(context, HOST_CARD));
-        reversalTemp.setMid(CardPrefix.getMerchantId(context, HOST_CARD));
-        reversalTemp.setTraceNo(calNumTraceNo(traceId));
-        Date cDate = new Date();
-        String fDate = new SimpleDateFormat("yyyyMMdd").format(cDate);
-        reversalTemp.setTransDate(fDate);
-        String tTime = new SimpleDateFormat("HH:mm:ss").format(cDate);
-        reversalTemp.setTransTime(tTime);
-        reversalTemp.setAmount(decimalFormat.format(Float.valueOf(AMOUNT)));
-        reversalTemp.setCardNo(CARD_NO);
-        reversalTemp.setCardType("0"); //cardType == REFUND ? "1" : "0"
-        reversalTemp.setTrack1(TRACK1); //TODO ถ้าไม่มีต้องทำยังไง เซตค่าว่าง ?
-        // Paul_20180523 Start
-        if (HOST_CARD.equals("TMS")) {
+                Realm realm = Realm.getDefaultInstance();
+                String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
+                String traceId = CardPrefix.geTraceId(context, HOST_CARD);
+                realm.beginTransaction();
+                DecimalFormat decimalFormat = new DecimalFormat("###0.00");
+                Number currentId = realm.where(ReversalTemp.class).max("id");
+                int nextId;
+                if (currentId == null) {
+                    nextId = 1;
+                } else {
+                    nextId = currentId.intValue() + 1;
+                }
+                ReversalTemp reversalTemp = realm.createObject(ReversalTemp.class, nextId);
+                reversalTemp.setAppid("000001");
+                reversalTemp.setTid(CardPrefix.getTerminalId(context, HOST_CARD));
+                reversalTemp.setMid(CardPrefix.getMerchantId(context, HOST_CARD));
+                reversalTemp.setTraceNo(calNumTraceNo(traceId));
+                Date cDate = new Date();
+                String fDate = new SimpleDateFormat("yyyyMMdd").format(cDate);
+                reversalTemp.setTransDate(fDate);
+                String tTime = new SimpleDateFormat("HH:mm:ss").format(cDate);
+                reversalTemp.setTransTime(tTime);
+                reversalTemp.setAmount(decimalFormat.format(Float.valueOf(AMOUNT)));
+                reversalTemp.setCardNo(CARD_NO);
+                reversalTemp.setCardType("0"); //cardType == REFUND ? "1" : "0"
+                reversalTemp.setTrack1(TRACK1); //TODO ถ้าไม่มีต้องทำยังไง เซตค่าว่าง ?
+                // Paul_20180523 Start
+                if (HOST_CARD.equals("TMS")) {
 
-            reversalTemp.setTrack2(TRACK2_ENC);
+                    reversalTemp.setTrack2(TRACK2_ENC);
 //            reversalTemp.setTrack2( mBlockDataSend[35 - 1] );
-            reversalTemp.setField63(mBlockDataSend[63 - 1]);
-            reversalTemp.setPinblock(mBlockDataSend[52 - 1]);
-        } else {
-            reversalTemp.setTrack2(TRACK2);
-        }
-        // Paul_20180523 End
-        reversalTemp.setTrack2(TRACK2);
-        reversalTemp.setProcCode(PROCESSING_CODE);
-        reversalTemp.setPosem(POSEM);
-        reversalTemp.setPosoc(POSOC);
-        reversalTemp.setNii(NII);
-        reversalTemp.setPointService(mBlockDataSend[22 - 1]);
-        reversalTemp.setApplicationPAN(mBlockDataSend[23 - 1]);
-        reversalTemp.setExpiry(EXPIRY);
-        reversalTemp.setRefNo(mBlockDataReceived[37 - 1] == null ? "" : mBlockDataReceived[37 - 1]);
-        reversalTemp.setIccData(mBlockDataSend[55 - 1]);
-        reversalTemp.setApprvCode(mBlockDataReceived[38 - 1] == null ? "" : mBlockDataReceived[38 - 1]);
-        reversalTemp.setTransType(typeCard);
-        reversalTemp.setRespCode(mBlockDataReceived[39 - 1] == null ? "" : mBlockDataReceived[39 - 1]);
-        reversalTemp.setVoidFlag("N");
-        reversalTemp.setCloseFlag("N");
-        if (mBlockDataSend[3 - 1].equals(SALE_PROCESSING_CODE)) {
-            reversalTemp.setTransStat("SALE");
-        } else if (mBlockDataSend[3 - 1].equals(VOID_PROCESSING_CODE)) {
-            reversalTemp.setTransStat("VOID");
-        }
-        reversalTemp.setEcr(calNumTraceNo(invoiceNumber));
-        reversalTemp.setHostTypeCard(HOST_CARD);
-        reversalTemp.setReserved(mBlockDataSend[63 - 1]);
-        Log.d(TAG, "insertReversalSaleTransaction: " + calNumTraceNo(invoiceNumber).length() + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber)));
-        realm.commitTransaction();
-        realm.close();
-        realm = null;
+                    reversalTemp.setField63(mBlockDataSend[63 - 1]);
+                    reversalTemp.setPinblock(mBlockDataSend[52 - 1]);
+                } else {
+                    reversalTemp.setTrack2(TRACK2);
+                }
+                // Paul_20180523 End
+                reversalTemp.setTrack2(TRACK2);
+                reversalTemp.setProcCode(PROCESSING_CODE);
+                reversalTemp.setPosem(POSEM);
+                reversalTemp.setPosoc(POSOC);
+                reversalTemp.setNii(NII);
+                reversalTemp.setPointService(mBlockDataSend[22 - 1]);
+                reversalTemp.setApplicationPAN(mBlockDataSend[23 - 1]);
+                reversalTemp.setExpiry(EXPIRY);
+                reversalTemp.setRefNo(mBlockDataReceived[37 - 1] == null ? "" : mBlockDataReceived[37 - 1]);
+                reversalTemp.setIccData(mBlockDataSend[55 - 1]);
+                reversalTemp.setApprvCode(mBlockDataReceived[38 - 1] == null ? "" : mBlockDataReceived[38 - 1]);
+                reversalTemp.setTransType(typeCard);
+                reversalTemp.setRespCode(mBlockDataReceived[39 - 1] == null ? "" : mBlockDataReceived[39 - 1]);
+                reversalTemp.setVoidFlag("N");
+                reversalTemp.setCloseFlag("N");
+                if (mBlockDataSend[3 - 1].equals(SALE_PROCESSING_CODE)) {
+                    reversalTemp.setTransStat("SALE");
+                } else if (mBlockDataSend[3 - 1].equals(VOID_PROCESSING_CODE)) {
+                    reversalTemp.setTransStat("VOID");
+                }
+                reversalTemp.setEcr(calNumTraceNo(invoiceNumber));
+                reversalTemp.setHostTypeCard(HOST_CARD);
+                reversalTemp.setReserved(mBlockDataSend[63 - 1]);
+                Log.d(TAG, "insertReversalSaleTransaction: " + calNumTraceNo(invoiceNumber).length() + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber)));
+                realm.commitTransaction();
+                realm.close();
+            }
+        }).start();
+        // Paul_20180523
+
     }
 
     private String Track2MappingTable(String t2, String TRANDATE) {
@@ -4577,6 +4592,7 @@ public class CardManager {
     private SettlementHelperLister settlementHelperLister = null;
     private ResponseCodeListener responseCodeListener = null;
     private TestHostLister testHostLister = null;
+    private TransResultAbortLister transResultAbortLister = null;
 
     public void setCardHelperListener(CardHelperListener cardHelperListener) {
         this.cardHelperListener = cardHelperListener;
@@ -4605,6 +4621,9 @@ public class CardManager {
     public void setTestHostLister(TestHostLister testHostLister) {
         this.testHostLister = testHostLister;
     }
+    public void setTransResultAbortLister(TransResultAbortLister transResultAbortLister) {
+        this.transResultAbortLister = transResultAbortLister;
+    }
 
     public void removeCardHelperListener() {
         this.cardHelperListener = null;
@@ -4632,6 +4651,10 @@ public class CardManager {
 
     public void removeTestHostLister() {
         this.testHostLister = null;
+    }
+
+    public void removeTransResultAbort() {
+        this.transResultAbortLister = null;
     }
 
 
@@ -4696,6 +4719,10 @@ public class CardManager {
         public void onConnectTimeOut();
 
         public void onTransactionTimeOut();
+    }
+
+    public interface TransResultAbortLister {
+        public void onTransResultAbort();
     }
 
 //endregion

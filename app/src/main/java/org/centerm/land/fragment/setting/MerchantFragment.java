@@ -16,6 +16,8 @@ import org.centerm.land.R;
 import org.centerm.land.utility.CustomDialog;
 import org.centerm.land.utility.Preference;
 
+import java.text.DecimalFormat;
+
 @SuppressWarnings("unused")
 public class MerchantFragment extends Fragment implements View.OnClickListener {
 
@@ -29,6 +31,8 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
     private Button feeBtn = null;
     private TextView texLabel = null;
     private Button texBtn = null;
+    private TextView posIdLabel = null;
+    private Button posIdBtn = null;
     private CustomDialog customDialog;
 
     public MerchantFragment() {
@@ -81,19 +85,26 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
         merchantL3Btn = rootView.findViewById(R.id.merchantL3Btn);
 
         feeLabel = rootView.findViewById(R.id.feeLabel);
-        feeLabel.setText(Preference.getInstance(getContext()).getValueFloat(Preference.KEY_FEE)+"");
+        DecimalFormat decimalFormat = new DecimalFormat("###0.00");
+        feeLabel.setText(decimalFormat.format(Preference.getInstance(getContext()).getValueDouble(Preference.KEY_FEE)));
         feeBtn = rootView.findViewById(R.id.feeBtn);
 
         texLabel = rootView.findViewById(R.id.texLabel);
-        texLabel.setText(Preference.getInstance(getContext()).getValueFloat(Preference.KEY_FEE)+"");
+        texLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_TAX_ID));
 
         texBtn = rootView.findViewById(R.id.texBtn);
+
+        posIdLabel = rootView.findViewById(R.id.posIdLabel);
+        posIdLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_POS_ID));
+
+        posIdBtn = rootView.findViewById(R.id.posIdBtn);
 
         merchantL1Btn.setOnClickListener(this);
         merchantL2Btn.setOnClickListener(this);
         merchantL3Btn.setOnClickListener(this);
         feeBtn.setOnClickListener(this);
         texBtn.setOnClickListener(this);
+        posIdBtn.setOnClickListener(this);
     }
 
     @Override
@@ -200,13 +211,14 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
             }
             customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
             customDialog.setInitWidgetDialog(feeLabel.getText().toString());
-            customDialog.setMaxLength(20);
+            customDialog.setMaxLength(4);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override
                 public void onClickSave(Dialog dialog, String sEt) {
                     feeLabel.setText(sEt);
-//                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_TERMINAL_ID,sEt);
+                    DecimalFormat decimalFormat = new DecimalFormat("##0.00");
+                    Preference.getInstance(getContext()).setValueDouble(Preference.KEY_FEE, Double.parseDouble(decimalFormat.format(Double.parseDouble(sEt))));
                     dialog.dismiss();
                 }
 
@@ -221,14 +233,36 @@ public class MerchantFragment extends Fragment implements View.OnClickListener {
                 customDialog = null;
             }
             customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
-            customDialog.setInitWidgetDialog(feeLabel.getText().toString());
-            customDialog.setMaxLength(10);
+            customDialog.setInitWidgetDialog(texLabel.getText().toString());
+            customDialog.setMaxLength(13);
             customDialog.setCancelable(false);
             customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
                 @Override
                 public void onClickSave(Dialog dialog, String sEt) {
-                    feeLabel.setText(sEt);
-//                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_TERMINAL_ID,sEt);
+                    texLabel.setText(sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_TAX_ID,sEt);
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onClickCancel(Dialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+            customDialog.show();
+        } else if (v == posIdBtn) {
+            if (customDialog != null) {
+                customDialog = null;
+            }
+            customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
+            customDialog.setInitWidgetDialog(posIdLabel.getText().toString());
+            customDialog.setMaxLength(4);
+            customDialog.setCancelable(false);
+            customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
+                @Override
+                public void onClickSave(Dialog dialog, String sEt) {
+                    posIdLabel.setText(sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_POS_ID,sEt);
                     dialog.dismiss();
                 }
 

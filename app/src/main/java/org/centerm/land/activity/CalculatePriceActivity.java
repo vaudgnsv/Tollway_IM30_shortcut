@@ -150,6 +150,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 if (dialogWaiting != null) {
                     dialogWaiting.dismiss();
                 }
+                cardManager.removeTransResultAbort();
                 Intent intent = new Intent(CalculatePriceActivity.this, SlipTemplateActivity.class);
                 intent.putExtra(KEY_CALCUATE_ID, id);
                 intent.putExtra(KEY_TYPE_SALE_OR_VOID, TypeSale);
@@ -589,9 +590,42 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         }
     }
 
+    private void setAbortPboc() {
+        cardManager.setTransResultAbortLister(new CardManager.TransResultAbortLister() {
+            @Override
+            public void onTransResultAbort() {
+                cardManager.abortPBOCProcess();
+                Intent intent = new Intent(CalculatePriceActivity.this, MenuServiceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         cardManager.abortPBOCProcess();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (cardManager != null) {
+            setAbortPboc();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (cardManager != null) {
+            cardManager.removeTransResultAbort();
+        }
     }
 }

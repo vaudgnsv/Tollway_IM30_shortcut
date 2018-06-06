@@ -33,7 +33,7 @@
     <string name="slip_no_refund">** NO REFUND **</string>
     <string name="slip_print">พิมพ์ ใบเสร็จรับเงิน</string>
     <string name="slip_pattern_amount">* %1$s</string>
-    <string name="slip_pattern_amount_void"> * - %1$s</string>
+    <string name="slip_pattern_amount_void"> - %1$s</string>
     <string name="date_qr">DATE : %1$s</string>
     <string name="time_qr">TIME : %1$s</string>
     <string name="tid_qr">TID : %1$s</string>

@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/timeburnerbold"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="Header Line1"
                 android:textColor="@android:color/black"
                 android:textSize="13sp" />
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/timeburnerbold"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="Header Line1"
                 android:textColor="@android:color/black"
                 android:textSize="13sp" />
@@ -91,11 +91,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/timeburnerbold"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="Header Line1"
                 android:textColor="@android:color/black"
                 android:textSize="13sp" />
             <TextView
+                android:layout_marginTop="5dp"
                 android:gravity="center"
                 android:background="@android:color/black"
                 android:layout_width="match_parent"
@@ -118,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_weight="0.5"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="TID : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -129,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
                     android:layout_weight="1.5"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:gravity="end"
                     android:text="33333333"
                     android:textColor="@android:color/black"
@@ -148,7 +149,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="MID : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -159,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="3333333"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -176,7 +177,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="TRACE : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -186,7 +187,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:gravity="end"
                     android:text="33333333"
                     android:textColor="@android:color/black"
@@ -199,7 +200,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="SYSTRC : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -209,7 +210,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="99999999"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -222,7 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="BATCH : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -232,7 +233,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="99999999"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -247,7 +248,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="REF NO : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -257,7 +258,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="99999999"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -273,7 +274,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -283,7 +284,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
 
@@ -308,7 +309,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="@string/slip_type"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -321,14 +322,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="@string/slip_type"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
             </FrameLayout>
 
-            <FrameLayout
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -336,11 +338,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="@string/slip_number_card"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
-            </FrameLayout>
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/typeInputCardLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -349,7 +363,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="APPR.CODE : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -359,7 +373,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="1111111"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -372,7 +386,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="COMCODE : "
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
@@ -385,7 +399,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="70029"
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -399,22 +413,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="AMT THB : "
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/amtThbLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="*234234"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
             </FrameLayout>
 
             <FrameLayout
@@ -425,7 +439,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="FEE THB : "
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
@@ -436,7 +450,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="*234234"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
@@ -451,7 +465,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="TOT THB : "
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
@@ -462,7 +476,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="*234234"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
@@ -480,7 +494,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="REF1 : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -492,7 +506,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="234234"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
@@ -511,7 +525,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="REF2 : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -523,7 +537,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="234234"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
@@ -542,7 +556,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="REF3 : "
                     android:textColor="@android:color/black"
                     android:textSize="13sp" />
@@ -554,7 +568,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="234234"
                     android:textStyle="bold"
                     android:textColor="@android:color/black"
@@ -577,18 +591,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:fontFamily="@font/timeburnernormal"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="@string/slip_signature"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/nameEmvCardLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:text=""
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginTop="40dp"
-                android:fontFamily="@font/timeburnerbold"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="I ACKNOWLEDGE SATISFACTORY RECEIPT
 GOODS/SERVICES AND AGREE TO PAY
 TOTAL AMOUNT"
@@ -599,7 +624,7 @@ TOTAL AMOUNT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/timeburnerbold"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="**** NO REFUND ****"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
@@ -608,7 +633,7 @@ TOTAL AMOUNT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/timeburnerbold"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="DOL_18_05_30"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
@@ -618,7 +643,7 @@ TOTAL AMOUNT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/timeburnerbold"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="โปรดตรวจสอบความถูกต้องในทันทีที่ได้รับเอกสารนี้
 หากไม่ทักท้วงจะถือว่ารายการดังกล่าวข้างต้น
 ถูกต้องสมบูรณ์"
@@ -626,15 +651,270 @@ TOTAL AMOUNT"
                 android:textSize="10sp" />
 
             <TextView
+                android:id="@+id/typeCopyLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="30dp"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/timeburnernormal"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="**** MERCHANT COPY ****"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />
+
+            <TextView
+                android:maxLines="1"
+                android:text="-----------------------------------------------------------"
+                android:textColor="@android:color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:id="@+id/taxLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:gravity="center"
+                    android:text="TAX INVOICE (ABB)
+KRUNGTHAI BANK PCI
+KRUNGTHAI"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:gravity="center"
+                    android:text="35 SUKHUMVIT ROAD,KLONG TOEY NUA
+SUBDISTEICT,WATTANA DISTRICT,
+BANGKOK 10110 THAILAND
+TEL. 0-2255-2222 FAX. 0-2255-9391-3"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:gravity="center"
+                    android:text="POS ID : 2222"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:text="TAX ID "
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/taxIdLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.4"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:text="TAX (ABB) "
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/taxAbbLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.4"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:text="TRACE  "
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/traceTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.4"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:text="BATCH  "
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/batchTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.4"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+
+                        <TextView
+                            android:id="@+id/dateTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/timeTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:gravity="end"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@android:color/black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:text="FEE THB "
+                            android:textColor="@android:color/black"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/feeTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1.4"
+                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:gravity="end"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.4"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:gravity="center"
+                        android:text="* VAT INCULEDED *"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/copyLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1.4"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:gravity="center"
+                        android:text="**** สำเนาร้านค้า ****"
+                        android:textColor="@android:color/black"
+                        android:textStyle="normal" />
+
+
+                </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

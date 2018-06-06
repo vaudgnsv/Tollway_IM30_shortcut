@@ -171,6 +171,35 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     private TextView cardCountLabelSmQr;
     private TextView cardAmountLabelSmQr;
     private NestedScrollView slipNestedScrollViewSmQr;
+    private TextView merchantName1ReportLabel;
+    private TextView merchantName2ReportLabel;
+    private TextView merchantName3ReportLabel;
+    private TextView merchantName1TaxLabel;
+    private TextView merchantName2TaxLabel;
+    private TextView merchantName3TaxLabel;
+    private TextView merchantName1QrLabel;
+    private TextView merchantName2QrLabel;
+    private TextView merchantName3QrLabel;
+    /**
+     * FEE
+     */
+    private View reportSummaryFeeView;
+    private LinearLayout summaryLinearFeeLayout;
+    private TextView merchantName1FeeLabel;
+    private TextView merchantName2FeeLabel;
+    private TextView merchantName3FeeLabel;
+    private TextView dateFeeLabel;
+    private TextView timeFeeLabel;
+    private TextView midFeeLabel;
+    private TextView tidFeeLabel;
+    private TextView batchFeeLabel;
+    private TextView hostFeeLabel;
+    private TextView saleCountFeeLabel;
+    private TextView saleTotalFeeLabel;
+    private TextView voidSaleCountFeeLabel;
+    private TextView voidSaleAmountFeeLabel;
+    private TextView cardCountFeeLabel;
+    private TextView cardAmountFeeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +229,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         reportViewQr();
         reportSummaryViewQr();
         setViewReportTaxDetail();
+        reportSummaryFeeView();
     }
 
     private void reportView() {
@@ -214,6 +244,9 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         recyclerViewReportDetail.setAdapter(slipReportAdapter);
         countReportLabel = reportView.findViewById(R.id.countReportLabel);
         amountReportLabel = reportView.findViewById(R.id.amountReportLabel);
+        merchantName1ReportLabel = reportView.findViewById(R.id.merchantName1Label);
+        merchantName2ReportLabel = reportView.findViewById(R.id.merchantName2Label);
+        merchantName3ReportLabel = reportView.findViewById(R.id.merchantName3Label);
     }
 
     private void reportViewQr() {
@@ -234,6 +267,9 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         tidLabelQr = reportViewQr.findViewById(R.id.tidLabel);
         batchLabelQr = reportViewQr.findViewById(R.id.batchLabel);
         hostLabelQr = reportViewQr.findViewById(R.id.hostLabel);
+        merchantName1QrLabel = reportViewQr.findViewById(R.id.merchantName1Label);
+        merchantName2QrLabel = reportViewQr.findViewById(R.id.merchantName2Label);
+        merchantName3QrLabel = reportViewQr.findViewById(R.id.merchantName3Label);
     }
 
     private void reportSummaryView() {
@@ -256,6 +292,28 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         voidSaleAmountLabel = reportSummaryView.findViewById(R.id.voidSaleAmountLabel);
         cardCountLabel = reportSummaryView.findViewById(R.id.cardCountLabel);
         cardAmountLabel = reportSummaryView.findViewById(R.id.cardAmountLabel);
+
+    }
+    private void reportSummaryFeeView() {
+        LayoutInflater inflater =
+                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        reportSummaryFeeView = inflater.inflate(R.layout.view_silp_report_fee_summary, null);
+        summaryLinearFeeLayout = reportSummaryFeeView.findViewById(R.id.summaryLinearLayout);
+        merchantName1FeeLabel = reportSummaryFeeView.findViewById(R.id.merchantName1Label);
+        merchantName2FeeLabel = reportSummaryFeeView.findViewById(R.id.merchantName2Label);
+        merchantName3FeeLabel = reportSummaryFeeView.findViewById(R.id.merchantName3Label);
+        dateFeeLabel = reportSummaryFeeView.findViewById(R.id.dateLabel);
+        timeFeeLabel = reportSummaryFeeView.findViewById(R.id.timeLabel);
+        midFeeLabel = reportSummaryFeeView.findViewById(R.id.midLabel);
+        tidFeeLabel = reportSummaryFeeView.findViewById(R.id.tidLabel);
+        batchFeeLabel = reportSummaryFeeView.findViewById(R.id.batchLabel);
+        hostFeeLabel = reportSummaryFeeView.findViewById(R.id.hostLabel);
+        saleCountFeeLabel = reportSummaryFeeView.findViewById(R.id.saleCountLabel);
+        saleTotalFeeLabel = reportSummaryFeeView.findViewById(R.id.saleTotalLabel);
+        voidSaleCountFeeLabel = reportSummaryFeeView.findViewById(R.id.voidSaleCountLabel);
+        voidSaleAmountFeeLabel = reportSummaryFeeView.findViewById(R.id.voidSaleAmountLabel);
+        cardCountFeeLabel = reportSummaryFeeView.findViewById(R.id.cardCountLabel);
+        cardAmountFeeLabel = reportSummaryFeeView.findViewById(R.id.cardAmountLabel);
 
     }
 
@@ -298,6 +356,11 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         reportSummaryView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         reportSummaryView.layout(0, 0, reportSummaryView.getMeasuredWidth(), reportSummaryView.getMeasuredHeight());
+    }
+    private void setMeasureFeeSummary() {
+        reportSummaryFeeView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        reportSummaryFeeView.layout(0, 0, reportSummaryFeeView.getMeasuredWidth(), reportSummaryFeeView.getMeasuredHeight());
     }
     private void setMeasureSummaryQr() {
         reportSummaryViewQr.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
@@ -412,6 +475,13 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                 amountAll += Double.valueOf(transTempList.get(i).getAmount());
             }
         }
+
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1ReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2ReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3ReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
 
         countReportLabel.setText(transTempList.size() + "");
         amountReportLabel.setText(decimalFormat.format(amountAll));
@@ -533,24 +603,24 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         Log.d(TAG, "selectSummaryReport: " + transTempSale.size());
         Log.d(TAG, "selectSummaryReport: " + transTempVoid.size());
         for (int i = 0; i < transTempSale.size(); i++) {
-            totalSale += Double.valueOf(transTempSale.get(i).getAmount());
+            totalSale += Double.valueOf(transTempSale.get(i).getFee());
         }
 
         for (int i = 0; i < transTempVoid.size(); i++) {
-            totalVoid += Double.valueOf(transTempVoid.get(i).getAmount());
+            totalVoid += Double.valueOf(transTempVoid.get(i).getFee());
         }
         if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
-            merchantName1Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+            merchantName1FeeLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1));
         if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
-            merchantName2Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+            merchantName2FeeLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2));
         if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
-            merchantName3Label.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+            merchantName3FeeLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
         DateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
-        dateLabel.setText(dateFormat.format(date));
-        timeLabel.setText(timeFormat.format(date));
-        switch (typeHost) {
+        dateFeeLabel.setText(dateFormat.format(date));
+        timeFeeLabel.setText(timeFormat.format(date));
+        /*switch (typeHost) {
             case "POS":
                 midLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
                 tidLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
@@ -569,17 +639,17 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                 batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)), 6));
                 hostLabel.setText("KTB ONUS");
                 break;
-        }
+        }*/
 
-        saleCountLabel.setText(String.valueOf(transTempSale.size()));
-        saleTotalLabel.setText(decimalFormat.format(totalSale));
-        voidSaleCountLabel.setText(transTempVoid.size() + "");
-        voidSaleAmountLabel.setText(decimalFormat.format(totalVoid));
+        saleCountFeeLabel.setText(String.valueOf(transTempSale.size()));
+        saleTotalFeeLabel.setText(decimalFormat.format(totalSale));
+        voidSaleCountFeeLabel.setText(transTempVoid.size() + "");
+        voidSaleAmountFeeLabel.setText(decimalFormat.format(totalVoid));
         countAll = transTempSale.size() + transTempVoid.size();
-        cardCountLabel.setText(countAll + "");
-        cardAmountLabel.setText(decimalFormat.format(totalSale));
+        cardCountFeeLabel.setText(countAll + "");
+        cardAmountFeeLabel.setText(decimalFormat.format(totalSale));
 
-        setMeasureSummary();
+        setMeasureFeeSummary();
         new CountDownTimer(1500, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -589,7 +659,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             @Override
             public void onFinish() {
                 if (transTempSale.size() > 0 || transTempVoid.size() > 0) {
-                    doPrinting(getBitmapFromView(summaryLinearLayout));
+                    doPrinting(getBitmapFromView(summaryLinearFeeLayout));
                 } else {
                     Utility.customDialogAlert(MenuDetailReportActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
                         @Override
@@ -629,7 +699,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         midLabelSmQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
         tidLabelSmQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
         batchLabelSmQr.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)), 6));
-        hostLabelSmQr.setText("KTB ON US");
+        hostLabelSmQr.setText("KTB QR");
 
         saleCountLabelSmQr.setText(qrCodes.size() + "");
         saleTotalLabelSmQr.setText(decimalFormat.format(totalSale));
@@ -846,6 +916,9 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         countGrandLabel = reportTaxView.findViewById(R.id.countGrandLabel);
         totalCountGrandLabel = reportTaxView.findViewById(R.id.totalCountGrandLabel);
         recyclerViewReportTaxDetail = reportTaxView.findViewById(R.id.recyclerViewReportTaxDetail);
+        merchantName1TaxLabel = reportTaxView.findViewById(R.id.merchantName1Label);
+        merchantName2TaxLabel = reportTaxView.findViewById(R.id.merchantName2Label);
+        merchantName3TaxLabel = reportTaxView.findViewById(R.id.merchantName3Label);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewReportTaxDetail.setLayoutManager(layoutManager);
     }
@@ -864,6 +937,13 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             batchIdLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
             hostTaxLabel.setText("KTB OFFUS");
         }
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1TaxLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2TaxLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3TaxLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+
         dateTaxLabel.setText(dateFormat.format(date));
         timeTaxLabel.setText(timeFormat.format(date));
         RealmResults<TransTemp> tax = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).findAll();
@@ -945,6 +1025,14 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             taxIdLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TAX_ID));
             dateLabelQr.setText(dateFormat.format(date));
             timeLabelQr.setText(timeFormat.format(date));
+
+            if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+                merchantName1QrLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+            if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+                merchantName2QrLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+            if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+                merchantName3QrLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+
 
             midLabelQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
             tidLabelQr.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));

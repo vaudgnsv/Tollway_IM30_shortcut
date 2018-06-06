@@ -86,29 +86,32 @@ public class Preference {
     public static final String KEY_SALE_VOID_PRINT_ID_EPS = Preference.class.getName() + "key_sale_void_print_id_eps";
     public static final String KEY_SALE_VOID_PRINT_ID_TMS = Preference.class.getName() + "key_sale_void_print_id_tms";
 
+    public static final String KEY_SETTLE_TYPE_POS = Preference.class.getName() + "key_settle_type_pos";
     public static final String KEY_SETTLE_DATE_POS = Preference.class.getName() + "key_settle_date_pos";
-    public static final String KEY_SETTLE_TIME_POS = Preference.class.getName() + "key_settle_date_pos";
+    public static final String KEY_SETTLE_TIME_POS = Preference.class.getName() + "key_settle_time_pos";
     public static final String KEY_SETTLE_SALE_COUNT_POS = Preference.class.getName() + "key_settle_sale_count_pos";
     public static final String KEY_SETTLE_SALE_TOTAL_POS = Preference.class.getName() + "key_settle_sale_total_pos";
     public static final String KEY_SETTLE_VOID_COUNT_POS = Preference.class.getName() + "key_settle_void_count_pos";
     public static final String KEY_SETTLE_VOID_TOTAL_POS = Preference.class.getName() + "key_settle_void_total_pos";
 
+    public static final String KEY_SETTLE_TYPE_EPS = Preference.class.getName() + "key_settle_type_eps";
     public static final String KEY_SETTLE_DATE_EPS = Preference.class.getName() + "key_settle_date_eps";
-    public static final String KEY_SETTLE_TIME_EPS = Preference.class.getName() + "key_settle_date_eps";
+    public static final String KEY_SETTLE_TIME_EPS = Preference.class.getName() + "key_settle_time_eps";
     public static final String KEY_SETTLE_SALE_COUNT_EPS = Preference.class.getName() + "key_settle_sale_count_eps";
     public static final String KEY_SETTLE_SALE_TOTAL_EPS = Preference.class.getName() + "key_settle_sale_total_eps";
     public static final String KEY_SETTLE_VOID_COUNT_EPS = Preference.class.getName() + "key_settle_void_count_eps";
     public static final String KEY_SETTLE_VOID_TOTAL_EPS = Preference.class.getName() + "key_settle_void_total_eps";
 
+    public static final String KEY_SETTLE_TYPE_TMS = Preference.class.getName() + "key_settle_type_tms";
     public static final String KEY_SETTLE_DATE_TMS = Preference.class.getName() + "key_settle_date_tms";
-    public static final String KEY_SETTLE_TIME_TMS = Preference.class.getName() + "key_settle_date_tms";
+    public static final String KEY_SETTLE_TIME_TMS = Preference.class.getName() + "key_settle_time_tms";
     public static final String KEY_SETTLE_SALE_COUNT_TMS = Preference.class.getName() + "key_settle_sale_count_tms";
     public static final String KEY_SETTLE_SALE_TOTAL_TMS = Preference.class.getName() + "key_settle_sale_total_tms";
     public static final String KEY_SETTLE_VOID_COUNT_TMS = Preference.class.getName() + "key_settle_void_count_tms";
     public static final String KEY_SETTLE_VOID_TOTAL_TMS = Preference.class.getName() + "key_settle_void_total_tms";
 
     public static final String KEY_SETTLE_DATE_QR = Preference.class.getName() + "key_settle_date_qr";
-    public static final String KEY_SETTLE_TIME_QR = Preference.class.getName() + "key_settle_date_qr";
+    public static final String KEY_SETTLE_TIME_QR = Preference.class.getName() + "key_settle_time_qr";
     public static final String KEY_SETTLE_SALE_COUNT_QR = Preference.class.getName() + "key_settle_sale_count_qr";
     public static final String KEY_SETTLE_SALE_TOTAL_QR = Preference.class.getName() + "key_settle_sale_total_qr";
     public static final String KEY_SETTLE_VOID_COUNT_QR = Preference.class.getName() + "key_settle_void_count_qr";
@@ -117,6 +120,8 @@ public class Preference {
     public static final String KEY_TAX_INVOICE_NO_POS = Preference.class.getName() + "key_tax_invoice_no_pos";
     public static final String KEY_TAX_INVOICE_NO_EPS = Preference.class.getName() + "key_tax_invoice_no_eps";
     public static final String KEY_TAX_ID = Preference.class.getName() + "key_tax_id";
+
+    public static final String KEY_POS_ID = Preference.class.getName() + "key_pos_id";
 
     private static Preference settingPreference = null;
     private final String preferenceName = BuildConfig.APPLICATION_ID + "Setting";

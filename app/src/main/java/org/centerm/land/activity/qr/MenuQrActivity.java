@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
 import com.centerm.smartpos.aidl.printer.AidlPrinterStateChangeListener;
@@ -34,7 +32,6 @@ import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.activity.MenuServiceActivity;
-import org.centerm.land.activity.SlipTemplateActivity;
 import org.centerm.land.adapter.MenuQrAdapter;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.QrCode;
@@ -47,6 +44,7 @@ import org.centerm.land.utility.Utility;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,6 +98,7 @@ public class MenuQrActivity extends SettingToolbarActivity {
     private TextView batchLabel;
     private TextView apprCodeLabel;
     private TextView inquiryLabel;
+    private Dialog dialogLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +117,7 @@ public class MenuQrActivity extends SettingToolbarActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewMenuQr.setLayoutManager(layoutManager);
         customDialogOutOfPaper();
+        customDialogLoading();
         setMenuQr();
 
         setViewPrintSlip();
@@ -232,6 +232,15 @@ public class MenuQrActivity extends SettingToolbarActivity {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+
+                if (!Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+                    merchantName1Label.setText(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+                if (!Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+                    merchantName2Label.setText(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+                if (!Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+                    merchantName3Label.setText(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+
                 qrCode = realm.where(QrCode.class).equalTo("id", qrId).findFirst();
                 qrTidLabel.setText(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
                 midLabel.setText(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
@@ -241,10 +250,13 @@ public class MenuQrActivity extends SettingToolbarActivity {
                 billerLabel.setText(qrCode.getBillerId());
                 traceLabel.setText(qrCode.getTrace());
                 dateLabel.setText(qrCode.getDate());
-                timeLabel.setText(qrCode.getTime());
+                String timeHH = qrCode.getTime().substring(0,2);
+                String timeMM = qrCode.getTime().substring(2,4);
+                String timeSS = qrCode.getTime().substring(4,6);
+                timeLabel.setText(getString(R.string.time_qr, timeHH + ":" + timeMM + ":" +timeSS));
                 qrId = qrCode.getId();
 //                comCodeLabel.setText(qrCode.getComCode());
-                amtThbLabel.setText(getString(R.string.slip_pattern_amount, qrCode.getAmount()));
+                amtThbLabel.setText(getString(R.string.slip_pattern_amount,decimalFormat.format(Double.valueOf(qrCode.getAmount())) ));
                 /*if (qrCode.getRef1() != null) {
                     ref1RelativeLayout.setVisibility(View.VISIBLE);
                     ref1Label.setText(qrCode.getRef1());
@@ -274,6 +286,13 @@ public class MenuQrActivity extends SettingToolbarActivity {
 
 
     private void requestCheckSlip() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                dialogLoading.show();
+            }
+        });
         HttpManager.getInstance().getService().checkQr(check)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -290,9 +309,11 @@ public class MenuQrActivity extends SettingToolbarActivity {
                                 JSONObject object = new JSONObject(jsonElementResponse.body().toString());
                                 String code = object.getString("code");
                                 if (code.equalsIgnoreCase("00000")) {
+                                    dialogLoading.dismiss();
                                     updateQrSuccess();
                                     doPrinting(getBitmapFromView(slipLinearLayout));
                                 } else {
+                                    dialogLoading.dismiss();
                                     String dec = object.getString("desc");
                                     Utility.customDialogAlert(MenuQrActivity.this, dec, new Utility.OnClickCloseImage() {
                                         @Override
@@ -302,6 +323,7 @@ public class MenuQrActivity extends SettingToolbarActivity {
                                     });
                                 }
                             } else {
+                                dialogLoading.dismiss();
                                 Utility.customDialogAlert(MenuQrActivity.this, "ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้", new Utility.OnClickCloseImage() {
                                     @Override
                                     public void onClickImage(Dialog dialog) {
@@ -316,6 +338,7 @@ public class MenuQrActivity extends SettingToolbarActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        dialogLoading.dismiss();
                         Log.d(TAG, "onError: " + e.getMessage());
                         Utility.customDialogAlert(MenuQrActivity.this, "ไม่สามารถเชื่อมต่อเซิฟเวอร์ได้", new Utility.OnClickCloseImage() {
                             @Override
@@ -327,7 +350,7 @@ public class MenuQrActivity extends SettingToolbarActivity {
 
                     @Override
                     public void onComplete() {
-
+                        dialogLoading.dismiss();
                     }
                 });
     }
@@ -425,6 +448,15 @@ public class MenuQrActivity extends SettingToolbarActivity {
             }
         });
 
+    }
+
+    private void customDialogLoading() {
+        dialogLoading = new Dialog(this);
+        dialogLoading.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogLoading.setContentView(R.layout.dialog_custom_alert_loading);
+        dialogLoading.setCancelable(false);
+        dialogLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogLoading.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
     }
 
     @Override

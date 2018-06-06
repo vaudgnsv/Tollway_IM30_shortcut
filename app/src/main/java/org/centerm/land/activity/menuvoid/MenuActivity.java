@@ -207,23 +207,24 @@ public class MenuActivity extends SettingToolbarActivity {
                 public void onClick(View v) {
                     int position = (int) v.getTag();
                     if (position == 0) {
+                        if (checkReversal("TMS")) {
+                            Intent intent = new Intent(MenuActivity.this, VoidActivity.class);
+                            intent.putExtra(KEY_MENU_HOST, "TMS");
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
+                        }
+
+                    } else if (position == 1) {
                         if (checkReversal("POS")) {
                             Intent intent = new Intent(MenuActivity.this, VoidActivity.class);
                             intent.putExtra(KEY_MENU_HOST, "POS");
                             startActivity(intent);
                             overridePendingTransition(0, 0);
                         }
-                    } else if (position == 1) {
+                    } else if (position == 2) {
                         if (checkReversal("EPS")) {
                             Intent intent = new Intent(MenuActivity.this, VoidActivity.class);
                             intent.putExtra(KEY_MENU_HOST, "EPS");
-                            startActivity(intent);
-                            overridePendingTransition(0, 0);
-                        }
-                    } else if (position == 2) {
-                        if (checkReversal("TMS")) {
-                            Intent intent = new Intent(MenuActivity.this, VoidActivity.class);
-                            intent.putExtra(KEY_MENU_HOST, "TMS");
                             startActivity(intent);
                             overridePendingTransition(0, 0);
                         }
@@ -238,9 +239,10 @@ public class MenuActivity extends SettingToolbarActivity {
         } else {
             nameMenuList.clear();
         }
-        nameMenuList.add("KTB Off us");
-        nameMenuList.add("BASE24 EPS");
-        nameMenuList.add("KTB On Us");
+
+        nameMenuList.add("KTB On Us"); //2 0
+        nameMenuList.add("KTB Off us"); //0 1
+        nameMenuList.add("BASE24 EPS"); //1 2
         menuVoidAdapter.setItem(nameMenuList);
         menuVoidAdapter.notifyDataSetChanged();
     }
