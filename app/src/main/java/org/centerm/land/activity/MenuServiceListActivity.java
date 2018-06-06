@@ -615,6 +615,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                     timer.cancel();
                 if (dialogInsertCard != null)
                     dialogInsertCard.cancel();
+                dialogFallBackCheck.dismiss();
                 cardManager.stopTransaction();
 
             }
