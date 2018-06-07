@@ -33,6 +33,7 @@ import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.activity.MenuServiceActivity;
+import org.centerm.land.activity.settlement.MenuSettlementActivity;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.QrCode;
 import org.centerm.land.helper.CardPrefix;
@@ -580,7 +581,9 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 billerSlipLabel.setText(qrCode.getBillerId());
                 midSlipLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
                 apprCodeLabel.setText("000000");
-                batchSlipLabel.setText(CardPrefix.calLen(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+                int batch = Integer.parseInt(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_BATCH_NUMBER));
+                batchSlipLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
+//                batchSlipLabel.setText(CardPrefix.calLen(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
                 traceSlipLabel.setText(qrCode.getTrace());
                 dateSlipLabel.setText(qrCode.getDate());
                 String timeHH = qrCode.getTime().substring(0,2);

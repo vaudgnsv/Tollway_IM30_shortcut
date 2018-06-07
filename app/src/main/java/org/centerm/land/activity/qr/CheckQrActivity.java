@@ -33,6 +33,7 @@ import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
 import org.centerm.land.activity.MenuServiceActivity;
+import org.centerm.land.activity.settlement.MenuSettlementActivity;
 import org.centerm.land.activity.settlement.SlipSettlementActivity;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
 import org.centerm.land.database.QrCode;
@@ -158,9 +159,11 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
                     if (!Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
                         merchantName3Label.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_3));
 
-                    qrTidLabel.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
-                    midLabel.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
-                    batchLabel.setText(CardPrefix.calLen(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+                    qrTidLabel.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_QR_TERMINAL_ID));
+                    midLabel.setText(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_QR_BILLER_ID));
+//                    batchLabel.setText(CardPrefix.calLen(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+                    int batch = Integer.parseInt(Preference.getInstance(CheckQrActivity.this).getValueString(Preference.KEY_QR_BATCH_NUMBER));
+                    batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
                     apprCodeLabel.setText("000000");
                     inquiryLabel.setText(qrCode.getQrTid());
                     billerLabel.setText(qrCode.getBillerId());

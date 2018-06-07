@@ -75,6 +75,11 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
     private Dialog dialogAlert = null;
     private TextView msgLabel;
 
+    private boolean stateAbort = false;
+    private Dialog dialogCardError;
+    private TextView msgCardErrorLabel;
+    private ImageView closeCardErrorImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +143,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         customDialogWaiting();
         customDialogInputPin();
         customDialogParameterEnable();
+        customDialogCardError();
         cardManager.setInsertOrUpdateDatabase(new CardManager.InsertOrUpdateDatabase() {
             @Override
             public void onUpdateVoidSuccess(int id) {
@@ -282,6 +288,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
     }
 
     private void submitAmount() {
+        stateAbort = true;
         if (!priceLabel.getText().toString().equalsIgnoreCase("0.00") &&
                 !priceLabel.getText().toString().equalsIgnoreCase("0")) {
             if (!cardManager.getHostCard().equalsIgnoreCase("POS")) {
@@ -325,7 +332,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
                 dialogInputPin.dismiss();
-                cardManager.abortPBOCProcess();
+//                cardManager.abortPBOCProcess();
                 finish();
             }
         });
@@ -425,7 +432,12 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                     dialogParaEndble.dismiss();
                     dialogWaiting.show();
                     if (cardManager.getHostCard().equalsIgnoreCase("EPS")) {
-                        cardManager.setImportAmountEPS(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
+                        if (typeCard.equalsIgnoreCase(MenuServiceListActivity.IC_CARD)) {
+                            cardManager.setImportAmountEPS(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
+                        } else {
+                            cardManager.setDataSaleFallBackEPS(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())),ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString(), pinBox.getText().toString());
+                        }
+
                     } else if (cardManager.getHostCard().equalsIgnoreCase("TMS")) {
                         cardManager.setDataSalePIN(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                     } else {
@@ -594,7 +606,53 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         cardManager.setTransResultAbortLister(new CardManager.TransResultAbortLister() {
             @Override
             public void onTransResultAbort() {
-                cardManager.abortPBOCProcess();
+                if (!stateAbort) {
+                    Intent intent = new Intent(CalculatePriceActivity.this, MenuServiceActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                    overridePendingTransition(0, 0);
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialogCardError.show();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void customDialogCardError() {
+        dialogCardError = new Dialog(this);
+        dialogCardError.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogCardError.setCancelable(false);
+        dialogCardError.setContentView(R.layout.dialog_custom_alert_card_error);
+        dialogCardError.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogCardError.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        msgCardErrorLabel = dialogCardError.findViewById(R.id.msgLabel);
+        closeCardErrorImage = dialogCardError.findViewById(R.id.closeImage);
+        okBtn = dialogCardError.findViewById(R.id.okBtn);
+        closeCardErrorImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CalculatePriceActivity.this, MenuServiceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                overridePendingTransition(0, 0);
+            }
+        });
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(CalculatePriceActivity.this, MenuServiceActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -616,6 +674,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
     @Override
     protected void onResume() {
         super.onResume();
+        stateAbort = false;
         if (cardManager != null) {
             setAbortPboc();
         }

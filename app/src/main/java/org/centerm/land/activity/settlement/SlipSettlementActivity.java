@@ -174,7 +174,7 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
         Date date = new Date();
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         voidSaleCountLabel.setText(transTempVoid.size() + "");
-        voidSaleAmountLabel.setText(getString(R.string.slip_pattern_amount_void,decimalFormat.format(amountVoid)));
+        voidSaleAmountLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormat.format(amountVoid)));
         saleCountLabel.setText(transTemp.size() + "");
         saleTotalLabel.setText(decimalFormat.format(amountSale));
         cardCountLabel.setText((transTemp.size() + transTempVoid.size()) + "");
@@ -185,7 +185,8 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
 
         if (typeHost.equalsIgnoreCase("POS")) {
             hostLabel.setText("KTB Off us");
-            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS),6));
+            int batch = Integer.parseInt(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS)) - 1;
+            batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_POS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_POS));
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_POS, dateLabel.getText().toString());
@@ -196,7 +197,8 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS, voidSaleAmountLabel.getText().toString());
         } else if (typeHost.equalsIgnoreCase("EPS")) {
             hostLabel.setText("BASE24 EPS");
-            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS),6));
+            int batch = Integer.parseInt(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS)) - 1;
+            batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_EPS, dateLabel.getText().toString());
@@ -207,7 +209,9 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS, voidSaleAmountLabel.getText().toString());
         } else {
             hostLabel.setText("KTB On Us");
-            batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+
+            int batch = Integer.parseInt(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)) - 1;
+            batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
             tidLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
             midLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_DATE_TMS, dateLabel.getText().toString());

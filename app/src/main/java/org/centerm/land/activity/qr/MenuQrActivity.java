@@ -244,19 +244,21 @@ public class MenuQrActivity extends SettingToolbarActivity {
                 qrCode = realm.where(QrCode.class).equalTo("id", qrId).findFirst();
                 qrTidLabel.setText(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
                 midLabel.setText(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
-                batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+//                batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+                int batch = Integer.parseInt(Preference.getInstance(MenuQrActivity.this).getValueString(Preference.KEY_QR_BATCH_NUMBER));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
                 apprCodeLabel.setText("000000");
                 inquiryLabel.setText(qrCode.getQrTid());
                 billerLabel.setText(qrCode.getBillerId());
                 traceLabel.setText(qrCode.getTrace());
                 dateLabel.setText(qrCode.getDate());
-                String timeHH = qrCode.getTime().substring(0,2);
-                String timeMM = qrCode.getTime().substring(2,4);
-                String timeSS = qrCode.getTime().substring(4,6);
-                timeLabel.setText(getString(R.string.time_qr, timeHH + ":" + timeMM + ":" +timeSS));
+                String timeHH = qrCode.getTime().substring(0, 2);
+                String timeMM = qrCode.getTime().substring(2, 4);
+                String timeSS = qrCode.getTime().substring(4, 6);
+                timeLabel.setText(getString(R.string.time_qr, timeHH + ":" + timeMM + ":" + timeSS));
                 qrId = qrCode.getId();
 //                comCodeLabel.setText(qrCode.getComCode());
-                amtThbLabel.setText(getString(R.string.slip_pattern_amount,decimalFormat.format(Double.valueOf(qrCode.getAmount())) ));
+                amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormat.format(Double.valueOf(qrCode.getAmount()))));
                 /*if (qrCode.getRef1() != null) {
                     ref1RelativeLayout.setVisibility(View.VISIBLE);
                     ref1Label.setText(qrCode.getRef1());
@@ -360,7 +362,7 @@ public class MenuQrActivity extends SettingToolbarActivity {
             @Override
             public void run() {
                 final Realm realm = Realm.getDefaultInstance();
-                try{
+                try {
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -377,7 +379,6 @@ public class MenuQrActivity extends SettingToolbarActivity {
 
             }
         }).start();
-
 
 
     }

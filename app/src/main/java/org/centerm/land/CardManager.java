@@ -543,7 +543,7 @@ public class CardManager {
                             MAG_TRX_RECV = false;
 //                            CheckCardCallback(CHECKCARD_ONFINDICCARD);
 
-                             if (operateId == SALE) {
+                            if (operateId == SALE) {
                                 //  Create message field
                                 mBlockDataSend = new String[64];
                                 mBlockDataSend[3 - 1] = SALE_PROCESSING_CODE;
@@ -560,7 +560,7 @@ public class CardManager {
 //                                tagOf55List.add("4F");
 //                                tagOf55List.add("9F12");
                                 //  Find card info
-                               allProcess(operateId, ICCARD, msg, isCheckMag, isCheckIC, isChecRF, msgPrompt);
+                                allProcess(operateId, ICCARD, msg, isCheckMag, isCheckIC, isChecRF, msgPrompt);
                                 Log.d(TAG, "onFindICCard: \n OperateId = " + operateId + "\n ICCARD = " + ICCARD + "\n MSG = " + msg + "\n isCheckMsg = " + isCheckMag);
                             }
 
@@ -571,6 +571,7 @@ public class CardManager {
                                 throws RemoteException {
                             System.out.println("TAG:" + arg0.getCardNo());
 
+                            NAMECARDHOLDER = "";
 
                             if (!FALLBACK_HAPPEN) {
                                 Log.d(TAG, "found magnetic card number :" + arg0.getCardNo());
@@ -582,6 +583,8 @@ public class CardManager {
                                 MAG_TRX_RECV = true;
                                 TRACK1 = BlockCalculateUtil.get45BlockData(HexUtil.bcd2str(arg0.getFirstTrackData()));
                                 TRACK2 = get35Data2(arg0);
+
+                                String Tag_4f = readKernelData(EMVTAGS.EMVTAG_AID);
 
                                 String[] name = TRACK1.split("5E");
                                 Log.d(TAG, "onFindMagCard " + name.length + " : Name = " + name[0] + " === " + BlockCalculateUtil.hexToString(name[1]));
@@ -618,7 +621,6 @@ public class CardManager {
                                     }
                                 }
 
-
                             } else {
                                 Card cardMsg = new Card(arg0.getCardNo());
                                 cardMsg.setExpireDate(arg0.getExpireDate());
@@ -632,6 +634,9 @@ public class CardManager {
 
                                 Log.d(TAG, "Track 1 = " + TRACK1);
                                 Log.d(TAG, "Track 2 = " + TRACK2);
+                                String[] name = TRACK1.split("5E");
+                                Log.d(TAG, "onFindMagCard " + name.length + " : Name = " + name[0] + " === " + BlockCalculateUtil.hexToString(name[1]));
+                                NAMECARDHOLDER = BlockCalculateUtil.hexToString(name[1]);
 
                                 MagneticCardData = arg0;
 
@@ -960,7 +965,6 @@ public class CardManager {
                     // 读取5F34卡序列号的时候不需要在请求联机这个时候读取，
                     // If you need  the value from tag "9F26", You should read the Five-five data in onRequestOnline
                     // 需要在请求联机交易时读取
-
                     if (operateId == SALE) {
                         tempSavedTrackData = readKernelData(EMVTAGS.EMVTAG_TRACK2);
                         mBlockDataSend[35 - 1] = BlockCalculateUtil.get35Data(tempSavedTrackData);
@@ -1802,7 +1806,7 @@ public class CardManager {
         mBlockDataSend[22 - 1] = "0022";
 //        mBlockDataSend[24 - 1] = "0346";                        // Paul_20180522 NEXT Change
         mBlockDataSend[24 - 1] = NII;
-        mBlockDataSend[25 - 1] = "05";
+        mBlockDataSend[25 - 1] = "00";
         Log.d(TAG, "Track2MappingTable 1: " + TRACK2);
         String track2 = TRACK2.substring(2, TRACK2.length());
         Log.d(TAG, "Track2MappingTable 2: " + track2);
@@ -1874,6 +1878,7 @@ public class CardManager {
         Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
         Double amountFee1 = (Double.valueOf(AMOUNT) * fee) / 100;
         Double amountAll = Double.valueOf(amount) + amountFee1;
+        AMOUNTFEE = amountFee1;
         mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
         mBlockDataSend[11 - 1] = calNumTraceNo(traceIdNo);
         mBlockDataSend[14 - 1] = card.getExpireDate();
@@ -1882,6 +1887,46 @@ public class CardManager {
         mBlockDataSend[35 - 1] = TRACK2;
         mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
         mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+        invoiceGB = calNumTraceNo(invoiceNumber);
+        mBlockDataSend[62 - 1] = getLength62(String.valueOf(calNumTraceNo(invoiceNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber));
+        onLineNow = true;
+        TPDU = CardPrefix.getTPDU(context, HOST_CARD);
+        packageAndSend(TPDU, MESSAGE_SALE, mBlockDataSend);
+    }
+
+    public void setDataSaleFallBackEPS(String amount, String ref1, String ref2, String ref3, String comCode, String pin) {
+
+        String keyPin = OffUsEPSPinblock(card.getNo(), pin);
+        DecimalFormat decimalFormat = new DecimalFormat("###0.00");
+        HOST_CARD = CardPrefix.getTypeCard(card.getNo());
+        NII = CardPrefix.getNii(card.getNo(), context);     // Paul_20180523
+        String traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
+        String invoiceNumber = CardPrefix.getInvoice(context, HOST_CARD);
+        COMCODE = comCode;
+        REF1 = ref1;
+        REF2 = ref2;
+        REF3 = ref3;
+        CARD_NO = card.getNo();
+        AMOUNT = amount;
+        EXPIRY = card.getExpireDate();
+        MERCHANT_NUMBER = CardPrefix.getMerchantId(context, HOST_CARD);
+        TERMINAL_ID = CardPrefix.getTerminalId(context, HOST_CARD);
+        mBlockDataSend = new String[64];
+        mBlockDataSend[3 - 1] = "003000";
+        Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
+        Double amountFee1 = (Double.valueOf(AMOUNT) * fee) / 100;
+        Double amountAll = Double.valueOf(amount) + amountFee1;
+        AMOUNTFEE = amountFee1;
+        mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
+        mBlockDataSend[11 - 1] = calNumTraceNo(traceIdNo);
+//        mBlockDataSend[14 - 1] = card.getExpireDate();
+        mBlockDataSend[22 - 1] = "0801";
+        mBlockDataSend[24 - 1] = NII;
+        mBlockDataSend[25 - 1] = "00";
+        mBlockDataSend[35 - 1] = TRACK2;
+        mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
+        mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
+        mBlockDataSend[52 - 1] = keyPin;
         invoiceGB = calNumTraceNo(invoiceNumber);
         mBlockDataSend[62 - 1] = getLength62(String.valueOf(calNumTraceNo(invoiceNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber));
         onLineNow = true;
@@ -1932,7 +1977,11 @@ public class CardManager {
             mBlockDataSend[23 - 1] = transTemp.getApplicationPAN();
         }
         mBlockDataSend[24 - 1] = transTemp.getNii();
-        mBlockDataSend[25 - 1] = "05";
+        if (transTemp.getIccData() != null || !transTemp.getIccData().isEmpty()) {
+            mBlockDataSend[25 - 1] = "05";
+        } else {
+            mBlockDataSend[25 - 1] = "00";
+        }
         mBlockDataSend[37 - 1] = BlockCalculateUtil.getHexString(transTemp.getRefNo());
         mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
         mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
@@ -2047,7 +2096,7 @@ public class CardManager {
             mBlockDataSend[23 - 1] = transTemp.getApplicationPAN();
         }
         mBlockDataSend[24 - 1] = transTemp.getNii();
-        mBlockDataSend[25 - 1] = "05";
+        mBlockDataSend[25 - 1] = "00";
         mBlockDataSend[37 - 1] = BlockCalculateUtil.getHexString(transTemp.getRefNo());
         mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(calNumTraceNo(Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_ID_TMS)));
         mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(calNumTraceNo(Preference.getInstance(context).getValueString(Preference.KEY_MERCHANT_ID_TMS)));
@@ -2322,7 +2371,7 @@ public class CardManager {
                     terminalCERT + checkSum;
             mBlockDataSend[61 - 1] = CardPrefix.calLen(mBlock61.length() + "", 4) + BlockCalculateUtil.getHexString(mBlock61);
             mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(payCount, amountPayAllToStr);
-            Log.d(TAG, "setDataSettlementAndSendTMS: " + mBlockDataSend[63 - 1] );
+            Log.d(TAG, "setDataSettlementAndSendTMS: " + mBlockDataSend[63 - 1]);
             settlement61 = mBlockDataSend[61 - 1];
             settlement63 = mBlockDataSend[63 - 1];
             MTI = MESSAGE_SETTLEMENT;
@@ -2412,22 +2461,52 @@ public class CardManager {
             PROCESSING_CODE = mBlockDataSend[3 - 1];    // Paul_20180523
             Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
             Double amountFee1 = (Double.valueOf(reversalTemp.getAmount()) * fee) / 100;
-            Double amountAll = Float.valueOf(reversalTemp.getAmount()) + amountFee1;
-            mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
-            mBlockDataSend[11 - 1] = reversalTemp.getTraceNo();
+            Double amountAll = Double.valueOf(reversalTemp.getAmount()) + amountFee1;
+            if (!HOST_CARD.equalsIgnoreCase("TMS")) {
+                mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
+            } else {
+                mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(Double.valueOf(reversalTemp.getAmount())));
+            }
+            mBlockDataSend[11 - 1] = calNumTraceNo(String.valueOf(Integer.valueOf(reversalTemp.getTraceNo()) - 1));
 //            mBlockDataSend[14 - 1] = reversalTemp.getExpiry();
-            mBlockDataSend[22 - 1] = POS_ENT_MODE;
+            if (reversalTemp.getHostTypeCard().equalsIgnoreCase("TMS")) {
+                mBlockDataSend[22 - 1] = "0022";
+                mBlockDataSend[25 - 1] = "00";
+            } else if (reversalTemp.getHostTypeCard().equalsIgnoreCase("POS")) {
+                mBlockDataSend[22 - 1] = "0051";
+                if (reversalTemp.getTransStat().equalsIgnoreCase("I")) {
+                    mBlockDataSend[25 - 1] = "05";
+                } else {
+                    mBlockDataSend[25 - 1] = "00";
+                }
+            } else {
+                mBlockDataSend[22 - 1] = "0052";
+                if (reversalTemp.getTransStat().equalsIgnoreCase("I")) {
+                    mBlockDataSend[25 - 1] = "05";
+                } else {
+                    mBlockDataSend[25 - 1] = "00";
+                }
+            }
+
             if (reversalTemp.getApplicationPAN() != null) {
                 mBlockDataSend[23 - 1] = reversalTemp.getApplicationPAN();
             }
             mBlockDataSend[24 - 1] = reversalTemp.getNii();
-            mBlockDataSend[25 - 1] = "05";
+            String dateTime = reversalTemp.getField63().substring(404, 404 + 28);
+            Log.d(TAG, "setDataReversalAndSendHost: " + dateTime + " track 2 " + reversalTemp.getTrack2());
+            /*String tr2 =reversalTemp.getTrack2();
             if (reversalTemp.getTransStat().equalsIgnoreCase("SALE")) {
-                mBlockDataSend[35 - 1] = reversalTemp.getTrack2();
-                if ((reversalTemp.getTrack2().length() % 2) != 0) {
-                    mBlockDataSend[35 - 1] += "0";
+                //mBlockDataSend[35 - 1] = reversalTemp.getTrack2();
+                if ((tr2.length() % 2) != 0) {
+                    //mBlockDataSend[35 - 1] += "0";
+                    tr2+="0";
                 }
-            }
+            }*/
+            //mBlockDataSend[35 - 1] = "37" + Track2MappingTable(reversalTemp.getTrack2().substring(2, reversalTemp.getTrack2().length()), BlockCalculateUtil.hexToString(dateTime)) + "0";
+            mBlockDataSend[35 - 1] = "37" + Track2MappingTable(reversalTemp.getTrack2().substring(2, reversalTemp.getTrack2().length()), BlockCalculateUtil.hexToString(dateTime)) + "0";
+            Log.d(TAG, "Reversal : mBlockDataSend[35 - 1] = " + mBlockDataSend[35 - 1] + " \n" +
+                    " dateTime = " + BlockCalculateUtil.hexToString(dateTime));
+
             mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
             mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
 
@@ -2443,6 +2522,7 @@ public class CardManager {
 
             mBlockDataSend[62 - 1] = getLength62(String.valueOf(reversalTemp.getEcr().length())) + BlockCalculateUtil.getHexString(reversalTemp.getEcr());
             mBlockDataSend[63 - 1] = reversalTemp.getField63();
+            Log.d(TAG, "setDataReversalAndSendHost: " + mBlockDataSend[63 - 1]);
         } else {
             MERCHANT_NUMBER = CardPrefix.getMerchantId(context, HOST_CARD);
             TERMINAL_ID = CardPrefix.getTerminalId(context, HOST_CARD);
@@ -2461,7 +2541,8 @@ public class CardManager {
             Double amountFee1 = (Float.valueOf(reversalTemp.getAmount()) * fee) / 100;
             Double amountAll = Float.valueOf(reversalTemp.getAmount()) + amountFee1;
             mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
-            mBlockDataSend[11 - 1] = reversalTemp.getTraceNo();
+//            mBlockDataSend[11 - 1] = reversalTemp.getTraceNo();
+            mBlockDataSend[11 - 1] = calNumTraceNo(String.valueOf(Integer.valueOf(reversalTemp.getTraceNo()) - 1));
             if (HOST_CARD.equalsIgnoreCase("POS")) {
                 mBlockDataSend[14 - 1] = reversalTemp.getExpiry();
             }
@@ -3780,7 +3861,8 @@ public class CardManager {
                 }
                 Log.d(TAG, "Close : Settlement");
                 Log.d(TAG, "response_code: " + receivedMessageType);
-            } else if (response_code.trim().equals("00") && receivedMessageType.equals("0410")) {
+            } else if (response_code.equals("00") && receivedMessageType.equals("0410")) {
+                Log.d(TAG, "onReversalSuccess: " + response_code);
                 if (reversalListener != null) {
                     reversalListener.onReversalSuccess();
                 }
@@ -4209,6 +4291,9 @@ public class CardManager {
 //            setTCUpload(traceIdNo, tTime, fDate, mBlockDataSend[55 - 1],
 //                    invoiceNumber.length() + BlockCalculateUtil.getHexString(calNumTraceNo(invoiceNumber)),
 //                    mBlockDataSend[23 - 1], mBlockDataSend[52 - 1], mBlockDataSend[22 - 1]);
+        } else {
+            if (!HOST_CARD.equalsIgnoreCase("TMS"))
+                setOnlineUploadCredit(mBlockDataSend[55 - 1], mBlockDataSend[22 - 1], AMOUNTFEE);
         }
 //        if (!HOST_CARD.equalsIgnoreCase("TMS")) {
 //            Log.d(TAG, "OnlineUploadCredit: ");
@@ -4629,6 +4714,7 @@ public class CardManager {
     public void setTestHostLister(TestHostLister testHostLister) {
         this.testHostLister = testHostLister;
     }
+
     public void setTransResultAbortLister(TransResultAbortLister transResultAbortLister) {
         this.transResultAbortLister = transResultAbortLister;
     }

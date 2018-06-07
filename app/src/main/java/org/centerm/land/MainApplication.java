@@ -108,6 +108,10 @@ public class MainApplication extends Application {
         String billerId = Preference.getInstance(this).getValueString(Preference.KEY_QR_BILLER_ID);
         String merchantName = Preference.getInstance(this).getValueString(Preference.KEY_QR_MERCHANT_NAME);
         String terminalId = Preference.getInstance(this).getValueString(Preference.KEY_QR_TERMINAL_ID);
+        String batchId = Preference.getInstance(this).getValueString(Preference.KEY_QR_BATCH_NUMBER);
+        if (batchId.isEmpty()) {
+            Preference.getInstance(this).setValueString(Preference.KEY_QR_BATCH_NUMBER, "1");
+        }
         if (qrAid.isEmpty()) {
             Preference.getInstance(this).setValueString(Preference.KEY_QR_AID, "A000000677010112");
         }

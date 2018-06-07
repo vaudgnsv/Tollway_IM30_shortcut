@@ -417,9 +417,24 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             taxAbbLayout.setText(item.getTaxAbb());
             traceTaxLayout.setText(item.getEcr());
 
-            appLabel.setText(item.getEmvAppLabel());
+            /*appLabel.setText(item.getEmvAppLabel());
             tcLabel.setText(item.getEmvTc());
-            aidLabel.setText(item.getEmvAid());
+            aidLabel.setText(item.getEmvAid());*/
+            if (item.getEmvAppLabel().isEmpty()) {
+                appLabel.setText(item.getEmvAppLabel());
+            } else {
+                appFrameLabel.setVisibility(View.GONE);
+            }
+            if (item.getEmvTc().isEmpty()) {
+                tcLabel.setText(item.getEmvTc());
+            } else {
+                tcFrameLayout.setVisibility(View.GONE);
+            }
+            if (item.getEmvAid().isEmpty()) {
+                aidLabel.setText(item.getEmvAid());
+            } else {
+                aidFrameLayout.setVisibility(View.GONE);
+            }
             Log.d(TAG, "setDataView: " + item.getEmvAppLabel());
             Log.d(TAG, "setDataView: " + item.getEmvTc());
             Log.d(TAG, "setDataView: " + item.getEmvAid());
@@ -575,9 +590,21 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
 //            dateTaxLayoutAuto.setText(item.getTransDate());
             timeTaxLayoutAuto.setText(item.getTransTime());
 
-            appLabelAuto.setText(item.getEmvAppLabel());
-            tcLabelAuto.setText(item.getEmvTc());
-            aidLabelAuto.setText(item.getEmvAid());
+            if (item.getEmvAppLabel().isEmpty()) {
+                appLabelAuto.setText(item.getEmvAppLabel());
+            } else {
+                appFrameLabelAuto.setVisibility(View.GONE);
+            }
+            if (item.getEmvTc().isEmpty()) {
+                tcLabelAuto.setText(item.getEmvTc());
+            } else {
+                tcFrameLayoutAuto.setVisibility(View.GONE);
+            }
+            if (item.getEmvAid().isEmpty()) {
+                aidLabelAuto.setText(item.getEmvAid());
+            } else {
+                aidFrameLayoutAuto.setVisibility(View.GONE);
+            }
         } else {
             appFrameLabelAuto.setVisibility(View.GONE);
             tcFrameLayoutAuto.setVisibility(View.GONE);

@@ -139,6 +139,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        okBtn.setVisibility(View.VISIBLE);
                         Utility.customDialogAlert(MenuSettlementActivity.this, "ทำรายการไม่สำเร็จ 95", new Utility.OnClickCloseImage() {
                             @Override
                             public void onClickImage(Dialog dialog) {
@@ -327,7 +328,9 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
 
                     if (typeHost.equalsIgnoreCase("POS")) {
                         hostLabel.setText("KTB Off us");
-                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS),6));
+                        int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS)) - 1;
+                        batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
+//                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS),6));
                         tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
                         midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_POS, dateLabel.getText().toString());
@@ -338,7 +341,9 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS, voidSaleAmountLabel.getText().toString());
                     } else if (typeHost.equalsIgnoreCase("EPS")) {
                         hostLabel.setText("BASE24 EPS");
-                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS),6));
+                        int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS)) - 1;
+                        batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
+//                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS),6));
                         tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
                         midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_EPS, dateLabel.getText().toString());
@@ -349,7 +354,9 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS, voidSaleAmountLabel.getText().toString());
                     } else {
                         hostLabel.setText("KTB On Us");
-                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
+                        int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)) - 1;
+                        batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
+//                        batchLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS),6));
                         tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
                         midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_TMS, dateLabel.getText().toString());
@@ -405,6 +412,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                             }
                             dialogWaiting.show();
                         } else {
+                            okBtn.setVisibility(View.VISIBLE);
                             Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
                                 @Override
                                 public void onClickImage(Dialog dialog) {
@@ -427,6 +435,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                             }
                             dialogWaiting.show();
                         } else {
+                            okBtn.setVisibility(View.VISIBLE);
                             Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
                                 @Override
                                 public void onClickImage(Dialog dialog) {
@@ -447,6 +456,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                             }
                             dialogWaiting.show();
                         } else {
+                            okBtn.setVisibility(View.VISIBLE);
                             Utility.customDialogAlert(MenuSettlementActivity.this, "ไม่มีข้อมูล", new Utility.OnClickCloseImage() {
                                 @Override
                                 public void onClickImage(Dialog dialog) {
@@ -460,6 +470,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         settlementPosition = 0;
                         isSettlementAll = true;
                         typeHost = "POS";
+                        okBtn.setVisibility(View.GONE);
                         dialogSettlement.show();
                         progressBarStatus.setVisibility(View.VISIBLE);
                         selectDataTransTempAll("POS");
@@ -673,9 +684,11 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
                     timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
                     hostLabel.setText("KTB QR");
-                    batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
-                    tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
-                    midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+                    int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_QR_BATCH_NUMBER));
+                    batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
+//                    batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+                    tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_QR_TERMINAL_ID));
+                    midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_QR_BILLER_ID));
                     Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_QR, dateLabel.getText().toString());
                     Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TIME_QR, timeLabel.getText().toString());
                     Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_TOTAL_QR, saleTotalLabel.getText().toString());
@@ -740,7 +753,10 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     dateLabel.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
                     timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
                     hostLabel.setText("KTB QR");
-                    batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+//                    batchLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS));
+                    int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_QR_BATCH_NUMBER));
+                    batchLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_QR_BATCH_NUMBER, String.valueOf((batch + 1)));
                     tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
                     midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
                     Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_DATE_QR, dateLabel.getText().toString());
@@ -761,6 +777,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     deleteQrAll();
                     doPrinting(getBitmapFromView(settlementLinearLayout));
                 } else {
+                    okBtn.setVisibility(View.VISIBLE);
                     progressBarStatus.setVisibility(View.GONE);
                     statusLabel.setText("QR ไม่มีข้อมูล");
                 }
