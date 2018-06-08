@@ -158,6 +158,10 @@ public class MenuActivity extends SettingToolbarActivity {
                 Log.d(TAG, "onTransactionTimeOut: ");
             }
         });
+
+    }
+
+    private void setCallBackReversal() {
         cardManager.setReversalListener(new CardManager.ReversalListener() {
             @Override
             public void onReversalSuccess() {
@@ -246,17 +250,18 @@ public class MenuActivity extends SettingToolbarActivity {
         menuVoidAdapter.setItem(nameMenuList);
         menuVoidAdapter.notifyDataSetChanged();
     }
+
     private boolean checkReversal(String type) {
         typeHost = type;
-            ReversalTemp reversalTemp = null;
-            reversalTemp = realm.where(ReversalTemp.class).findFirst();
-            if (reversalTemp != null) {
-                dialogWaiting.show();
-                cardManager.setDataReversalAndSendHost(reversalTemp);
-                return false;
-            } else {
-                return true;
-            }
+        ReversalTemp reversalTemp = null;
+        reversalTemp = realm.where(ReversalTemp.class).findFirst();
+        if (reversalTemp != null) {
+            dialogWaiting.show();
+            cardManager.setDataReversalAndSendHost(reversalTemp);
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void customDialogWaiting() {
@@ -276,11 +281,13 @@ public class MenuActivity extends SettingToolbarActivity {
     protected void onResume() {
         super.onResume();
         realm = Realm.getDefaultInstance();
+        setCallBackReversal();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         realm.close();
+        cardManager.removeReversalListener();
     }
 }

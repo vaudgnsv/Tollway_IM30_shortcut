@@ -176,6 +176,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
 
     private Bitmap bitmapOld = null;
     private TextView msgLabel;
+    private View texView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,6 +280,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         bankImageAuto = printFirst.findViewById(R.id.bankImage);
         bank1ImageAuto = printFirst.findViewById(R.id.bank1Image);
         merchantName1LabelAuto = printFirst.findViewById(R.id.merchantName1Label);
+        texView = printFirst.findViewById(R.id.texView);
         if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
             merchantName1LabelAuto.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
 
@@ -445,7 +447,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             aidFrameLayout.setVisibility(View.GONE);
             taxLinearLayout.setVisibility(View.GONE);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 20, 0, 50);
+            lp.setMargins(0, 50, 0, 100);
             copyLabel.setLayoutParams(lp);
             copyLabel.setGravity(Gravity.CENTER_HORIZONTAL);
         }
@@ -606,12 +608,13 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                 aidFrameLayoutAuto.setVisibility(View.GONE);
             }
         } else {
+            texView.setVisibility(View.GONE);
             appFrameLabelAuto.setVisibility(View.GONE);
             tcFrameLayoutAuto.setVisibility(View.GONE);
             aidFrameLayoutAuto.setVisibility(View.GONE);
             taxLinearLayoutAuto.setVisibility(View.GONE);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 20, 0, 50);
+            lp.setMargins(0, 20, 0, 100);
             copyLabelAuto.setLayoutParams(lp);
             copyLabelAuto.setGravity(Gravity.CENTER_HORIZONTAL);
         }
@@ -778,6 +781,10 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             public void run() {
                 try {
                     printDev.initPrinter();
+                    //This interface is used for set the gray level of the printing
+                    //MIN is 0,Max is 4
+                    //The level bigger, the speed of print is smaller
+                    printDev.setPrinterGray(2);
                     printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
                         @Override
                         public void onPrintFinish() throws RemoteException {

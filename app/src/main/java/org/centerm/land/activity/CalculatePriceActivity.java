@@ -288,9 +288,12 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
     }
 
     private void submitAmount() {
+        Log.d(TAG, "submitAmount: " + numberPrice);
         stateAbort = true;
         if (!priceLabel.getText().toString().equalsIgnoreCase("0.00") &&
-                !priceLabel.getText().toString().equalsIgnoreCase("0")) {
+                !priceLabel.getText().toString().equalsIgnoreCase("0") &&
+                !priceLabel.getText().toString().equalsIgnoreCase("0.") &&
+                !priceLabel.getText().toString().equalsIgnoreCase("0.0")) {
             if (!cardManager.getHostCard().equalsIgnoreCase("POS")) {
                 pinBox.setText("");
                 dialogInputPin.show();
@@ -358,33 +361,19 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         Button cancelBtn = dialogParaEndble.findViewById(R.id.cancelBtn);
         String valueParameterEnable = Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1000);
         if (!valueParameterEnable.isEmpty()) {
-            if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("3")) {
-                comCodeLinearLayout.setVisibility(View.VISIBLE);
-                comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
-                comCodeBox.setEnabled(false);
-            } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("4")) {
-                comCodeLinearLayout.setVisibility(View.VISIBLE);
-                comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
-                comCodeBox.setEnabled(true);
-                comCodeBox.requestFocus();
-            } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("2")) {
-                comCodeLinearLayout.setVisibility(View.GONE);
-                comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
-                comCodeBox.setEnabled(false);
-            }
-            if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("3")) {
-                ref1LinearLayout.setVisibility(View.VISIBLE);
-                ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
-                ref1Box.setEnabled(false);
-            } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("4")) {
-                ref1LinearLayout.setVisibility(View.VISIBLE);
-                ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
-                ref1Box.setEnabled(true);
-                ref1Box.requestFocus();
-            } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("2")) {
-                ref1LinearLayout.setVisibility(View.GONE);
-                ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
-                ref1Box.setEnabled(false);
+            if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("3")) {
+                ref3LinearLayout.setVisibility(View.VISIBLE);
+                ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
+                ref3Box.setEnabled(false);
+            } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("4")) {
+                ref3LinearLayout.setVisibility(View.VISIBLE);
+                ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
+                ref3Box.setEnabled(true);
+                ref3Box.requestFocus();
+            } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("2")) {
+                ref3LinearLayout.setVisibility(View.GONE);
+                ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
+                ref3Box.setEnabled(false);
             }
             if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("3")) {
                 ref2LinearLayout.setVisibility(View.VISIBLE);
@@ -400,20 +389,35 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                 ref2Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1003));
                 ref2Box.setEnabled(false);
             }
-            if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("3")) {
-                ref3LinearLayout.setVisibility(View.VISIBLE);
-                ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
-                ref3Box.setEnabled(false);
-            } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("4")) {
-                ref3LinearLayout.setVisibility(View.VISIBLE);
-                ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
-                ref3Box.setEnabled(true);
-                ref3Box.requestFocus();
-            } else if (valueParameterEnable.substring(3, 4).equalsIgnoreCase("2")) {
-                ref3LinearLayout.setVisibility(View.GONE);
-                ref3Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1004));
-                ref3Box.setEnabled(false);
+            if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("3")) {
+                ref1LinearLayout.setVisibility(View.VISIBLE);
+                ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
+                ref1Box.setEnabled(false);
+            } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("4")) {
+                ref1LinearLayout.setVisibility(View.VISIBLE);
+                ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
+                ref1Box.setEnabled(true);
+                ref1Box.requestFocus();
+            } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("2")) {
+                ref1LinearLayout.setVisibility(View.GONE);
+                ref1Box.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1002));
+                ref1Box.setEnabled(false);
             }
+            if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("3")) {
+                comCodeLinearLayout.setVisibility(View.VISIBLE);
+                comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
+                comCodeBox.setEnabled(false);
+            } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("4")) {
+                comCodeLinearLayout.setVisibility(View.VISIBLE);
+                comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
+                comCodeBox.setEnabled(true);
+                comCodeBox.requestFocus();
+            } else if (valueParameterEnable.substring(0, 1).equalsIgnoreCase("2")) {
+                comCodeLinearLayout.setVisibility(View.GONE);
+                comCodeBox.setText(Preference.getInstance(CalculatePriceActivity.this).getValueString(Preference.KEY_TAG_1001));
+                comCodeBox.setEnabled(false);
+            }
+
         } else {
             Utility.customDialogAlert(CalculatePriceActivity.this, "กรุณา First Settlement ก่อนทำรายการ", new Utility.OnClickCloseImage() {
                 @Override
@@ -463,6 +467,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View v) {
+        Log.d(TAG, "Click number: " + numberPrice);
         String[] splitter = null;
         Log.d(TAG, "onClick: " + numberPrice.contains("."));
         if (numberPrice.length() < 8) {
@@ -473,23 +478,32 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                         numberPrice = "";
                 clickCal(v);
             } else {
+                Log.d(TAG, "onClick: ");
                 Log.d(TAG, "else Main : ");
                 splitter = numberPrice.split("\\.");
                 if (splitter.length > 1) {
                     Log.d(TAG, "if Sub : ");
                     if (splitter[1].length() > 1) {
+                        Log.d(TAG, "splitter[1].length() > 1: ");
                         if (v == exitClickFrameLayout) {
                             cardManager.abortPBOCProcess();
                             finish();
                         } else if (v == deleteClickFrameLayout) {
                             if (!numberPrice.equalsIgnoreCase("0.00")) {
+                                Log.d(TAG, "onClick: numberPrice.equalsIgnoreCase(\"0.00\") ");
                                 if (numberPrice.length() == 0) {
+                                    Log.d(TAG, "onClick: numberPrice.length() If == 0 ");
                                     numberPrice = "0.00";
                                 } else {
                                     numberPrice = numberPrice.substring(0, numberPrice.length() - 1);
                                     if (numberPrice.length() == 0) {
+                                        Log.d(TAG, "onClick: numberPrice.length() Else == 0 ");
                                         numberPrice = "0.00";
                                     }
+                                }
+                            } else {
+                                if (!numberPrice.isEmpty()) {
+                                    numberPrice = numberPrice.substring(0, numberPrice.length() - 1);
                                 }
                             }
                         } else if (v == sureClickFrameLayout) {
@@ -497,15 +511,19 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                         }
                     } else {
                         if (!numberPrice.isEmpty())
-                            if (numberPrice.substring(0, 1).equalsIgnoreCase("0"))
-                                numberPrice = "";
+                            /*if (numberPrice.substring(0, 1).equalsIgnoreCase("0"))
+                                numberPrice = "";*/
                         clickCal(v);
                     }
                 } else {
+
+                    Log.d(TAG, "splitter[1].length() > 1 Else: ");
+
                     if (!numberPrice.isEmpty())
-                        if (numberPrice.substring(0, 1).equalsIgnoreCase("0"))
-                            numberPrice = "";
+                        /*if (numberPrice.substring(0, 1).equalsIgnoreCase("0"))
+                            numberPrice = "";*/
                     Log.d(TAG, "else Sub : " + splitter.length);
+                    Log.d(TAG, "else Sub : " + splitter[splitter.length - 1]);
                     clickCal(v);
                 }
             }
@@ -530,6 +548,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
     }
 
     private void clickCal(View v) {
+
         if (v == oneClickFrameLayout) {
             checkNumberPrice();
             numberPrice += "1";

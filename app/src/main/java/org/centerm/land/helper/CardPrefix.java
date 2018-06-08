@@ -444,6 +444,9 @@ public class CardPrefix {
 
     public static String calLen(String l, int number) {
         String no = "";
+        if (l == null) {
+            l = "";
+        }
         for (int i = l.length(); i < number; i++) {
             no += "0";
         }

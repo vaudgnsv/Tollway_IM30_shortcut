@@ -70,6 +70,7 @@ public class Preference {
     public static final String KEY_QR_TERMINAL_ID = Preference.class.getName() + "key_qr_terminal_id";
     public static final String KEY_QR_TRACE_NO = Preference.class.getName() + "key_qr_trace_no";
     public static final String KEY_QR_BATCH_NUMBER = Preference.class.getName() +"key_qr_batch_number";
+    public static final String KEY_QR_MERCHANT_NAME_THAI = Preference.class.getName() + "key_qr_merchant_name_THAI";
 
     public static final String KEY_REF_2 = Preference.class.getName() + "key_ref_2";
 

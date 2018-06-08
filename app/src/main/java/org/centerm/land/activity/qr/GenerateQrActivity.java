@@ -32,6 +32,7 @@ import com.google.gson.JsonElement;
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.R;
+import org.centerm.land.activity.CalculatePriceActivity;
 import org.centerm.land.activity.MenuServiceActivity;
 import org.centerm.land.activity.settlement.MenuSettlementActivity;
 import org.centerm.land.bassactivity.SettingToolbarActivity;
@@ -60,6 +61,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
 
     private final String TAG = "GenerateQrActivity";
     private LinearLayout ref2LinearLayout;
+    private LinearLayout ref1LinearLayout;
     private ImageView qrImage = null;
     private EditText amountBox = null;
     private EditText ref1Box = null;
@@ -149,6 +151,9 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
     private TextView apprCodeLabel;
     private Dialog dialogLoading;
 
+    private TextView merchantNameThaiLabel = null;
+    private TextView merchantNameLabel = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,23 +171,25 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         printDev = cardManager.getInstancesPrint();
         qrImage = findViewById(R.id.qrImage);
         ref2LinearLayout = findViewById(R.id.ref2LinearLayout);
+        ref1LinearLayout = findViewById(R.id.ref1LinearLayout);
         amountBox = findViewById(R.id.amountBox);
         amountBox.setFilters(new InputFilter[]{new MoneyValueFilter()});
         ref1Box = findViewById(R.id.ref1Box);
         ref2Box = findViewById(R.id.ref2Box);
         linearLayoutPrint = findViewById(R.id.linearLayoutPrint);
         thaiQrImage = findViewById(R.id.thaiQrImage);
-
+//        merchantNameLabel = findViewById(R.id.merchantNameLabel);
+//        merchantNameLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_MERCHANT_NAME));
         generatorBtn = findViewById(R.id.generatorBtn);
         qrSuccessBtn = findViewById(R.id.qrSuccessBtn);
         linearLayoutPrint.setOnClickListener(this);
         generatorBtn.setOnClickListener(this);
         qrSuccessBtn.setOnClickListener(this);
-        if (Preference.getInstance(this).getValueBoolean(Preference.KEY_REF_2)) {
+        /*if (Preference.getInstance(this).getValueBoolean(Preference.KEY_REF_2)) {
             ref2LinearLayout.setVisibility(View.VISIBLE);
         } else {
             ref2LinearLayout.setVisibility(View.GONE);
-        }
+        }*/
         customDialogOutOfPaper();
         customDialogLoading();
         LayoutInflater inflater =
@@ -206,6 +213,49 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         slipSuccessLinearLayout = tagView.findViewById(R.id.slipLinearLayout);
         setViewPrintQr();
         customDialogAlertLoading();
+        String valueParameterEnable = Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1000);
+        if (!valueParameterEnable.isEmpty()) {
+            if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("3")) {
+                ref1LinearLayout.setVisibility(View.VISIBLE);
+                ref1Box.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1002));
+                ref1Box.setEnabled(false);
+            } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("4")) {
+                ref1LinearLayout.setVisibility(View.VISIBLE);
+                ref1Box.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1002));
+                ref1Box.setEnabled(true);
+                ref1Box.requestFocus();
+            } else if (valueParameterEnable.substring(1, 2).equalsIgnoreCase("2")) {
+                ref1LinearLayout.setVisibility(View.GONE);
+                ref1Box.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1002));
+                ref1Box.setEnabled(false);
+            }
+            if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("3")) {
+                ref2LinearLayout.setVisibility(View.VISIBLE);
+                ref2Box.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1003));
+                ref2Box.setEnabled(false);
+            } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("4")) {
+                ref2LinearLayout.setVisibility(View.VISIBLE);
+                ref2Box.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1003));
+                ref2Box.setEnabled(true);
+                ref2Box.requestFocus();
+            } else if (valueParameterEnable.substring(2, 3).equalsIgnoreCase("2")) {
+                ref2LinearLayout.setVisibility(View.GONE);
+                ref2Box.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1003));
+                ref2Box.setEnabled(false);
+            }
+        } else {
+            Utility.customDialogAlert(GenerateQrActivity.this, "กรุณา First Settlement ก่อนทำรายการ", new Utility.OnClickCloseImage() {
+                @Override
+                public void onClickImage(Dialog dialog) {
+                    dialog.dismiss();
+                    finish();
+                    cardManager.abortPBOCProcess();
+                }
+            });
+        }
+        amountBox.requestFocus();
+//        amountBox.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+//        ref2LinearLayout.setVisibility(View.VISIBLE);
 
     }
 
@@ -402,14 +452,14 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         dateFormatDef = new SimpleDateFormat("yyMMdd").format(date);
 
         aid = Preference.getInstance(this).getValueString(Preference.KEY_QR_AID);
-        billerId = "010352102131870";
+        billerId = Preference.getInstance(this).getValueString(Preference.KEY_QR_BILLER_ID);
         qrTid = Preference.getInstance(this).getValueString(Preference.KEY_QR_TERMINAL_ID) +
                 CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_QR_TRACE_NO), 6) +
                 dateFormatDef; //"00025068000023180517";  //tid trace yymmdd
         Log.d(TAG, "onClick: " + qrTid);
         Log.d(TAG, "onClick: " + billerId);
         Log.d(TAG, "onClick: " + aid);
-        nameCompany = "NAKHONRATCHASIMA PCG.";
+        nameCompany = /*"NAKHONRATCHASIMA PCG."+ */Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_MERCHANT_NAME);
 
         tagAll = Utility.idValue("", "00", "01");
         tagAll = Utility.idValue(tagAll, "01", "11");
@@ -430,8 +480,9 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         tagAll += tag62;
 //                tagAll = Utility.idValue(tagAll, "63", "");
         tagAll += "6304";
+        Log.d(TAG, "initWidget: B " + tagAll);
         tagAll += Utility.CheckSumCrcCCITT(tagAll);
-        Log.d(TAG, "initWidget: " + tagAll);
+        Log.d(TAG, "initWidget: A " + tagAll);
         qrImage.setImageBitmap(Utility.createQRImage(tagAll, 300, 300, GenerateQrActivity.this));
 //            thaiQrImage.setVisibility(View.VISIBLE);
         insertGenerateQr();
@@ -452,6 +503,10 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
         merchantName1Label = tagViewQr.findViewById(R.id.merchantName1Label);
         merchantName2Label = tagViewQr.findViewById(R.id.merchantName2Label);
         merchantName3Label = tagViewQr.findViewById(R.id.merchantName3Label);
+        merchantNameThaiLabel = tagViewQr.findViewById(R.id.merchantNameThaiLabel);
+        merchantNameThaiLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_MERCHANT_NAME_THAI));
+        merchantNameLabel = tagViewQr.findViewById(R.id.merchantNameLabel);
+        merchantNameLabel.setText(Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_QR_MERCHANT_NAME));
         tidLabel = tagViewQr.findViewById(R.id.tidLabel);
         billerIdLabel = tagViewQr.findViewById(R.id.billerIdLabel);
         traceNoLabel = tagViewQr.findViewById(R.id.traceNoLabel);
@@ -644,6 +699,10 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
             public void run() {
                 try {
                     printDev.initPrinter();
+                    //This interface is used for set the gray level of the printing
+                    //MIN is 0,Max is 4
+                    //The level bigger, the speed of print is smaller
+                    printDev.setPrinterGray(2);
                     printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
                         @Override
                         public void onPrintFinish() throws RemoteException {

@@ -23,6 +23,7 @@ import com.centerm.smartpos.aidl.pboc.ParcelableTrackData;
 import com.centerm.smartpos.aidl.printer.AidlPrinter;
 import com.centerm.smartpos.aidl.qrscan.AidlQuickScanZbar;
 import com.centerm.smartpos.aidl.sys.AidlDeviceManager;
+import com.centerm.smartpos.aidl.sys.AidlSystemSettingService;
 import com.centerm.smartpos.constant.Constant;
 import com.centerm.smartpos.util.CompactUtil;
 import com.centerm.smartpos.util.EMVConstant;
@@ -172,7 +173,7 @@ public class CardManager {
                     pboc2 = AidlEMVL2.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_PBOC2));
                     printDev = AidlPrinter.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_PRINTERDEV));
 //                    aidlQuickScanService = AidlQuickScanZbar.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_QUICKSCAN));
-
+                    settingService = AidlSystemSettingService.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_SYS));
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -232,6 +233,7 @@ public class CardManager {
     //private String _gender_eng;
     //private String _gender_th;
     private static AidlEMVL2 pboc2;
+    private static AidlSystemSettingService settingService;
     private boolean isSuccess = false;
     private final static byte PROCESS_STARTING = 0x01;
     private final static byte PROCESS_DONE = 0x02;
@@ -455,6 +457,12 @@ public class CardManager {
     public AidlTleService getTleVersionOne() {
         if (tleVersionOne != null) {
             return tleVersionOne;
+        }
+        return null;
+    }
+    public AidlSystemSettingService getSettingService() {
+        if (settingService != null) {
+            return settingService;
         }
         return null;
     }
@@ -2186,7 +2194,7 @@ public class CardManager {
                 mBlockDataSend[2 - 1] = tcUpload.get(tcUploadPosition).getCardNo().length() + tcUpload.get(tcUploadPosition).getCardNo();
                 mBlockDataSend[3 - 1] = "943000";
                 double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
-                double amountFee1 = (Double.valueOf(AMOUNT) * fee) / 100;
+                double amountFee1 = (Double.valueOf(tcUpload.get(tcUploadPosition).getAmount()) * fee) / 100;
                 double amountAll = Double.valueOf(tcUpload.get(tcUploadPosition).getAmount()) + amountFee1;
                 mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
                 mBlockDataSend[11 - 1] = calNumTraceNo(CardPrefix.geTraceId(context, HOST_CARD));
@@ -3543,13 +3551,32 @@ public class CardManager {
         }
 // Paul_20180522 End
 //        raw_data = decryptMsg(response); // send to decrypt no need length
-        Log.d(TAG, "Decrypted Response Data：" + raw_data);
+
 
         //raw_data = raw_data.substring(4); // already cut length
         String receivedTPDU = raw_data.substring(0, 5 * 2);
         String receivedMessageType = raw_data.substring(5 * 2, 5 * 2 + 2 * 2);
         mBlockDataReceived = BlockCalculateUtil.getReceivedDataBlock(raw_data);
 
+        Log.d(TAG, "Decrypted Response Data：" + raw_data);
+        if (mBlockDataReceived[12 - 1].length() == 6 && mBlockDataReceived[13 - 1].length() == 4) {
+            try {
+                Date dateTime = new Date();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy");
+                int second = Integer.parseInt(mBlockDataReceived[12 - 1].substring(4,6));
+                int minute = Integer.parseInt(mBlockDataReceived[12 - 1].substring(2,4));
+                int hour = Integer.parseInt(mBlockDataReceived[12 - 1].substring(0,2));
+                int date = Integer.parseInt(mBlockDataReceived[13 - 1].substring(0,2));
+                int mount = Integer.parseInt(mBlockDataReceived[13 - 1].substring(2,4));
+                if (settingService.setSystemTime(second, minute, hour, date, mount, Integer.parseInt(dateFormat.format(dateTime)))) {
+                    Log.d(TAG, "onCreate: Success");
+                } else {
+                    Log.d(TAG, "onCreate: Fail");
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
 
         for (int i = 0; i < mBlockDataReceived.length; i++) {
             //System.out.println((i+1)+":"+mBlockDataReceived[i]);
@@ -4119,6 +4146,11 @@ public class CardManager {
      */
 
     private void deleteReversal() {
+       /* try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
         Log.d(TAG, "deleteReversal: ");
         Realm.getDefaultInstance().refresh();
         new Thread(new Runnable() {
@@ -4364,10 +4396,15 @@ public class CardManager {
                 reversalTemp.setRefNo(mBlockDataReceived[37 - 1] == null ? "" : mBlockDataReceived[37 - 1]);
                 reversalTemp.setIccData(mBlockDataSend[55 - 1]);
                 reversalTemp.setApprvCode(mBlockDataReceived[38 - 1] == null ? "" : mBlockDataReceived[38 - 1]);
-                reversalTemp.setTransType(typeCard);
+//                reversalTemp.setTransType(typeCard);
                 reversalTemp.setRespCode(mBlockDataReceived[39 - 1] == null ? "" : mBlockDataReceived[39 - 1]);
                 reversalTemp.setVoidFlag("N");
                 reversalTemp.setCloseFlag("N");
+                if (MAG_TRX_RECV) {
+                    reversalTemp.setTransType("M");
+                } else {
+                    reversalTemp.setTransType("I");
+                }
                 if (mBlockDataSend[3 - 1].equals(SALE_PROCESSING_CODE)) {
                     reversalTemp.setTransStat("SALE");
                 } else if (mBlockDataSend[3 - 1].equals(VOID_PROCESSING_CODE)) {

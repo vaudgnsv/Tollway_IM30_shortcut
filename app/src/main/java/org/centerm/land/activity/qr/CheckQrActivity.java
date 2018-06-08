@@ -169,10 +169,10 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
                     billerLabel.setText(qrCode.getBillerId());
                     traceLabel.setText(qrCode.getTrace());
                     dateLabel.setText(qrCode.getDate());
-                    String timeHH = qrCode.getTime().substring(0,2);
-                    String timeMM = qrCode.getTime().substring(2,4);
-                    String timeSS = qrCode.getTime().substring(4,6);
-                    timeLabel.setText(getString(R.string.time_qr, timeHH + ":" + timeMM + ":" +timeSS));
+                    String timeHH = qrCode.getTime().substring(0, 2);
+                    String timeMM = qrCode.getTime().substring(2, 4);
+                    String timeSS = qrCode.getTime().substring(4, 6);
+                    timeLabel.setText(getString(R.string.time_qr, timeHH + ":" + timeMM + ":" + timeSS));
 //                    comCodeLabel.setText(qrCode.getComCode());
                     amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(qrCode.getAmount()))));
                     /*if (qrCode.getRef1() != null) {
@@ -193,6 +193,9 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
                     check.setRef2(qrCode.getRef2());
                     statusSuccess = qrCode.getStatusSuccess();
                     qrCodeId = qrCode.getId();
+                } else {
+                    statusSuccess = "";
+                    check = null;
                 }
             }
         }, new Realm.Transaction.OnSuccess() {
@@ -206,14 +209,16 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
                         Utility.customDialogAlertSuccess(CheckQrActivity.this, "รายการนี้ชำระเงินแล้ว", new Utility.OnClickCloseImage() {
                             @Override
                             public void onClickImage(Dialog dialog) {
+                                statusSuccess = "";
                                 dialog.dismiss();
                             }
                         });
                     }
                 } else {
-                    Utility.customDialogAlertSuccess(CheckQrActivity.this, "ไม่มีหมายเลขนี้ในรายการ", new Utility.OnClickCloseImage() {
+                    Utility.customDialogAlert(CheckQrActivity.this, "ไม่มีหมายเลขนี้ในรายการ", new Utility.OnClickCloseImage() {
                         @Override
                         public void onClickImage(Dialog dialog) {
+                            statusSuccess = "";
                             dialog.dismiss();
                         }
                     });
@@ -272,6 +277,10 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
             public void run() {
                 try {
                     printDev.initPrinter();
+                    //This interface is used for set the gray level of the printing
+                    //MIN is 0,Max is 4
+                    //The level bigger, the speed of print is smaller
+                    printDev.setPrinterGray(2);
                     printDev.printBmpFast(bitmapOld, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
                         @Override
                         public void onPrintFinish() throws RemoteException {

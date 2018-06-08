@@ -34,6 +34,8 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
     private Button billerKeyBtn = null;
     private TextView qrPortLabel = null;
     private Button qrPortBtn = null;
+    private TextView merchantNameThaiLabel = null;
+    private Button merchantNameThaiBtn = null;
     private CustomDialog customDialog;
 
     public QrSettingFragment() {
@@ -99,18 +101,18 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
         qrPortLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_QR_PORT));
         qrPortBtn = rootView.findViewById(R.id.qrPortBtn);
 
+        merchantNameThaiLabel = rootView.findViewById(R.id.merchantNameThaiLabel);
+        merchantNameThaiLabel.setText(Preference.getInstance(getContext()).getValueString(Preference.KEY_QR_MERCHANT_NAME_THAI));
+        merchantNameThaiBtn = rootView.findViewById(R.id.merchantNameThaiBtn);
+
         aidBtn.setOnClickListener(this);
         billerIdBtn.setOnClickListener(this);
         merchantNameBtn.setOnClickListener(this);
         qrTerminalIdBtn.setOnClickListener(this);
         billerKeyBtn.setOnClickListener(this);
         qrPortBtn.setOnClickListener(this);
+        merchantNameThaiBtn.setOnClickListener(this);
 
-        if (ref1CB.isChecked()) {
-
-        } else {
-
-        }
 
         ref2CB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -282,6 +284,29 @@ public class QrSettingFragment extends Fragment implements View.OnClickListener 
                 public void onClickSave(Dialog dialog, String sEt) {
                     qrTerminalIdLabel.setText(sEt);
                     Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_PORT,sEt);
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onClickCancel(Dialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+            customDialog.show();
+        }else if (v == merchantNameThaiBtn) {
+            if (customDialog != null) {
+                customDialog = null;
+            }
+            customDialog = new CustomDialog(getContext(), R.layout.dialog_custom_ip);
+            customDialog.setInitWidgetDialog(merchantNameThaiLabel.getText().toString());
+            customDialog.setMaxLength(50);
+            customDialog.setInputText(InputType.TYPE_CLASS_TEXT);
+            customDialog.setCancelable(false);
+            customDialog.setOnClickListener(new CustomDialog.OnClickDialog() {
+                @Override
+                public void onClickSave(Dialog dialog, String sEt) {
+                    merchantNameThaiLabel.setText(sEt);
+                    Preference.getInstance(getContext()).setValueString(Preference.KEY_QR_MERCHANT_NAME_THAI,sEt);
                     dialog.dismiss();
                 }
 

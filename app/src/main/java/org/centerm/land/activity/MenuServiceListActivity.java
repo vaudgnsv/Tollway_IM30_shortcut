@@ -1,11 +1,17 @@
 package org.centerm.land.activity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.media.ToneGenerator;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
@@ -32,6 +38,7 @@ import org.centerm.land.database.ReversalTemp;
 import org.centerm.land.model.Card;
 import org.centerm.land.utility.Utility;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -71,6 +78,10 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
     private ImageView closeFallBackImage;
     private Button okBtn;
     private Dialog dialogFallBackCheck;
+    private MediaPlayer mp;
+    private Dialog dialogCheckCard;
+    private ImageView closeCardImage;
+    private Button okCardBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +111,10 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
         customDialog();
         customDialogWaiting();
         customDialogCheckFallBack();
+        customDialogCheckCard();
         cardManager = MainApplication.getCardManager();
+        final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+
         cardManager.setCardHelperListener(new CardManager.CardHelperListener() {
             @Override
             public void onCardInfoReceived(final Card card) {
@@ -216,19 +230,16 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MenuServiceListActivity.this);
-                        builder.setMessage("กรุณารูดบัตร")
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setCancelable(false)
-                                .setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialogFallBack.show();
-                                        setTimer(15000, 1);
-                                        cardManager.startTransaction(CardManager.SALE);
-                                    }
-                                });
-                        AlertDialog alert = builder.create();
-                        alert.show();
+//                        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
+                        try {
+                            mp = MediaPlayer.create(MenuServiceListActivity.this, R.raw.beep_02);
+                            mp.setLooping(true);
+                            mp.seekTo(100);
+                            mp.start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        dialogCheckCard.show();
                     }
                 });
             }
@@ -239,7 +250,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                     @Override
                     public void run() {
                         AlertDialog.Builder builder = new AlertDialog.Builder(MenuServiceListActivity.this);
-                        builder.setMessage("สไลด์กาดล้มเหลว")
+                        builder.setMessage("สไลด์การ์ดล้มเหลว")
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .setCancelable(false)
                                 .setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
@@ -625,6 +636,44 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
             public void onClick(View v) {
                 dialogFallBackCheck.dismiss();
                 cardManager.startTransaction(CardManager.SALE);
+            }
+        });
+    }
+
+    private void customDialogCheckCard() {
+        dialogCheckCard = new Dialog(this);
+        dialogCheckCard.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogCheckCard.setCancelable(false);
+        dialogCheckCard.setContentView(R.layout.dialog_custom_alert_card);
+        dialogCheckCard.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogCheckCard.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        closeCardImage = dialogCheckCard.findViewById(R.id.closeImage);
+        okCardBtn = dialogCheckCard.findViewById(R.id.okBtn);
+        closeCardImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogCheckCard.dismiss();
+                dialogFallBack.show();
+                setTimer(15000, 1);
+                cardManager.startTransaction(CardManager.SALE);
+//                                        tg.stopTone();
+                mp.stop();
+                mp.release();
+                mp = null;
+
+            }
+        });
+        okCardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogCheckCard.dismiss();
+                dialogFallBack.show();
+                setTimer(15000, 1);
+                cardManager.startTransaction(CardManager.SALE);
+//                                        tg.stopTone();
+                mp.stop();
+                mp.release();
+                mp = null;
             }
         });
     }

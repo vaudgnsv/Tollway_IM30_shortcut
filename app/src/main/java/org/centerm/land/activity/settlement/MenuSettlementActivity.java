@@ -586,6 +586,10 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
             public void run() {
                 try {
                     printDev.initPrinter();
+                    //This interface is used for set the gray level of the printing
+                    //MIN is 0,Max is 4
+                    //The level bigger, the speed of print is smaller
+                    printDev.setPrinterGray(2);
                     printDev.printBmpFast(oldBitmap, Constant.ALIGN.CENTER, new AidlPrinterStateChangeListener.Stub() {
                         @Override
                         public void onPrintFinish() throws RemoteException {

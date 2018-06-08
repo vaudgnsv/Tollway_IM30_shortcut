@@ -45,6 +45,7 @@
             android:textSize="35sp" />
 
         <LinearLayout
+            android:id="@+id/ref1LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

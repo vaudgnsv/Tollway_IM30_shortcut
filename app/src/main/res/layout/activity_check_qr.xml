@@ -27,6 +27,7 @@
             android:textSize="18sp" />
 
         <EditText
+            android:maxLength="6"
             android:id="@+id/traceBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

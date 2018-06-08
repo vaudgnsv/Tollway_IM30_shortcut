@@ -1,13 +1,18 @@
 package org.centerm.land.activity;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.RemoteException;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,9 +24,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.centerm.smartpos.aidl.sys.AidlSystemSettingService;
+
 import org.centerm.land.CardManager;
 import org.centerm.land.MainApplication;
 import org.centerm.land.activity.qr.MenuQrActivity;
+import org.centerm.land.activity.settlement.MenuSettlementActivity;
 import org.centerm.land.fragment.MenuServiceFragment;
 import org.centerm.land.R;
 import org.centerm.land.utility.Preference;
@@ -36,6 +44,7 @@ import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.Calendar;
 
 public class MenuServiceActivity extends AppCompatActivity {
 
@@ -61,10 +70,17 @@ public class MenuServiceActivity extends AppCompatActivity {
 
     private CardManager cardManager = null;
 
+    private AidlSystemSettingService aidlSystemSettingService = null;
+    private AlertDialog.Builder builder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_service);
+        /*Calendar c = Calendar.getInstance();
+        c.set(2013, 8, 15, 12, 34, 56);
+        AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        am.setTime(c.getTimeInMillis());*/
 
 //        viewPagerMenu = findViewById(R.id.viewPagerMenu);
 //        pagerAdapter = new ScreenPagerAdapter(getSupportFragmentManager());
@@ -110,6 +126,8 @@ public class MenuServiceActivity extends AppCompatActivity {
         });
         customDialogPassword();
         customDialogHost();
+        setDialog();
+
     }
 
     private void getStringJsonCAPK() {
@@ -330,6 +348,25 @@ public class MenuServiceActivity extends AppCompatActivity {
             });
     }
 
+    private void setDialog() {
+        builder = new AlertDialog.Builder(MenuServiceActivity.this);
+        builder.setMessage("คุณต้องการออกจากระบบ")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
+                .setNegativeButton("ไม่", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                });
+        builder.create();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -343,5 +380,10 @@ public class MenuServiceActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         cardManager.removeTestHostLister();
+    }
+
+    @Override
+    public void onBackPressed() {
+        builder.show();
     }
 }

@@ -8,6 +8,8 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <permission android:name="android.permission.SET_TIME" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -21,6 +23,8 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
+    <uses-permission android:name="android.permission.CPAYSDK_SYSTEM_MODULE"/>
 
     <!-- PERMISSION FOR CENTERM Device -->
     <!-- 密码键盘权限 -->
@@ -82,6 +86,8 @@
     <!-- WIFI探针设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_WIFI_PROBE_MODULE" />
     <uses-permission android:name="android.permission.CPAYSDK_SYSTEM_MODULE" />
+    <!-- 接收开机广播权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".MainApplication"
@@ -116,11 +122,18 @@
         <activity android:name=".activity.qr.MenuQrActivity" />
         <activity
             android:name=".activity.qr.GenerateQrActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateAlwaysVisible" />
         <activity android:name=".activity.qr.CheckQrActivity" />
         <activity android:name=".activity.MenuDetailReportActivity" />
         <activity android:name=".activity.ReprintActivity" />
         <activity android:name=".activity.PrintPreviousActivity"></activity>
+
+        <receiver android:name=".service.BootBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -751,6 +751,7 @@ TOTAL AMOUNT"
                     android:textSize="14sp" />
 
                 <View
+                    android:id="@+id/texView"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/black" />
