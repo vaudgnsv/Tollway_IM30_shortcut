@@ -379,6 +379,7 @@
                     android:textSize="13sp" />
             </FrameLayout>
             <FrameLayout
+                android:id="@+id/comCodeFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

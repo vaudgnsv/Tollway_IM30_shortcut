@@ -452,6 +452,7 @@
                         android:textSize="13sp" />
                 </FrameLayout>
                 <FrameLayout
+                    android:id="@+id/comCodeFragment"
                     android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -881,6 +882,7 @@ TOTAL AMOUNT"
                         android:layout_weight="1"
                         android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="end"
+                        android:textSize="12sp"
                         android:textColor="@android:color/black"
                         android:textStyle="bold" />
 

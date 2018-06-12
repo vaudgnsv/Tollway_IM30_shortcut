@@ -61,7 +61,7 @@
                         android:background="@drawable/under_line_text_view"
                         android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="center"
-                        android:maxLength="16"
+                        android:maxLength="99"
                         android:minHeight="45dp"
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />
@@ -102,7 +102,7 @@
                         android:background="@drawable/under_line_text_view"
                         android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="center"
-                        android:maxLength="15"
+                        android:maxLength="99"
                         android:minHeight="45dp"
                         android:textColor="@android:color/black"
                         android:textSize="16sp" />

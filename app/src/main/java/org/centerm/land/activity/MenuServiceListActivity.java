@@ -82,6 +82,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
     private Dialog dialogCheckCard;
     private ImageView closeCardImage;
     private Button okCardBtn;
+    private Dialog dialogAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
         customDialogWaiting();
         customDialogCheckFallBack();
         customDialogCheckCard();
+        customDialogAlert();
         cardManager = MainApplication.getCardManager();
         final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
 
@@ -678,21 +680,112 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
         });
     }
 
+    private void showMessageResCode() {
+        cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
+            @Override
+            public void onResponseCode(String response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialogAlert.show();
+                        dismissDialogAll();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponseCodeSuccess() {
+
+            }
+
+            @Override
+            public void onConnectTimeOut() {
+                if (dialogWaiting != null) {
+                    dialogWaiting.dismiss();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isFinishing()) {
+                            Utility.customDialogAlert(MenuServiceListActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onTransactionTimeOut() {
+                if (dialogWaiting != null) {
+                    dialogWaiting.dismiss();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!isFinishing()) {
+                            Utility.customDialogAlert(MenuServiceListActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void customDialogAlert() {
+        if (dialogAlert != null) {
+            if (dialogAlert.isShowing()) {
+                dialogAlert.dismiss();
+            }
+            dialogAlert = null;
+        }
+        dialogAlert = new Dialog(MenuServiceListActivity.this);
+        dialogAlert.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogAlert.setContentView(R.layout.dialog_custom_alert);
+        dialogAlert.setCancelable(false);
+        dialogAlert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogAlert.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        msgLabel = dialogAlert.findViewById(R.id.msgLabel);
+        ImageView closeImage = dialogAlert.findViewById(R.id.closeImage);
+        closeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogAlert.dismiss();
+            }
+        });
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         realm = Realm.getDefaultInstance();
         numFallBack = 0;
+        if (cardManager != null) {
+            showMessageResCode();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        cardManager.removeResponseCodeListener();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         realm.close();
+
     }
 }

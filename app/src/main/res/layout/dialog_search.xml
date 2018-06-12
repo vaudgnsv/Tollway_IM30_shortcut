@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.7"
             android:background="@drawable/under_line_edit_text"
-            android:hint="invoice 6 หลัก"
+            android:hint="Slip (Trace) : "
             android:imeOptions="actionSearch"
             android:inputType="number"
             android:minHeight="50dp"

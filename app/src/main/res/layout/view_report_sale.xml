@@ -467,6 +467,7 @@
                 </FrameLayout>
 
                 <FrameLayout
+                    android:id="@+id/comCodeFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -937,6 +938,7 @@ TEL. 0-2255-2222 FAX. 0-2255-9391-3"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/microsoft_sans_serif"
                                 android:gravity="end"
+                                android:textSize="12sp"
                                 android:textColor="@android:color/black"
                                 android:textStyle="bold" />
 

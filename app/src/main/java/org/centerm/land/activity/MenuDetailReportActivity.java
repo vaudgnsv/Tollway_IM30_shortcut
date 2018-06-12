@@ -180,6 +180,12 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
     private TextView merchantName1QrLabel;
     private TextView merchantName2QrLabel;
     private TextView merchantName3QrLabel;
+    private TextView dateReportLabel;
+    private TextView timeReportLabel;
+    private TextView midReportLabel;
+    private TextView tidReportLabel;
+    private TextView batchReportLabel;
+    private TextView hostReportLabel;
     /**
      * FEE
      */
@@ -248,6 +254,12 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         merchantName1ReportLabel = reportView.findViewById(R.id.merchantName1Label);
         merchantName2ReportLabel = reportView.findViewById(R.id.merchantName2Label);
         merchantName3ReportLabel = reportView.findViewById(R.id.merchantName3Label);
+        dateReportLabel = reportView.findViewById(R.id.dateLabel);
+        timeReportLabel = reportView.findViewById(R.id.timeLabel);
+        midReportLabel = reportView.findViewById(R.id.midLabel);
+        tidReportLabel = reportView.findViewById(R.id.tidLabel);
+        batchReportLabel = reportView.findViewById(R.id.batchLabel);
+        hostReportLabel = reportView.findViewById(R.id.hostLabel);
     }
 
     private void reportViewQr() {
@@ -295,6 +307,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
         cardAmountLabel = reportSummaryView.findViewById(R.id.cardAmountLabel);
 
     }
+
     private void reportSummaryFeeView() {
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -348,6 +361,7 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         reportView.layout(0, 0, reportView.getMeasuredWidth(), reportView.getMeasuredHeight());
     }
+
     private void setMeasureQr() {
         reportViewQr.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -359,11 +373,13 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         reportSummaryView.layout(0, 0, reportSummaryView.getMeasuredWidth(), reportSummaryView.getMeasuredHeight());
     }
+
     private void setMeasureFeeSummary() {
         reportSummaryFeeView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         reportSummaryFeeView.layout(0, 0, reportSummaryFeeView.getMeasuredWidth(), reportSummaryFeeView.getMeasuredHeight());
     }
+
     private void setMeasureSummaryQr() {
         reportSummaryViewQr.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -476,6 +492,25 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
             if (transTempList.get(i).getVoidFlag().equals("N")) {
                 amountAll += Double.valueOf(transTempList.get(i).getAmount());
             }
+        }
+        Date date = new Date();
+        dateReportLabel.setText(new SimpleDateFormat("dd/MM/yy").format(date));
+        timeReportLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+        if (typeHost.equalsIgnoreCase("TMS")) {
+            midReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+            tidReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+            batchReportLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+            hostReportLabel.setText("KTB ONUS");
+        } else if (typeHost.equalsIgnoreCase("EPS")) {
+            midReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
+            tidReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
+            batchReportLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
+            hostReportLabel.setText("BASE24 OFFUS");
+        } else {
+            midReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+            tidReportLabel.setText(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
+            batchReportLabel.setText(CardPrefix.calLen(Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
+            hostReportLabel.setText("KTB OFFUS");
         }
 
         if (!Preference.getInstance(MenuDetailReportActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
@@ -1132,7 +1167,12 @@ public class MenuDetailReportActivity extends SettingToolbarActivity {
 
                         @Override
                         public void onPrintError(int i) throws RemoteException {
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogOutOfPaper.show();
+                                }
+                            });
                         }
 
                         @Override

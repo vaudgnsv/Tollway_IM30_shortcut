@@ -2313,6 +2313,7 @@ public class CardManager {
 
     public void setDataSettlementAndSendTMS() {
         HOST_CARD = "TMS";
+        DecimalFormat decimalFormat = new DecimalFormat("##0.00");
         String traceIdNo;
         try {
             if (realm == null) {
@@ -2333,9 +2334,9 @@ public class CardManager {
             RealmResults<TransTemp> transTempVoidYFlag = realm.where(TransTemp.class).equalTo("voidFlag", "Y").equalTo("hostTypeCard", HOST_CARD).findAll();
             if (transTempVoidYFlag.size() != 0) {
                 voidCount = transTempVoidYFlag.size();
-//                for (int i = 0; i < transTempVoidYFlag.size(); i++) {
-////                    amountVoidAll += Float.valueOf(transTempVoidYFlag.get(i).getAmount());
-//                }
+                for (int i = 0; i < transTempVoidYFlag.size(); i++) {
+                    amountVoidAll += Float.valueOf(transTempVoidYFlag.get(i).getAmount());
+                }
             }
             String nii = "";
             nii = Preference.getInstance(context).getValueString(Preference.KEY_NII_TMS);
@@ -2343,23 +2344,31 @@ public class CardManager {
             MERCHANT_NUMBER = CardPrefix.getMerchantId(context, HOST_CARD);
             TERMINAL_ID = CardPrefix.getTerminalId(context, HOST_CARD);
 
+
+            int countPayAll = (payCount + voidCount);
+
             String msgLen = "00000121";
             String terVer = Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_VERSION);
             String msgVer = Preference.getInstance(context).getValueString(Preference.KEY_MESSAGE_VERSION);
             String tranCode = "6012";
             String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, HOST_CARD), 8);
-            String transaction = CardPrefix.calLen(String.valueOf((payCount /*+ voidCount*/)), 5);
-            String totalPayCount = CardPrefix.calLen(String.valueOf(payCount), 5);
+            String transaction = CardPrefix.calLen(String.valueOf((countPayAll + voidCount)), 5);
+//            String totalPayCount = CardPrefix.calLen(String.valueOf(payCount), 5);
+            String totalPayCount = CardPrefix.calLen(String.valueOf(countPayAll), 5);
 
-            String amountPayAllToStr = String.format("%.2f", amountAll).replace(".", "");
+//            String amountPayAllToStr = String.format("%.2f", amountAll).replace(".", "");
+            String amountPayAllToStr = decimalFormat.format(amountAll + amountVoidAll).replace(".", "");
 
             String totalPayAmount = CardPrefix.calLen(String.valueOf(amountPayAllToStr), 10);
 
-            String totalVoidCount = CardPrefix.calLen(String.valueOf(0), 5);
+//            String totalVoidCount = CardPrefix.calLen("", 5);
+            String totalVoidCount = CardPrefix.calLen(String.valueOf(voidCount), 5);
 
-            String amountVoidAllToStr = String.format("%.2f", amountVoidAll).replace(".", "");
+            String amountVoidAllToStr = decimalFormat.format(amountVoidAll).replace(".", "");
 
             String totalVoidAmount = CardPrefix.calLen(String.valueOf(amountVoidAllToStr), 10);
+
+//            String totalVoidAmount = CardPrefix.calLen("", 10);
             String totalRefundCount = CardPrefix.calLen("", 5);
             String totalRefundAmount = CardPrefix.calLen("", 10);
             String randomData = CardPrefix.calSpenLen("", 5);
@@ -3566,12 +3575,14 @@ public class CardManager {
                 int second = Integer.parseInt(mBlockDataReceived[12 - 1].substring(4,6));
                 int minute = Integer.parseInt(mBlockDataReceived[12 - 1].substring(2,4));
                 int hour = Integer.parseInt(mBlockDataReceived[12 - 1].substring(0,2));
-                int date = Integer.parseInt(mBlockDataReceived[13 - 1].substring(0,2));
-                int mount = Integer.parseInt(mBlockDataReceived[13 - 1].substring(2,4));
-                if (settingService.setSystemTime(second, minute, hour, date, mount, Integer.parseInt(dateFormat.format(dateTime)))) {
-                    Log.d(TAG, "onCreate: Success");
-                } else {
-                    Log.d(TAG, "onCreate: Fail");
+                int mount = Integer.parseInt(mBlockDataReceived[13 - 1].substring(0,2));
+                int date = Integer.parseInt(mBlockDataReceived[13 - 1].substring(2,4));
+                if (settingService != null) {
+                    if (settingService.setSystemTime(second, minute, hour, date, mount, Integer.parseInt(dateFormat.format(dateTime)))) {
+                        Log.d(TAG, "onCreate: Success");
+                    } else {
+                        Log.d(TAG, "onCreate: Fail");
+                    }
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -4229,7 +4240,11 @@ public class CardManager {
         transTemp.setPointServiceEntryMode(mBlockDataSend[22 - 1]);
         transTemp.setApplicationPAN(mBlockDataSend[23 - 1]);
         transTemp.setExpiry(EXPIRY);
-        transTemp.setRefNo(BlockCalculateUtil.hexToString(mBlockDataReceived[37 - 1]));
+        if (HOST_CARD.equalsIgnoreCase("TMS")) {
+            transTemp.setRefNo(CardPrefix.calLen(BlockCalculateUtil.hexToString(EMCI_ID),12));
+        } else {
+            transTemp.setRefNo(BlockCalculateUtil.hexToString(mBlockDataReceived[37 - 1]));
+        }
         transTemp.setIccData(mBlockDataSend[55 - 1]);
         transTemp.setEmvTc(TC);
         transTemp.setEmvAid(AID);

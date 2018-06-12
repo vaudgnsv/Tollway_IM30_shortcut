@@ -137,6 +137,12 @@ public class VoidActivity extends SettingToolbarActivity {
             }
         });
 
+
+//        checkReversal();
+    }
+
+    private void setResponseCode() {
+
         cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
             @Override
             public void onResponseCode(final String response) {
@@ -210,8 +216,6 @@ public class VoidActivity extends SettingToolbarActivity {
                 }
             }
         });
-
-        checkReversal();
     }
 
     private void checkReversal() {
@@ -422,6 +426,15 @@ public class VoidActivity extends SettingToolbarActivity {
         super.onResume();
         setVoidList();
         realm = Realm.getDefaultInstance();
+        if (cardManager != null) {
+            setResponseCode();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cardManager.removeResponseCodeListener();
     }
 
     @Override

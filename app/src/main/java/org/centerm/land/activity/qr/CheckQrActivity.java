@@ -296,12 +296,22 @@ public class CheckQrActivity extends SettingToolbarActivity implements View.OnCl
 
                         @Override
                         public void onPrintError(int i) throws RemoteException {
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogOutOfPaper.show();
+                                }
+                            });
                         }
 
                         @Override
                         public void onPrintOutOfPaper() throws RemoteException {
-                            dialogOutOfPaper.show();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogOutOfPaper.show();
+                                }
+                            });
                         }
                     });
                 } catch (RemoteException e) {

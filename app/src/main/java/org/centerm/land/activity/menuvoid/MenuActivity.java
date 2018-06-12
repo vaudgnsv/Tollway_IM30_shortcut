@@ -59,52 +59,19 @@ public class MenuActivity extends SettingToolbarActivity {
         menuRecyclerView.setLayoutManager(layoutManager);
         setMenuList();
         customDialogWaiting();
-        callBackReversal();
-        callBackConnect();
+//        callBackConnect();
     }
 
     private void callBackConnect() {
         cardManager.setConnectStatusSocket(new CardManager.ConnectStatusSocket() {
             @Override
             public void onConnectTimeOut() {
-                Log.d(TAG, "onConnectTimeOut: ");
-                if (!isFinishing()) {
-                    if (dialogWaiting != null) {
-                        dialogWaiting.dismiss();
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utility.customDialogAlert(MenuActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
+
             }
 
             @Override
             public void onTransactionTimeOut() {
-                Log.d(TAG, "onConnectTimeOut: ");
-                if (!isFinishing()) {
-                    if (dialogWaiting != null) {
-                        dialogWaiting.dismiss();
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Utility.customDialogAlert(MenuActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
+
             }
 
             @Override
@@ -128,6 +95,9 @@ public class MenuActivity extends SettingToolbarActivity {
         cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
             @Override
             public void onResponseCode(final String response) {
+                if (dialogWaiting != null) {
+                    dialogWaiting.dismiss();
+                }
                 if (!isFinishing()) {
                     runOnUiThread(new Runnable() {
                         @Override
@@ -151,11 +121,43 @@ public class MenuActivity extends SettingToolbarActivity {
             @Override
             public void onConnectTimeOut() {
                 Log.d(TAG, "onConnectTimeOut: ");
+                if (!isFinishing()) {
+                    if (dialogWaiting != null) {
+                        dialogWaiting.dismiss();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utility.customDialogAlert(MenuActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
             }
 
             @Override
             public void onTransactionTimeOut() {
-                Log.d(TAG, "onTransactionTimeOut: ");
+                Log.d(TAG, "onConnectTimeOut: ");
+                if (!isFinishing()) {
+                    if (dialogWaiting != null) {
+                        dialogWaiting.dismiss();
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utility.customDialogAlert(MenuActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
 
@@ -281,7 +283,10 @@ public class MenuActivity extends SettingToolbarActivity {
     protected void onResume() {
         super.onResume();
         realm = Realm.getDefaultInstance();
-        setCallBackReversal();
+        if (cardManager != null) {
+            setCallBackReversal();
+            callBackReversal();
+        }
     }
 
     @Override
@@ -289,5 +294,6 @@ public class MenuActivity extends SettingToolbarActivity {
         super.onStop();
         realm.close();
         cardManager.removeReversalListener();
+        cardManager.removeResponseCodeListener();
     }
 }

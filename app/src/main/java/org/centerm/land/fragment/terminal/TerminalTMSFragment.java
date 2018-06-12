@@ -132,7 +132,7 @@ public class TerminalTMSFragment extends Fragment implements View.OnClickListene
         applicationBtn.setOnClickListener(this);
         merchantBtn.setOnClickListener(this);
 
-        callBackResponseCode();
+
     }
 
     private void callBackResponseCode() {
@@ -239,6 +239,7 @@ public class TerminalTMSFragment extends Fragment implements View.OnClickListene
     @Override
     public void onStop() {
         super.onStop();
+        cardManager.removeResponseCodeListener();
     }
 
     /*
@@ -477,4 +478,14 @@ public class TerminalTMSFragment extends Fragment implements View.OnClickListene
                 break;
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (cardManager != null) {
+            callBackResponseCode();
+        }
+    }
+
+
 }

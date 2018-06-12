@@ -166,7 +166,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
             }
         });
 
-        responseCodeDialog();
+
 
     }
 
@@ -696,6 +696,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         stateAbort = false;
         if (cardManager != null) {
             setAbortPboc();
+            responseCodeDialog();
         }
     }
 
@@ -704,6 +705,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         super.onPause();
         if (cardManager != null) {
             cardManager.removeTransResultAbort();
+            cardManager.removeResponseCodeListener();
         }
     }
 }

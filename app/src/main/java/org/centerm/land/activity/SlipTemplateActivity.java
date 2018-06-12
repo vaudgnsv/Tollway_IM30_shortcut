@@ -41,7 +41,10 @@ import org.centerm.land.database.TransTemp;
 import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.utility.Preference;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import io.realm.Realm;
 
@@ -177,6 +180,8 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     private Bitmap bitmapOld = null;
     private TextView msgLabel;
     private View texView;
+    private FrameLayout comCodeFragmentAuto;
+    private FrameLayout comCodeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,6 +269,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         taxLinearLayout = findViewById(R.id.taxLinearLayout);
         copyLabel = findViewById(R.id.copyLabel);
         typeInputCardLabel = findViewById(R.id.typeInputCardLabel);
+        comCodeFragment = findViewById(R.id.comCodeFragment);
 
         printBtn.setOnClickListener(this);
         printBtn.setEnabled(false);
@@ -337,6 +343,8 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         taxLinearLayoutAuto = printFirst.findViewById(R.id.taxLinearLayout);
         copyLabelAuto = printFirst.findViewById(R.id.copyLabel);
 
+        comCodeFragmentAuto = printFirst.findViewById(R.id.comCodeFragment);
+
     }
 
     private void selectSALE() {
@@ -383,11 +391,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("TMS"))
             batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabel.setText(item.getRefNo());
-        String day = item.getTransDate().substring(6, 8);
-        String mount = item.getTransDate().substring(4, 6);
-        String year = item.getTransDate().substring(2, 4);
-        dateLabel.setText(day + "/" + mount + "/" + year);
-        timeLabel.setText(item.getTransTime());
+
         if (item.getVoidFlag().equals("Y")) {
             typeLabel.setText("VOID");
         } else {
@@ -409,11 +413,33 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
 
         if (!item.getHostTypeCard().equals("TMS")) {
+            comCodeFragment.setVisibility(View.GONE);
+            Date date = new Date();
+            String day = item.getTransDate().substring(6, 8);
+            String mount = item.getTransDate().substring(4, 6);
+            String year = item.getTransDate().substring(2, 4);
+            if (!item.getHostTypeCard().equalsIgnoreCase("POS")) {
+                dateLabel.setText(new SimpleDateFormat("dd/MM/yy").format(date));
+                timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+                dateTaxLayout.setText(new SimpleDateFormat("dd/MM/yy").format(date));
+                timeTaxLayout.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+            } else {
+                dateLabel.setText(day + "/" + mount + "/" + year);
+                timeLabel.setText(item.getTransTime());
+                dateTaxLayout.setText(day + "/" + mount + "/" + year);
+                timeTaxLayout.setText(item.getTransTime());
+            }
+//            timeLabel.setText(item.getTransTime());
+/*
             String dayTax = item.getTransDate().substring(6, 8);
             String mountTax = item.getTransDate().substring(4, 6);
             String yearTax = item.getTransDate().substring(2, 4);
-            dateTaxLayout.setText(dayTax + "/" + mountTax + "/" + yearTax);
-            timeTaxLayout.setText(item.getTransTime());
+            if (!item.getHostTypeCard().equalsIgnoreCase("POS")) {
+
+            } else {
+
+            }*/
+
 
             taxIdLayout.setText(Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAX_ID));
             taxAbbLayout.setText(item.getTaxAbb());
@@ -442,6 +468,16 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             Log.d(TAG, "setDataView: " + item.getEmvAid());
             Log.d(TAG, "setDataView: " + item.getEmvNameCardHolder());
         } else {
+            comCodeFragment.setVisibility(View.VISIBLE);
+            Date date = new Date();
+            /*String day = item.getTransDate().substring(6, 8);
+            String mount = item.getTransDate().substring(4, 6);
+            String year = item.getTransDate().substring(2, 4);
+            dateLabel.setText(day + "/" + mount + "/" + year);
+            timeLabel.setText(item.getTransTime());*/
+            dateLabel.setText(new SimpleDateFormat("dd/MM/yy").format(date));
+            timeLabel.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+
             appFrameLabel.setVisibility(View.GONE);
             tcFrameLayout.setVisibility(View.GONE);
             aidFrameLayout.setVisibility(View.GONE);
@@ -555,7 +591,6 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
     }
 
     private void setDataViewAuto(TransTemp item) {
-
         DecimalFormat decimalFormatShow = new DecimalFormat("#,##0.00");
         DecimalFormat decimalFormat = new DecimalFormat("###0.00");
         tidLabelAuto.setText(item.getTid());
@@ -570,13 +605,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
         refNoLabelAuto.setText(item.getRefNo());
 
-        String day = item.getTransDate().substring(6, 8);
-        String mount = item.getTransDate().substring(4, 6);
-        String year = item.getTransDate().substring(2, 4);
-        dateLabelAuto.setText(day + "/" + mount + "/" + year);
-
-        dateTaxLayoutAuto.setText(day + "/" + mount + "/" + year);
-        timeLabelAuto.setText(item.getTransTime());
+//        timeLabelAuto.setText(item.getTransTime());
 
         if (item.getHostTypeCard().equalsIgnoreCase("POS"))
             batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
@@ -586,11 +615,29 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
 
         if (!item.getHostTypeCard().equals("TMS")) {
+            comCodeFragmentAuto.setVisibility(View.GONE);
             taxIdLayoutAuto.setText(Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAX_ID));
             taxAbbLayoutAuto.setText(item.getTaxAbb());
             traceTaxLayoutAuto.setText(item.getEcr());
 //            dateTaxLayoutAuto.setText(item.getTransDate());
-            timeTaxLayoutAuto.setText(item.getTransTime());
+            String day = item.getTransDate().substring(6, 8);
+            String mount = item.getTransDate().substring(4, 6);
+            String year = item.getTransDate().substring(2, 4);
+            Date date = new Date();
+            if (!item.getHostTypeCard().equalsIgnoreCase("POS")) {
+                dateLabelAuto.setText(new SimpleDateFormat("dd/MM/yy").format(date));
+                timeLabelAuto.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+                dateTaxLayoutAuto.setText(new SimpleDateFormat("dd/MM/yy").format(date));
+                timeTaxLayoutAuto.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+            } else {
+                dateLabelAuto.setText(day + "/" + mount + "/" + year);
+                timeLabelAuto.setText(item.getTransTime());
+                dateTaxLayoutAuto.setText(day + "/" + mount + "/" + year);
+                timeTaxLayoutAuto.setText(item.getTransTime());
+            }
+
+            /*dateTaxLayoutAuto.setText(day + "/" + mount + "/" + year);
+            timeTaxLayoutAuto.setText(item.getTransTime());*/
 
             if (item.getEmvAppLabel().isEmpty()) {
                 appLabelAuto.setText(item.getEmvAppLabel());
@@ -608,6 +655,18 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                 aidFrameLayoutAuto.setVisibility(View.GONE);
             }
         } else {
+            comCodeFragmentAuto.setVisibility(View.VISIBLE);
+            Date date = new Date();
+            /*String day = item.getTransDate().substring(6, 8);
+            String mount = item.getTransDate().substring(4, 6);
+            String year = item.getTransDate().substring(2, 4);
+            dateLabelAuto.setText(day + "/" + mount + "/" + year);*/
+            dateLabelAuto.setText(new SimpleDateFormat("dd/MM/yy").format(date));
+            timeLabelAuto.setText(new SimpleDateFormat("HH:mm:ss").format(date));
+
+            /*dateTaxLayoutAuto.setText(day + "/" + mount + "/" + year);
+            timeTaxLayoutAuto.setText(item.getTransTime());*/
+
             texView.setVisibility(View.GONE);
             appFrameLabelAuto.setVisibility(View.GONE);
             tcFrameLayoutAuto.setVisibility(View.GONE);
@@ -814,9 +873,15 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
 
                         @Override
                         public void onPrintError(int i) throws RemoteException {
-                            Log.d(TAG, "onPrintError: ");
-                            msgLabel.setText("เกิดข้อผิดพลาด");
-                            dialogOutOfPaper.show();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.d(TAG, "onPrintError: ");
+                                    msgLabel.setText("เกิดข้อผิดพลาด");
+                                    dialogOutOfPaper.show();
+                                }
+                            });
+
                         }
 
                         @Override

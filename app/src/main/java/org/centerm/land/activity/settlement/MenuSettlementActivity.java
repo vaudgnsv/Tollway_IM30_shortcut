@@ -152,108 +152,6 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
             }
         });
 
-        cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
-            @Override
-            public void onResponseCode(final String response) {
-                if (!isFinishing()) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (dialogWaiting != null) {
-                                dialogWaiting.dismiss();
-                            }
-                            if (dialogSettlement != null) {
-                                dialogSettlement.dismiss();
-                            }
-                            Utility.customDialogAlert(MenuSettlementActivity.this, response, new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                    settlementPosition++;
-                                    okBtn.setVisibility(View.VISIBLE);
-                                    if (settlementPosition == 0) {
-                                        statusLabel.setText("KTB offus ไม่มีข้อมูล");
-                                    } else if (settlementPosition == 1) {
-                                        statusLabel.setText("BASE24 EPS ไม่มีข้อมูล");
-                                    } else if (settlementPosition == 2) {
-                                        statusLabel.setText("KTB ONUS ไม่มีข้อมูล");
-                                    } else if (settlementPosition == 3) {
-                                        statusLabel.setText("QR ไม่มีข้อมูล");
-                                    } else {
-                                        statusLabel.setText("Settlement สำเร็จ");
-                                    }
-                                    if (settlementPosition == 1) {
-                                        selectDataTransTempAll("EPS");
-                                    } else if (settlementPosition == 2) {
-                                        selectDataTransTempAll("TMS");
-                                    } else if (settlementPosition == 3) {
-                                        selectSettlementQR();
-                                    } else {
-                                        dialogSettlement.dismiss();
-                                        Log.d(TAG, "success: " + settlementPosition);
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onResponseCodeSuccess() {
-
-            }
-
-            @Override
-            public void onConnectTimeOut() {
-                if (!isFinishing()) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (dialogWaiting != null) {
-                                dialogWaiting.dismiss();
-                            }
-                            if (dialogSettlement != null) {
-                                dialogSettlement.dismiss();
-                            }
-                            if (dialogSettlement != null) {
-                                dialogSettlement.dismiss();
-                            }
-                            Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onTransactionTimeOut() {
-                if (!isFinishing()) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (dialogWaiting != null) {
-                                dialogWaiting.dismiss();
-                            }
-                            if (dialogSettlement != null) {
-                                dialogSettlement.dismiss();
-                            }
-                            Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
-                                @Override
-                                public void onClickImage(Dialog dialog) {
-                                    dialog.dismiss();
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         qrView = inflater.inflate(R.layout.view_slip_settlement, null);
@@ -579,6 +477,111 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         }).start();
     }
 
+    private void setResponsCode() {
+
+        cardManager.setResponseCodeListener(new CardManager.ResponseCodeListener() {
+            @Override
+            public void onResponseCode(final String response) {
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialogWaiting != null) {
+                                dialogWaiting.dismiss();
+                            }
+                            if (dialogSettlement != null) {
+                                dialogSettlement.dismiss();
+                            }
+                            Utility.customDialogAlert(MenuSettlementActivity.this, response, new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    settlementPosition++;
+                                    okBtn.setVisibility(View.VISIBLE);
+                                    if (settlementPosition == 0) {
+                                        statusLabel.setText("KTB offus ไม่มีข้อมูล");
+                                    } else if (settlementPosition == 1) {
+                                        statusLabel.setText("BASE24 EPS ไม่มีข้อมูล");
+                                    } else if (settlementPosition == 2) {
+                                        statusLabel.setText("KTB ONUS ไม่มีข้อมูล");
+                                    } else if (settlementPosition == 3) {
+                                        statusLabel.setText("QR ไม่มีข้อมูล");
+                                    } else {
+                                        statusLabel.setText("Settlement สำเร็จ");
+                                    }
+                                    if (settlementPosition == 1) {
+                                        selectDataTransTempAll("EPS");
+                                    } else if (settlementPosition == 2) {
+                                        selectDataTransTempAll("TMS");
+                                    } else if (settlementPosition == 3) {
+                                        selectSettlementQR();
+                                    } else {
+                                        dialogSettlement.dismiss();
+                                        Log.d(TAG, "success: " + settlementPosition);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onResponseCodeSuccess() {
+
+            }
+
+            @Override
+            public void onConnectTimeOut() {
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialogWaiting != null) {
+                                dialogWaiting.dismiss();
+                            }
+                            if (dialogSettlement != null) {
+                                dialogSettlement.dismiss();
+                            }
+                            if (dialogSettlement != null) {
+                                dialogSettlement.dismiss();
+                            }
+                            Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onTransactionTimeOut() {
+                if (!isFinishing()) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialogWaiting != null) {
+                                dialogWaiting.dismiss();
+                            }
+                            if (dialogSettlement != null) {
+                                dialogSettlement.dismiss();
+                            }
+                            Utility.customDialogAlert(MenuSettlementActivity.this, "เชื่อมต่อล้มเหลว", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     public void doPrinting(Bitmap slip) {
         oldBitmap = slip;
         new Thread() {
@@ -629,12 +632,22 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
 
                         @Override
                         public void onPrintError(int i) throws RemoteException {
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogOutOfPaper.show();
+                                }
+                            });
                         }
 
                         @Override
                         public void onPrintOutOfPaper() throws RemoteException {
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogOutOfPaper.show();
+                                }
+                            });
                         }
                     });
 //                    int ret = printDev.printBarCodeSync("asdasd");
@@ -769,6 +782,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                     Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_QR, saleCountLabel.getText().toString());
                     Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_QR, voidSaleCountLabel.getText().toString());
                     Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_QR, voidSaleAmountLabel.getText().toString());
+                    Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_BATCH_QR,CardPrefix.calLen(String.valueOf(batch), 6));
                     setMeasureQr();
                 } else {
                     status = 1;
@@ -894,6 +908,15 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
     protected void onResume() {
         super.onResume();
         realm = Realm.getDefaultInstance();
+        if (cardManager != null) {
+            setResponsCode();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cardManager.removeResponseCodeListener();
     }
 
     @Override

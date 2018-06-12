@@ -21,6 +21,18 @@
         android:layout_margin="30dp"
         android:orientation="vertical">
 
+
+
+        <Button
+            android:id="@+id/tmsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="KTB On Us"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
         <Button
             android:id="@+id/posBtn"
             android:layout_width="match_parent"
@@ -40,16 +52,6 @@
             android:background="@drawable/pressed_menu"
             android:fontFamily="@font/microsoft_sans_serif"
             android:text="BASE24 EPS"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/tmsBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/pressed_menu"
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:text="KTB On Us"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </LinearLayout>

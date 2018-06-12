@@ -195,6 +195,7 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_POS, saleCountLabel.getText().toString());
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_POS, voidSaleCountLabel.getText().toString());
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS, voidSaleAmountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_BATCH_POS,CardPrefix.calLen(String.valueOf(batch), 6));
         } else if (typeHost.equalsIgnoreCase("EPS")) {
             hostLabel.setText("BASE24 EPS");
             int batch = Integer.parseInt(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS)) - 1;
@@ -207,6 +208,7 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_EPS, saleCountLabel.getText().toString());
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_EPS, voidSaleCountLabel.getText().toString());
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS, voidSaleAmountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_BATCH_EPS,CardPrefix.calLen(String.valueOf(batch), 6));
         } else {
             hostLabel.setText("KTB On Us");
 
@@ -220,6 +222,7 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_TMS, saleCountLabel.getText().toString());
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_TMS, voidSaleCountLabel.getText().toString());
             Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_TMS, voidSaleAmountLabel.getText().toString());
+            Preference.getInstance(this).setValueString(Preference.KEY_SETTLE_BATCH_TMS,CardPrefix.calLen(String.valueOf(batch), 6));
         }
         realm.close();
         realm = null;
@@ -263,12 +266,22 @@ public class SlipSettlementActivity extends SettingToolbarActivity {
 
                         @Override
                         public void onPrintError(int i) throws RemoteException {
-
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogOutOfPaper.show();
+                                }
+                            });
                         }
 
                         @Override
                         public void onPrintOutOfPaper() throws RemoteException {
-                            dialogOutOfPaper.show();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogOutOfPaper.show();
+                                }
+                            });
                         }
                     });
                 } catch (RemoteException e) {
