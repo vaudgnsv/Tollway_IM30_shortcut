@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="void_layout_width">330dp</dimen>
+    <dimen name="hender_Line">15sp</dimen>
 </resources>

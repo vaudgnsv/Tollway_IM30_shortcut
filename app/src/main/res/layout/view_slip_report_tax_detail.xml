@@ -91,11 +91,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+
                     android:layout_marginBottom="5dp"
-                    android:fontFamily="@font/timeburnerbold"
                     android:text="Header Line1"
                     android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/hender_Line" />
 
                 <TextView
                     android:id="@+id/merchantName2Label"
@@ -103,10 +103,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                    android:fontFamily="@font/timeburnerbold"
                     android:text="Header Line2"
                     android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/hender_Line" />
 
                 <TextView
                     android:id="@+id/merchantName3Label"
@@ -114,10 +113,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                    android:fontFamily="@font/timeburnerbold"
                     android:text="Header Line3"
                     android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/hender_Line" />
             </LinearLayout>
 
             <LinearLayout
@@ -222,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/timeburnerbold"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:text="DETAIL REPORT"
                 android:textColor="@android:color/black"
                 android:textSize="14sp" />

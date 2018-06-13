@@ -887,6 +887,7 @@ public class CardManager {
                     }
                     String Tc = readKernelData(EMVTAGS.combine(0x9F, 0x26));
                     String Tag_4f = readKernelData(EMVTAGS.EMVTAG_AID);
+                    Log.d(TAG, "EMVTAG_TVR: " + readKernelData(EMVTAGS.EMVTAG_TVR));
                     Log.d(TAG, "----> CardInfoData ==> Tag_4f " + Tag_4f);
                     if (Tag_4f.equalsIgnoreCase("4F08A000000677010100") || Tag_4f.equalsIgnoreCase("4F08A000000677010101") ||
                             Tag_4f.equalsIgnoreCase("4F08A000000333010103") || Tag_4f.equalsIgnoreCase("4F08A000000677010109")) {

@@ -21,6 +21,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="TAX"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -28,6 +29,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="TAX INVOICE NO."
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -35,6 +37,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="Product Name"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -50,6 +53,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="Card Number"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -57,6 +61,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="Trace No"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -64,6 +69,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
                 android:text="TRANSACTION"
+                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

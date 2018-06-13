@@ -91,22 +91,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:fontFamily="@font/timeburnerbold"
+                    android:layout_marginBottom="5dp"
                         android:text="Header Line1"
                         android:textColor="@android:color/black"
-                        android:textSize="13sp" />
+                        android:textSize="@dimen/hender_Line" />
 
                     <TextView
                         android:id="@+id/merchantName2Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:fontFamily="@font/timeburnerbold"
+                    android:layout_marginBottom="5dp"
                         android:text="Header Line2"
                         android:textColor="@android:color/black"
-                        android:textSize="13sp" />
+                        android:textSize="@dimen/hender_Line" />
 
                     <TextView
                         android:id="@+id/merchantName3Label"
@@ -114,10 +112,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        android:fontFamily="@font/timeburnerbold"
                         android:text="Header Line3"
                         android:textColor="@android:color/black"
-                        android:textSize="13sp" />
+                        android:textSize="@dimen/hender_Line" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -135,7 +132,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:text="Date/Time"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
@@ -157,7 +154,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.2"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="15/08/18"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
@@ -167,7 +164,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:gravity="end"
                         android:text="09:54:33"
                         android:textColor="@android:color/black"
@@ -190,7 +187,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:text="MID"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
@@ -212,7 +209,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="111111212424123"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
@@ -225,7 +222,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:text="TID"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
@@ -247,7 +244,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="3123123123"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
@@ -269,7 +266,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:text="Batch"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
@@ -291,7 +288,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.8"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="000473"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
@@ -304,7 +301,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/timeburnerbold"
+                            android:fontFamily="@font/microsoft_sans_serif"
                             android:text="HOST"
                             android:textColor="@android:color/black"
                             android:textSize="10sp" />
@@ -325,7 +322,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/timeburnerbold"
+                        android:fontFamily="@font/microsoft_sans_serif"
                         android:text="KTB ONUS"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
@@ -338,7 +335,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/timeburnerbold"
+                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="DETAIL REPORT"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />

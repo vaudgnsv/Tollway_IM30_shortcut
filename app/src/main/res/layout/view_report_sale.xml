@@ -82,10 +82,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:layout_marginBottom="5dp"
                     android:text="Header Line1"
                     android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/hender_Line" />
 
                 <TextView
 
@@ -93,10 +93,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:layout_marginBottom="5dp"
                     android:text="Header Line1"
                     android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/hender_Line" />
 
                 <TextView
 
@@ -104,10 +104,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/microsoft_sans_serif"
                     android:text="Header Line1"
                     android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:textSize="@dimen/hender_Line" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

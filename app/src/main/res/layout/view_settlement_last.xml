@@ -95,7 +95,7 @@
                         android:fontFamily="@font/microsoft_sans_serif"
                         android:text="Header Line1"
                         android:textColor="@android:color/black"
-                        android:textSize="13sp" />
+                        android:textSize="@dimen/hender_Line" />
 
                     <TextView
                         android:id="@+id/merchantName2Label"
@@ -106,7 +106,7 @@
                         android:fontFamily="@font/microsoft_sans_serif"
                         android:text="Header Line2"
                         android:textColor="@android:color/black"
-                        android:textSize="13sp" />
+                        android:textSize="@dimen/hender_Line" />
 
                     <TextView
                         android:id="@+id/merchantName3Label"
@@ -117,7 +117,7 @@
                         android:fontFamily="@font/microsoft_sans_serif"
                         android:text="Header Line3"
                         android:textColor="@android:color/black"
-                        android:textSize="13sp" />
+                        android:textSize="@dimen/hender_Line" />
                 </LinearLayout>
 
                 <TextView
