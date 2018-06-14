@@ -42,6 +42,7 @@ import org.centerm.land.helper.CardPrefix;
 import org.centerm.land.utility.Preference;
 import org.centerm.land.utility.Utility;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -99,6 +100,30 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
     private TextView merchantName2Label;
     private TextView merchantName3Label;
     private ImageView closeImage;
+    /**
+     * TAX Fee
+     */
+    private View reportSummaryFeeView;
+    private LinearLayout summaryLinearFeeLayout;
+    private TextView merchantName1FeeLabel;
+    private TextView merchantName2FeeLabel;
+    private TextView merchantName3FeeLabel;
+    private TextView dateFeeLabel;
+    private TextView timeFeeLabel;
+    private TextView midFeeLabel;
+    private TextView tidFeeLabel;
+    private TextView batchFeeLabel;
+    private TextView hostFeeLabel;
+    private TextView saleCountFeeLabel;
+    private TextView saleTotalFeeLabel;
+    private TextView voidSaleCountFeeLabel;
+    private TextView voidSaleAmountFeeLabel;
+    private TextView cardCountFeeLabel;
+    private TextView cardAmountFeeLabel;
+    private TextView taxIdFeeLabel;
+    private Double totalSale = 0.0;
+    private Double totalVoid = 0.0;
+    private int countAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +145,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         customDialogWaiting();
         customDialogSettlement();
         customDialogOutOfPaper();
+//        reportSummaryFeeView();
         cardManager.setSettlementHelperLister(new CardManager.SettlementHelperLister() {
             @Override
             public void onSettlementSuccess() {
@@ -154,7 +180,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
 
         LayoutInflater inflater =
                 (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        qrView = inflater.inflate(R.layout.view_slip_settlement, null);
+        qrView = inflater.inflate(R.layout.view_slip_settlement_and_report, null);
         settlementLinearLayout = qrView.findViewById(R.id.settlementLinearLayout);
         dateLabel = qrView.findViewById(R.id.dateLabel);
         timeLabel = qrView.findViewById(R.id.timeLabel);
@@ -171,6 +197,24 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
         merchantName1Label = qrView.findViewById(R.id.merchantName1Label);
         merchantName2Label = qrView.findViewById(R.id.merchantName2Label);
         merchantName3Label = qrView.findViewById(R.id.merchantName3Label);
+
+        summaryLinearFeeLayout = qrView.findViewById(R.id.summaryLinearLayout);
+        merchantName1FeeLabel = qrView.findViewById(R.id.merchantName1TaxLabel);
+        merchantName2FeeLabel = qrView.findViewById(R.id.merchantName2TaxLabel);
+        merchantName3FeeLabel = qrView.findViewById(R.id.merchantName3TaxLabel);
+        dateFeeLabel = qrView.findViewById(R.id.dateTaxLabel);
+        timeFeeLabel = qrView.findViewById(R.id.timeTaxLabel);
+//        midFeeLabel = qrView.findViewById(R.id.midLabel);
+//        tidFeeLabel = qrView.findViewById(R.id.tidTaxLabel);
+        batchFeeLabel = qrView.findViewById(R.id.batchTaxLabel);
+        hostFeeLabel = qrView.findViewById(R.id.hostTaxLabel);
+        saleCountFeeLabel = qrView.findViewById(R.id.saleCountTaxLabel);
+        saleTotalFeeLabel = qrView.findViewById(R.id.saleTotalTaxLabel);
+        voidSaleCountFeeLabel = qrView.findViewById(R.id.voidSaleCountTaxLabel);
+        voidSaleAmountFeeLabel = qrView.findViewById(R.id.voidSaleAmountTaxLabel);
+        cardCountFeeLabel = qrView.findViewById(R.id.cardCountTaxLabel);
+        cardAmountFeeLabel = qrView.findViewById(R.id.cardAmountTaxLabel);
+        taxIdFeeLabel = qrView.findViewById(R.id.taxIdLabel);
     }
 
     private void setViewSlip() {
@@ -237,6 +281,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_POS, saleCountLabel.getText().toString());
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_POS, voidSaleCountLabel.getText().toString());
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS, voidSaleAmountLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_BATCH_POS, CardPrefix.calLen(String.valueOf(batch), 6));
                     } else if (typeHost.equalsIgnoreCase("EPS")) {
                         hostLabel.setText("BASE24 EPS");
                         int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS)) - 1;
@@ -250,6 +295,7 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_EPS, saleCountLabel.getText().toString());
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_EPS, voidSaleCountLabel.getText().toString());
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS, voidSaleAmountLabel.getText().toString());
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_BATCH_EPS, CardPrefix.calLen(String.valueOf(batch), 6));
                     } else {
                         hostLabel.setText("KTB On Us");
                         int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)) - 1;
@@ -263,7 +309,17 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_SALE_COUNT_TMS, saleCountLabel.getText().toString());
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_COUNT_TMS, voidSaleCountLabel.getText().toString());
                         Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_VOID_TOTAL_TMS, voidSaleAmountLabel.getText().toString());
+
+                        Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_BATCH_TMS, CardPrefix.calLen(String.valueOf(batch), 6));
                     }
+
+                    if (!typeHost.equalsIgnoreCase("TMS") && !typeHost.equalsIgnoreCase("QR")) {
+                        summaryLinearFeeLayout.setVisibility(View.VISIBLE);
+                        selectSummaryTAXReport(typeHost,realm);
+                    } else {
+                        summaryLinearFeeLayout.setVisibility(View.GONE);
+                    }
+
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -897,6 +953,111 @@ public class MenuSettlementActivity extends SettingToolbarActivity {
                 dialogSettlement.dismiss();
             }
         });
+    }
+
+
+    private void reportSummaryFeeView() {
+        LayoutInflater inflater =
+                (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        reportSummaryFeeView = inflater.inflate(R.layout.view_silp_report_fee_settlement, null);
+        summaryLinearFeeLayout = reportSummaryFeeView.findViewById(R.id.summaryLinearLayout);
+        merchantName1FeeLabel = reportSummaryFeeView.findViewById(R.id.merchantName1Label);
+        merchantName2FeeLabel = reportSummaryFeeView.findViewById(R.id.merchantName2Label);
+        merchantName3FeeLabel = reportSummaryFeeView.findViewById(R.id.merchantName3Label);
+        dateFeeLabel = reportSummaryFeeView.findViewById(R.id.dateLabel);
+        timeFeeLabel = reportSummaryFeeView.findViewById(R.id.timeLabel);
+        midFeeLabel = reportSummaryFeeView.findViewById(R.id.midLabel);
+        tidFeeLabel = reportSummaryFeeView.findViewById(R.id.tidLabel);
+        batchFeeLabel = reportSummaryFeeView.findViewById(R.id.batchLabel);
+        hostFeeLabel = reportSummaryFeeView.findViewById(R.id.hostLabel);
+        saleCountFeeLabel = reportSummaryFeeView.findViewById(R.id.saleCountLabel);
+        saleTotalFeeLabel = reportSummaryFeeView.findViewById(R.id.saleTotalLabel);
+        voidSaleCountFeeLabel = reportSummaryFeeView.findViewById(R.id.voidSaleCountLabel);
+        voidSaleAmountFeeLabel = reportSummaryFeeView.findViewById(R.id.voidSaleAmountLabel);
+        cardCountFeeLabel = reportSummaryFeeView.findViewById(R.id.cardCountLabel);
+        cardAmountFeeLabel = reportSummaryFeeView.findViewById(R.id.cardAmountLabel);
+        taxIdFeeLabel = reportSummaryFeeView.findViewById(R.id.taxIdLabel);
+
+    }
+
+    private void setMeasureFeeSummary() {
+        reportSummaryFeeView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        reportSummaryFeeView.layout(0, 0, reportSummaryFeeView.getMeasuredWidth(), reportSummaryFeeView.getMeasuredHeight());
+    }
+
+    private void selectSummaryTAXReport(String typeHost, Realm realm) {
+//        dialogLoading.show();
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        final RealmResults<TransTemp> transTempSale = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "N").findAll();
+
+        final RealmResults<TransTemp> transTempVoid = realm.where(TransTemp.class).equalTo("hostTypeCard", typeHost).equalTo("voidFlag", "Y").findAll();
+        Log.d(TAG, "selectSummaryReport: " + transTempSale.size());
+        Log.d(TAG, "selectSummaryReport: " + transTempVoid.size());
+        for (int i = 0; i < transTempSale.size(); i++) {
+            totalSale += Double.valueOf(transTempSale.get(i).getFee());
+        }
+
+
+        if (typeHost.equalsIgnoreCase("POS")) {
+            hostFeeLabel.setText("KTB OFFUS");
+        } else {
+            hostFeeLabel.setText("BASE24 EPS");
+        }
+
+        for (int i = 0; i < transTempVoid.size(); i++) {
+            totalVoid += Double.valueOf(transTempVoid.get(i).getFee());
+        }
+        if (typeHost.equalsIgnoreCase("POS")) {
+            Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TAX_FEE_SALE_POS, String.valueOf(totalSale));
+            Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TAX_FEE_VOID_POS, String.valueOf(totalVoid));
+            int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS)) - 1;
+            batchFeeLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
+        } else {
+            Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TAX_FEE_SALE_EPS, String.valueOf(totalSale));
+            Preference.getInstance(MenuSettlementActivity.this).setValueString(Preference.KEY_SETTLE_TAX_FEE_VOID_EPS, String.valueOf(totalVoid));
+            int batch = Integer.parseInt(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS)) - 1;
+            batchFeeLabel.setText(CardPrefix.calLen(String.valueOf(batch), 6));
+        }
+        if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+            merchantName1FeeLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_1));
+        if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+            merchantName2FeeLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_2));
+        if (!Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+            merchantName3FeeLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_3));
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        dateFeeLabel.setText(dateFormat.format(date));
+        timeFeeLabel.setText(timeFormat.format(date));
+        /*switch (typeHost) {
+            case "POS":
+                midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_POS));
+                tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_POS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_POS)), 6));
+                hostLabel.setText("KTB Off US");
+                break;
+            case "EPS":
+                midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_EPS));
+                tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_EPS)), 6));
+                hostLabel.setText("BASE24 EPS");
+                break;
+            default:
+                midLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_MERCHANT_ID_TMS));
+                tidLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TERMINAL_ID_TMS));
+                batchLabel.setText(CardPrefix.calLen(String.valueOf(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_BATCH_NUMBER_TMS)), 6));
+                hostLabel.setText("KTB ONUS");
+                break;
+        }*/
+        taxIdFeeLabel.setText(Preference.getInstance(MenuSettlementActivity.this).getValueString(Preference.KEY_TAX_ID));
+        saleCountFeeLabel.setText(String.valueOf(transTempSale.size()));
+        saleTotalFeeLabel.setText(decimalFormat.format(totalSale));
+        voidSaleCountFeeLabel.setText(transTempVoid.size() + "");
+        voidSaleAmountFeeLabel.setText(decimalFormat.format(totalVoid));
+        countAll = transTempSale.size() + transTempVoid.size();
+        cardCountFeeLabel.setText(countAll + "");
+        cardAmountFeeLabel.setText(decimalFormat.format(totalSale));
     }
 
     @Override

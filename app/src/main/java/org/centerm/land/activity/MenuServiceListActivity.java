@@ -127,8 +127,17 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                         @Override
                         public void run() {
                             dialogWaiting.show();
-                            setTimer(2000, 2);
+//                            setTimer(2000, 2);
+                            cardManager.stopTransaction();
+                            Intent intent = new Intent(MenuServiceListActivity.this, CalculatePriceActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable(KEY_CARD, cardNo);
+                            bundle.putString(KEY_TYPE_CARD, IC_CARD);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            overridePendingTransition(0, 0);
                             dialogInsertCard.dismiss();
+//                            dismissDialogAll();
                         }
                     });
                     cardManager.stopTransaction();
@@ -148,7 +157,6 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                     cardManager.setFallBackHappen();
                 }
                 if (numFallBack > 1) {
-                    numFallBack = 0;
                     isFallBack = true;
                     Log.d(TAG, "onTransResultFallBack: ");
                     if (dialogWaiting != null)
@@ -161,16 +169,17 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            dialogFallBack.show();
-                            cardManager.startTransaction(CardManager.SALE);
-                            setTimer(15000, 1);
+                            if (numFallBack > 1) {
+                                dialogFallBack.dismiss();
+                                cardManager.stopTransaction();
+                            }
+                            dialogFallBackCheck.show();
                         }
                     });
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
                             ++numFallBack;
 
                             cardManager.stopTransaction();
@@ -263,6 +272,18 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                                 });
                         AlertDialog alert = builder.create();
                         alert.show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFindICCard() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialogWaiting.show();
+                        setTimer(2000, 1);
+                        dialogInsertCard.dismiss();
                     }
                 });
             }
@@ -549,7 +570,7 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
                     @Override
                     public void onFinish() {
                         if (typeTimer == 1) {
-                            dismissDialogAll();
+//                            dismissDialogAll();
                             cardManager.stopTransaction();
                         } else if (typeTimer == 2) {
                             dismissDialogAll();
@@ -636,8 +657,19 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialogFallBackCheck.dismiss();
-                cardManager.startTransaction(CardManager.SALE);
+                dismissDialogAll();
+                if (numFallBack > 1) {
+                    Log.d(TAG, "onClick IF : " + numFallBack);
+                    dialogFallBackCheck.dismiss();
+                    dialogFallBack.show();
+                    cardManager.startTransaction(CardManager.SALE);
+                    setTimer(15000, 1);
+                } else {
+                    Log.d(TAG, "onClick ELSE : " + numFallBack);
+                    dialogFallBackCheck.dismiss();
+                    dialogInsertCard.show();
+                    cardManager.startTransaction(CardManager.SALE);
+                }
             }
         });
     }
@@ -786,6 +818,6 @@ public class MenuServiceListActivity extends SettingToolbarActivity {
     protected void onStop() {
         super.onStop();
         realm.close();
-
+        dismissDialogAll();
     }
 }

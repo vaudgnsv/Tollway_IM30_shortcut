@@ -384,12 +384,16 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         traceLabel.setText(item.getEcr());
         systrcLabel.setText(item.getTraceNo());
         Log.d(TAG, "setDataView getTraceNo: " + item.getTraceNo());
-        if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("POS"))
+        if (item.getHostTypeCard().equalsIgnoreCase("POS")) {
             batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
-        else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("EPS"))
+            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
+        } else if (item.getHostTypeCard().equalsIgnoreCase("EPS")) {
             batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
-        else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("TMS"))
+            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
+        } else if (item.getHostTypeCard().equalsIgnoreCase("TMS")) {
             batchLabel.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+        }
         refNoLabel.setText(item.getRefNo());
 
         if (item.getVoidFlag().equals("Y")) {
@@ -403,14 +407,6 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         String cardNo = cutCardStart + "XXXXXX" + cutCardEnd;
         cardNoLabel.setText(cardNo.substring(0, 4) + " " + cardNo.substring(4, 8) + " " + cardNo.substring(8, 12) + " " + cardNo.substring(12, 16));
         apprCodeLabel.setText(item.getApprvCode());
-
-
-        if (item.getHostTypeCard().equalsIgnoreCase("POS"))
-            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
-        else if (item.getHostTypeCard().equalsIgnoreCase("EPS"))
-            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
-        else if (item.getHostTypeCard().equalsIgnoreCase("TMS"))
-            batchTaxLayout.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
 
         if (!item.getHostTypeCard().equals("TMS")) {
             comCodeFragment.setVisibility(View.GONE);
@@ -439,8 +435,6 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
             } else {
 
             }*/
-
-
             taxIdLayout.setText(Preference.getInstance(SlipTemplateActivity.this).getValueString(Preference.KEY_TAX_ID));
             taxAbbLayout.setText(item.getTaxAbb());
             traceTaxLayout.setText(item.getEcr());
@@ -497,7 +491,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         }
 
         if (typeSlip.equalsIgnoreCase(CalculatePriceActivity.TypeSale)) {
-            feeTaxLayout.setText(getString(R.string.slip_pattern_amount,item.getFee()));
+            feeTaxLayout.setText(getString(R.string.slip_pattern_amount, item.getFee()));
             amtThbLabel.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView if : " + item.getAmount() + " Fee : " + item.getFee());
             if (item.getHostTypeCard().equals("TMS")) {
@@ -521,7 +515,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                 totThbLabel.setText(getString(R.string.slip_pattern_amount, "0.00"));
             }
         } else {
-            feeTaxLayout.setText(getString(R.string.slip_pattern_amount_void,item.getFee()));
+            feeTaxLayout.setText(getString(R.string.slip_pattern_amount_void, item.getFee()));
             amtThbLabel.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getAmount()))));
 
             if (item.getHostTypeCard().equals("TMS")) {
@@ -597,22 +591,19 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         midLabelAuto.setText(item.getMid());
         traceLabelAuto.setText(item.getEcr());
         systrcLabelAuto.setText(item.getTraceNo());
-        if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("POS"))
+        if (item.getHostTypeCard().equalsIgnoreCase("POS")) {
             batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
-        else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("EPS"))
+            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
+        } else if (item.getHostTypeCard().equalsIgnoreCase("EPS")) {
             batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
-        else if (CardPrefix.getTypeCard(item.getCardNo()).equalsIgnoreCase("TMS"))
+            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
+        } else if (item.getHostTypeCard().equalsIgnoreCase("TMS")) {
             batchLabelAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
+        }
         refNoLabelAuto.setText(item.getRefNo());
 
 //        timeLabelAuto.setText(item.getTransTime());
-
-        if (item.getHostTypeCard().equalsIgnoreCase("POS"))
-            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_POS), 6));
-        else if (item.getHostTypeCard().equalsIgnoreCase("EPS"))
-            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_EPS), 6));
-        else if (item.getHostTypeCard().equalsIgnoreCase("TMS"))
-            batchTaxLayoutAuto.setText(CardPrefix.calLen(Preference.getInstance(this).getValueString(Preference.KEY_BATCH_NUMBER_TMS), 6));
 
         if (!item.getHostTypeCard().equals("TMS")) {
             comCodeFragmentAuto.setVisibility(View.GONE);
@@ -701,7 +692,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
         apprCodeLabelAuto.setText(item.getApprvCode());
 //        comCodeLabelAuto.setText(item.getComCode());
         if (typeSlip.equalsIgnoreCase(CalculatePriceActivity.TypeSale)) {
-            feeTaxLayoutAuto.setText(getString(R.string.slip_pattern_amount,item.getFee()));
+            feeTaxLayoutAuto.setText(getString(R.string.slip_pattern_amount, item.getFee()));
             amtThbLabelAuto.setText(getString(R.string.slip_pattern_amount, decimalFormatShow.format(Double.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView if : " + item.getAmount() + " Fee : " + item.getFee());
             if (item.getHostTypeCard().equals("TMS")) {
@@ -724,7 +715,7 @@ public class SlipTemplateActivity extends SettingToolbarActivity implements View
                 totThbLabelAuto.setText(getString(R.string.slip_pattern_amount, "0.00"));
             }
         } else {
-            feeTaxLayoutAuto.setText(getString(R.string.slip_pattern_amount_void,item.getFee()));
+            feeTaxLayoutAuto.setText(getString(R.string.slip_pattern_amount_void, item.getFee()));
             amtThbLabelAuto.setText(getString(R.string.slip_pattern_amount_void, decimalFormatShow.format(Float.valueOf(item.getAmount()))));
             Log.d(TAG, "setDataView Else : " + item.getAmount() + " Fee : " + item.getFee());
             if (item.getHostTypeCard().equals("TMS")) {

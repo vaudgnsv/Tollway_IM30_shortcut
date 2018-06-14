@@ -42,5 +42,5 @@
     <string name="ref1_qr">REF1 : %1$s</string>
     <string name="ref2_qr">REF2 : %1$s</string>
     <string name="slip_text">โปรดตรวจสอบความถูกต้องในทันทีที่ได้รับเอกสารนี้ \n หากไม่ทักท้วงจะถือว่ารายการดังกล่าวข้างต้น \n ถูกต้องสมบูรณ์</string>
-    <string name="version_app">V.1.3</string>
+    <string name="version_app">V.1.5</string>
 </resources>

@@ -80,6 +80,8 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
     private TextView msgCardErrorLabel;
     private ImageView closeCardErrorImage;
 
+    private boolean checkResCode = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,7 +169,6 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         });
 
 
-
     }
 
     private void responseCodeDialog() {
@@ -179,6 +180,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                     public void run() {
                         msgLabel.setText(response);
                         if (!isFinishing()) {
+                            checkResCode = true;
                             dialogAlert.show();
                         }
                         /*Utility.customDialogAlert(CalculatePriceActivity.this, response, new Utility.OnClickCloseImage() {
@@ -335,7 +337,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
                 dialogInputPin.dismiss();
-//                cardManager.abortPBOCProcess();
+                cardManager.abortPBOCProcess();
                 finish();
             }
         });
@@ -439,16 +441,16 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                         if (typeCard.equalsIgnoreCase(MenuServiceListActivity.IC_CARD)) {
                             cardManager.setImportAmountEPS(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                         } else {
-                            cardManager.setDataSaleFallBackEPS(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())),ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString(), pinBox.getText().toString());
+                            cardManager.setDataSaleFallBackEPS(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString(), pinBox.getText().toString());
                         }
 
                     } else if (cardManager.getHostCard().equalsIgnoreCase("TMS")) {
                         cardManager.setDataSalePIN(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), pinBox.getText().toString(), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                     } else {
                         if (typeCard.equalsIgnoreCase(MenuServiceListActivity.IC_CARD)) {
-                            cardManager.setImportAmount(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())),ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
+                            cardManager.setImportAmount(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                         } else {
-                            cardManager.setDataSaleFallBack(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())),ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
+                            cardManager.setDataSaleFallBack(decimalFormat.format(Double.valueOf(priceLabel.getText().toString())), ref1Box.getText().toString(), ref2Box.getText().toString(), ref3Box.getText().toString(), comCodeBox.getText().toString());
                         }
                     }
                 } else {
@@ -513,7 +515,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                         if (!numberPrice.isEmpty())
                             /*if (numberPrice.substring(0, 1).equalsIgnoreCase("0"))
                                 numberPrice = "";*/
-                        clickCal(v);
+                            clickCal(v);
                     }
                 } else {
 
@@ -522,7 +524,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
                     if (!numberPrice.isEmpty())
                         /*if (numberPrice.substring(0, 1).equalsIgnoreCase("0"))
                             numberPrice = "";*/
-                    Log.d(TAG, "else Sub : " + splitter.length);
+                        Log.d(TAG, "else Sub : " + splitter.length);
                     Log.d(TAG, "else Sub : " + splitter[splitter.length - 1]);
                     clickCal(v);
                 }
@@ -684,6 +686,66 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         });
     }
 
+    private void showOnCardNotConnectHost() {
+        cardManager.setCardNoConnectHost(new CardManager.CardNoConnectHost() {
+            @Override
+            public void onProcessTransResultUnknow() {
+                if (!checkResCode) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialogWaiting != null) {
+                                dialogWaiting.dismiss();
+                            }
+                            Utility.customDialogAlertNotConnect(CalculatePriceActivity.this, "ไม่สามารถทำรายการได้", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(CalculatePriceActivity.this, MenuServiceActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                    overridePendingTransition(0, 0);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onProcessTransResultRefuse() {
+                if (!checkResCode) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (dialogWaiting != null) {
+                                dialogWaiting.dismiss();
+                            }
+                            Utility.customDialogAlertNotConnect(CalculatePriceActivity.this, "ไม่สามารถทำรายการได้", new Utility.OnClickCloseImage() {
+                                @Override
+                                public void onClickImage(Dialog dialog) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(CalculatePriceActivity.this, MenuServiceActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                    overridePendingTransition(0, 0);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -697,6 +759,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         if (cardManager != null) {
             setAbortPboc();
             responseCodeDialog();
+            showOnCardNotConnectHost();
         }
     }
 
@@ -706,6 +769,7 @@ public class CalculatePriceActivity extends AppCompatActivity implements View.On
         if (cardManager != null) {
             cardManager.removeTransResultAbort();
             cardManager.removeResponseCodeListener();
+            cardManager.removeCardNoConnectHost();
         }
     }
 }

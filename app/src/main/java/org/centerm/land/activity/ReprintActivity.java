@@ -158,6 +158,21 @@ public class ReprintActivity extends SettingToolbarActivity {
     private final String TAG = "ReprintActivity";
     private Dialog dialogLoading;
     private FrameLayout comCodeFragment;
+    private LinearLayout summaryLinearFeeLayout;
+    private TextView merchantName1FeeLabel;
+    private TextView merchantName2FeeLabel;
+    private TextView merchantName3FeeLabel;
+    private TextView dateFeeLabel;
+    private TextView timeFeeLabel;
+    private TextView batchFeeLabel;
+    private TextView hostFeeLabel;
+    private TextView saleCountFeeLabel;
+    private TextView saleTotalFeeLabel;
+    private TextView voidSaleCountFeeLabel;
+    private TextView voidSaleAmountFeeLabel;
+    private TextView cardCountFeeLabel;
+    private TextView cardAmountFeeLabel;
+    private TextView taxIdFeeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,23 +313,47 @@ public class ReprintActivity extends SettingToolbarActivity {
         bank1ImageSettle = reportSettlementLast.findViewById(R.id.bank1Image);
         bankImageSettle = reportSettlementLast.findViewById(R.id.bankImage);
 
+        summaryLinearFeeLayout = reportSettlementLast.findViewById(R.id.summaryLinearLayout);
+        merchantName1FeeLabel = reportSettlementLast.findViewById(R.id.merchantName1TaxLabel);
+        merchantName2FeeLabel = reportSettlementLast.findViewById(R.id.merchantName2TaxLabel);
+        merchantName3FeeLabel = reportSettlementLast.findViewById(R.id.merchantName3TaxLabel);
+        dateFeeLabel = reportSettlementLast.findViewById(R.id.dateTaxLabel);
+        timeFeeLabel = reportSettlementLast.findViewById(R.id.timeTaxLabel);
+        batchFeeLabel = reportSettlementLast.findViewById(R.id.batchTaxLabel);
+        hostFeeLabel = reportSettlementLast.findViewById(R.id.hostTaxLabel);
+        saleCountFeeLabel = reportSettlementLast.findViewById(R.id.saleCountTaxLabel);
+        saleTotalFeeLabel = reportSettlementLast.findViewById(R.id.saleTotalTaxLabel);
+        voidSaleCountFeeLabel = reportSettlementLast.findViewById(R.id.voidSaleCountTaxLabel);
+        voidSaleAmountFeeLabel = reportSettlementLast.findViewById(R.id.voidSaleAmountTaxLabel);
+        cardCountFeeLabel = reportSettlementLast.findViewById(R.id.cardCountTaxLabel);
+        cardAmountFeeLabel = reportSettlementLast.findViewById(R.id.cardAmountTaxLabel);
+        taxIdFeeLabel = reportSettlementLast.findViewById(R.id.taxIdLabel);
+
         merchantName1LabelSettle = reportSettlementLast.findViewById(R.id.merchantName1Label);
-        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1).isEmpty())
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1).isEmpty()) {
             merchantName1LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+            merchantName1FeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_1));
+        }
 
         merchantName2LabelSettle = reportSettlementLast.findViewById(R.id.merchantName2Label);
-        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2).isEmpty())
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2).isEmpty()) {
             merchantName2LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+            merchantName2FeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_2));
+        }
 
         merchantName3LabelSettle = reportSettlementLast.findViewById(R.id.merchantName3Label);
-        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3).isEmpty())
+        if (!Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3).isEmpty()) {
             merchantName3LabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+            merchantName3FeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_3));
+        }
     }
 
     private void setDataViewSettle() {
         dialogLoading.show();
         if (typeHost.equalsIgnoreCase("POS") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_POS).isEmpty()) {
+            summaryLinearFeeLayout.setVisibility(View.VISIBLE);
             hostLabelSettle.setText("KTB OFFUS");
+            hostFeeLabel.setText("KTB OFFUS");
             batchLabelSettle.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_SETTLE_BATCH_POS));
             tidLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_POS));
             midLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_MERCHANT_ID_POS));
@@ -323,12 +362,25 @@ public class ReprintActivity extends SettingToolbarActivity {
             dateLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_POS));
             timeLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TIME_POS));
             voidSaleCountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_COUNT_POS));
-            voidSaleAmountLabelSettle.setText(getString(R.string.slip_pattern_amount_void, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS)));
+            voidSaleAmountFeeLabel.setText(getString(R.string.slip_pattern_amount_void, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS)));
+            voidSaleAmountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_POS));
             cardCountLabelSettle.setText(Integer.valueOf(saleCountLabelSettle.getText().toString()) + Integer.valueOf(voidSaleCountLabelSettle.getText().toString()) + "");
             cardAmountLabelSettle.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_TOTAL_POS)));
+
+            batchFeeLabel.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_SETTLE_BATCH_POS));
+            saleCountFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_COUNT_POS));
+            saleTotalFeeLabel.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TAX_FEE_SALE_POS)));
+            dateFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_POS));
+            timeFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TIME_POS));
+            voidSaleCountFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_COUNT_POS));
+            voidSaleAmountFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TAX_FEE_VOID_POS));
+            cardAmountFeeLabel.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TAX_FEE_SALE_POS)));
+            cardCountFeeLabel.setText(Integer.valueOf(saleCountLabelSettle.getText().toString()) + Integer.valueOf(voidSaleCountLabelSettle.getText().toString()) + "");
+            taxIdFeeLabel.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_TAX_ID));
             setMeasureSettle();
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
         } else if (typeHost.equalsIgnoreCase("EPS") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_EPS).isEmpty()) {
+            summaryLinearFeeLayout.setVisibility(View.VISIBLE);
             hostLabelSettle.setText("BASE24 EPS");
             batchLabelSettle.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_SETTLE_BATCH_EPS));
             tidLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_TERMINAL_ID_EPS));
@@ -338,9 +390,21 @@ public class ReprintActivity extends SettingToolbarActivity {
             dateLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_EPS));
             timeLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TIME_EPS));
             voidSaleCountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_COUNT_EPS));
-            voidSaleAmountLabelSettle.setText(getString(R.string.slip_pattern_amount_void, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS)));
+            voidSaleAmountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_EPS));
             cardCountLabelSettle.setText(Integer.valueOf(saleCountLabelSettle.getText().toString()) + Integer.valueOf(voidSaleCountLabelSettle.getText().toString()) + "");
             cardAmountLabelSettle.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_TOTAL_EPS)));
+
+            batchFeeLabel.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_SETTLE_BATCH_EPS));
+            saleCountFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_COUNT_EPS));
+            saleTotalFeeLabel.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TAX_FEE_SALE_EPS)));
+            dateFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_EPS));
+            timeFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TIME_EPS));
+            voidSaleCountFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_COUNT_EPS));
+            voidSaleAmountFeeLabel.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TAX_FEE_VOID_EPS));
+            cardAmountFeeLabel.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TAX_FEE_SALE_EPS)));
+            cardCountFeeLabel.setText(Integer.valueOf(saleCountLabelSettle.getText().toString()) + Integer.valueOf(voidSaleCountLabelSettle.getText().toString()) + "");
+            taxIdFeeLabel.setText(Preference.getInstance(ReprintActivity.this).getValueString(Preference.KEY_TAX_ID));
+
             setMeasureSettle();
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
         } else if (typeHost.equalsIgnoreCase("TMS") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_TMS).isEmpty()) {
@@ -353,9 +417,10 @@ public class ReprintActivity extends SettingToolbarActivity {
             dateLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_TMS));
             timeLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TIME_TMS));
             voidSaleCountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_COUNT_TMS));
-            voidSaleAmountLabelSettle.setText(getString(R.string.slip_pattern_amount_void, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_TMS)));
+            voidSaleAmountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_TMS));
             cardCountLabelSettle.setText(Integer.valueOf(saleCountLabelSettle.getText().toString()) + Integer.valueOf(voidSaleCountLabelSettle.getText().toString()) + "");
             cardAmountLabelSettle.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_TOTAL_TMS)));
+            summaryLinearFeeLayout.setVisibility(View.GONE);
             setMeasureSettle();
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
         } else if (typeHost.equalsIgnoreCase("QR") && !Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_QR).isEmpty()) {
@@ -368,9 +433,10 @@ public class ReprintActivity extends SettingToolbarActivity {
             dateLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_DATE_QR));
             timeLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_TIME_QR));
             voidSaleCountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_COUNT_QR));
-            voidSaleAmountLabelSettle.setText(getString(R.string.slip_pattern_amount_void, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_QR)));
+            voidSaleAmountLabelSettle.setText(Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_VOID_TOTAL_QR));
             cardCountLabelSettle.setText(Integer.valueOf(saleCountLabelSettle.getText().toString()) + Integer.valueOf(voidSaleCountLabelSettle.getText().toString()) + "");
             cardAmountLabelSettle.setText(getString(R.string.slip_pattern_amount, Preference.getInstance(this).getValueString(Preference.KEY_SETTLE_SALE_TOTAL_QR)));
+            summaryLinearFeeLayout.setVisibility(View.GONE);
             setMeasureSettle();
             doPrinting(getBitmapFromView(settlementLinearLayoutSettle));
         } else {

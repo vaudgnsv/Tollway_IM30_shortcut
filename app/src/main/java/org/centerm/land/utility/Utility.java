@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -73,6 +74,38 @@ public class Utility {
             msgLabel.setText(msg);
         }
         closeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickCloseImage != null) {
+                    onClickCloseImage.onClickImage(dialogAlert);
+                }
+            }
+        });
+        dialogAlert.show();
+    }
+
+    public static void customDialogAlertNotConnect(Context context, @Nullable String msg, final OnClickCloseImage onClickCloseImage) {
+        final Dialog dialogAlert = new Dialog(context);
+        dialogAlert.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogAlert.setContentView(R.layout.dialog_custom_alert_not_connect);
+        dialogAlert.setCancelable(false);
+        dialogAlert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogAlert.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        TextView msgLabel = dialogAlert.findViewById(R.id.msgLabel);
+        Button okBtn = dialogAlert.findViewById(R.id.okBtn);
+        ImageView closeImage = dialogAlert.findViewById(R.id.closeImage);
+        if (msg != null) {
+            msgLabel.setText(msg);
+        }
+        closeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onClickCloseImage != null) {
+                    onClickCloseImage.onClickImage(dialogAlert);
+                }
+            }
+        });
+        okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onClickCloseImage != null) {

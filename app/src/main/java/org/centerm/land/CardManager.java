@@ -122,6 +122,7 @@ public class CardManager {
     private String TAX_ABB_NEW;
     private String invoiceGB = "";
     private String stTraceId = "";
+    private String dateTimeOnline;
 
     public static CardManager init(Context context) {
         if (instance == null) {
@@ -168,10 +169,10 @@ public class CardManager {
                     Log.d(TAG, "1. in catch block of main manager");
                     e.printStackTrace();
                 }*/
-
+                loadAid();
                 try {
-                    pboc2 = AidlEMVL2.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_PBOC2));
-                    printDev = AidlPrinter.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_PRINTERDEV));
+//                    pboc2 = AidlEMVL2.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_PBOC2));
+//                    printDev = AidlPrinter.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_PRINTERDEV));
 //                    aidlQuickScanService = AidlQuickScanZbar.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_QUICKSCAN));
                     settingService = AidlSystemSettingService.Stub.asInterface(manager.getDevice(Constant.DEVICE_TYPE.DEVICE_TYPE_SYS));
                 } catch (RemoteException e) {
@@ -550,6 +551,10 @@ public class CardManager {
                             Log.d(TAG, "pboc2 FindICCard");
                             MAG_TRX_RECV = false;
 //                            CheckCardCallback(CHECKCARD_ONFINDICCARD);
+
+                            if (cardHelperListener != null) {
+                                cardHelperListener.onFindICCard();
+                            }
 
                             if (operateId == SALE) {
                                 //  Create message field
@@ -1587,6 +1592,9 @@ public class CardManager {
                 if (cardHelperListener != null) {
                     cardHelperListener.onCardTransactionUpdate(false, card);
                 }
+                if (cardNoConnectHost != null) {
+                    cardNoConnectHost.onProcessTransResultUnknow();
+                }
                 break;
             case PROCESS_MAG_REQUEST_AMOUNT:
                 if (cardHelperListener != null) {
@@ -1599,9 +1607,13 @@ public class CardManager {
             case PROCESS_REQUEST_CONNECTION_FAILED:
                 break;
             case PROCESS_TRANS_RESULT_FALLBACK:
-
                 if (cardHelperListener != null) {
                     cardHelperListener.onTransResultFallBack();
+                }
+                break;
+            case PROCESS_TRANS_RESULT_REFUSE:
+                if (cardNoConnectHost != null) {
+                    cardNoConnectHost.onProcessTransResultRefuse();
                 }
                 break;
 
@@ -1768,6 +1780,7 @@ public class CardManager {
             Log.d(TAG, "setImportAmountEPS: " + decimalFormat.format(amountAll));
             pboc2.importAmount(decimalFormat.format(amountAll));
             mBlockDataSend[4 - 1] = BlockCalculateUtil.getAmount(decimalFormat.format(amountAll));
+//            mBlockDataSend[22 - 1] = "0052";
             mBlockDataSend[52 - 1] = keyPin;
             AMOUNT = amount;
 
@@ -2270,13 +2283,17 @@ public class CardManager {
                 realm = Realm.getDefaultInstance();
             }
             int timeCount = 0;
-            int amountAll = 0;
+            double amountAll = 0;
+
+            DecimalFormat decimalFormat = new DecimalFormat("###0.00");
+            Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
+
             traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
             RealmResults<TransTemp> transTempVoidFlag = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", HOST_CARD).findAll();
             if (transTempVoidFlag.size() != 0) {
                 timeCount = transTempVoidFlag.size();
                 for (int i = 0; i < transTempVoidFlag.size(); i++) {
-                    amountAll += Float.valueOf(transTempVoidFlag.get(i).getAmount());
+                    amountAll += Float.valueOf(transTempVoidFlag.get(i).getAmount()) + ((Double.valueOf(transTempVoidFlag.get(i).getAmount()) * fee)/ 100);
                 }
             }
             String nii = "";
@@ -2298,7 +2315,7 @@ public class CardManager {
             mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
             mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
             mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
-            mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
+            mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, decimalFormat.format(amountAll));
             settlement63 = mBlockDataSend[63 - 1];
             onLineNow = false;
             TPDU = CardPrefix.getTPDU(context, HOST_CARD);
@@ -2414,13 +2431,15 @@ public class CardManager {
                 realm = Realm.getDefaultInstance();
             }
             int timeCount = 0;
-            int amountAll = 0;
+            double amountAll = 0;
+            DecimalFormat decimalFormat = new DecimalFormat("###0.00");
+            Double fee = Preference.getInstance(context).getValueDouble(Preference.KEY_FEE);
             traceIdNo = CardPrefix.geTraceId(context, HOST_CARD);
             RealmResults<TransTemp> transTempVoidFlag = realm.where(TransTemp.class).equalTo("voidFlag", "N").equalTo("hostTypeCard", HOST_CARD).findAll();
             if (transTempVoidFlag.size() != 0) {
                 timeCount = transTempVoidFlag.size();
                 for (int i = 0; i < transTempVoidFlag.size(); i++) {
-                    amountAll += Float.valueOf(transTempVoidFlag.get(i).getAmount());
+                    amountAll += Double.valueOf(transTempVoidFlag.get(i).getAmount()) + ((Double.valueOf(transTempVoidFlag.get(i).getAmount()) * fee) / 100);
                 }
             }
             String nii = "";
@@ -2436,7 +2455,7 @@ public class CardManager {
             mBlockDataSend[41 - 1] = BlockCalculateUtil.getHexString(TERMINAL_ID);
             mBlockDataSend[42 - 1] = BlockCalculateUtil.getHexString(MERCHANT_NUMBER);
             mBlockDataSend[60 - 1] = getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber));
-            mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll));
+            mBlockDataSend[63 - 1] = BlockCalculateUtil.get63BlockData(timeCount, decimalFormat.format(amountAll));
             settlement63 = mBlockDataSend[63 - 1];
             MTI = MESSAGE_SETTLEMENT;
             onLineNow = false;
@@ -2446,7 +2465,7 @@ public class CardManager {
                     + "\n mBlockDataSend[41 - 1]:" + BlockCalculateUtil.getHexString(TERMINAL_ID)
                     + "\n mBlockDataSend[42 - 1]:" + BlockCalculateUtil.getHexString(MERCHANT_NUMBER)
                     + "\n mBlockDataSend[60 - 1]:" + getLength62(String.valueOf(calNumTraceNo(batchNumber).length())) + BlockCalculateUtil.getHexString(calNumTraceNo(batchNumber))
-                    + "\n mBlockDataSend[63 - 1]:" + BlockCalculateUtil.get63BlockData(timeCount, String.valueOf(amountAll))
+                    + "\n mBlockDataSend[63 - 1]:" + BlockCalculateUtil.get63BlockData(timeCount, decimalFormat.format(amountAll))
             );
             TPDU = CardPrefix.getTPDU(context, HOST_CARD);
             packageAndSend(TPDU, MTI, mBlockDataSend);
@@ -3001,14 +3020,14 @@ public class CardManager {
         String dateTime = new SimpleDateFormat("MMdd").format(date1);
         MERCHANT_NUMBER = CardPrefix.getMerchantId(context, "TMS");
         TERMINAL_ID = CardPrefix.getTerminalId(context, "TMS");
-        String f22 = "";
-        if (HOST_CARD.equalsIgnoreCase("EPS")) {
+        String f22 = mBlock22;
+        /*if (HOST_CARD.equalsIgnoreCase("EPS")) {
             f22 = "0052";
         } else if (HOST_CARD.equalsIgnoreCase("POS")) {
             f22 = "0051";
         } else {
             f22 = "0022";
-        }
+        }*/
         mBlockDataSend = new String[64];
         mBlockDataSend[2 - 1] = card.getNo().length() + card.getNo();
         mBlockDataSend[3 - 1] = "490000";
@@ -3053,14 +3072,16 @@ public class CardManager {
         String terminalV = Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_VERSION);
         String msgV = Preference.getInstance(context).getValueString(Preference.KEY_MESSAGE_VERSION);
         String transactionC = "8056";
-        String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, HOST_CARD), 8);
+        String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, "TMS"), 8);
         String transactionNo = "00000000";
         String comCode = CardPrefix.calSpenLen(COMCODE, 10);
         String ref1 = CardPrefix.calSpenLen(REF1, 50);
         String ref2 = CardPrefix.calSpenLen(REF2, 50);
         String ref3 = CardPrefix.calSpenLen(REF3, 50);
         Log.d(TAG, "setOnlineUploadCredit: " + " comCode : " + comCode + " \n ref1 : " + ref1 + " \n ref2 : " + ref2 + "\n ref 3 : " + ref3);
-        String dateTime63 = new SimpleDateFormat("yyyyMMddHHmmss").format(date1);
+//        String dateTime63 = new SimpleDateFormat("yyyyMMddHHmmss").format(date1);
+        String dateTime63 = dateTimeOnline;
+        Log.d(TAG, "dateTimeOnline: " + dateTimeOnline);
         StringBuilder cardStringBuilder = new StringBuilder(card.getNo());
         cardStringBuilder.replace(7, 12, "X");
         String cardNo = card.getNo();
@@ -3164,14 +3185,15 @@ public class CardManager {
         String terminalV = Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_VERSION);
         String msgV = Preference.getInstance(context).getValueString(Preference.KEY_MESSAGE_VERSION);
         String transactionC = "8065";
-        String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, HOST_CARD), 8);
+        String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, "TMS"), 8);
         String transactionNo = CardPrefix.calLen(transTemp.getDe11OnlineTMS(), 8);
         String comCode = CardPrefix.calSpenLen(transTemp.getComCode(), 10);
         String ref1 = CardPrefix.calSpenLen(transTemp.getRef1(), 50);
         String ref2 = CardPrefix.calSpenLen(transTemp.getRef2(), 50);
         String ref3 = CardPrefix.calSpenLen(transTemp.getRef3(), 50);
         Log.d(TAG, "setOnlineUploadCredit: " + " comCode : " + comCode + " \n ref1 : " + ref1 + " \n ref2 : " + ref2 + "\n ref 3 : " + ref3);
-        String dateTime63 = new SimpleDateFormat("yyyyMMddHHmmss").format(date1);
+//        String dateTime63 = new SimpleDateFormat("yyyyMMddHHmmss").format(date1);
+        String dateTime63 = transTemp.getTransDate() + transTemp.getTransTime().replace(":","");
         StringBuilder cardStringBuilder = new StringBuilder(transTemp.getCardNo());
         cardStringBuilder.replace(7, 12, "X");
         String cardNo = transTemp.getCardNo();
@@ -3257,13 +3279,15 @@ public class CardManager {
                 String terminalV = Preference.getInstance(context).getValueString(Preference.KEY_TERMINAL_VERSION);
                 String msgV = Preference.getInstance(context).getValueString(Preference.KEY_MESSAGE_VERSION);
                 String transactionC = "8055";
-                String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, HOST_CARD), 8);
+                String batchNo = CardPrefix.calLen(CardPrefix.getBatch(context, "TMS"), 8);
                 String transactionNo = "00000000";
                 String comCode = CardPrefix.calSpenLen(Preference.getInstance(context).getValueString(Preference.KEY_TAG_1001), 10);
                 String ref1 = CardPrefix.calSpenLen(Preference.getInstance(context).getValueString(Preference.KEY_TAG_1002), 50);
                 String ref2 = CardPrefix.calSpenLen(Preference.getInstance(context).getValueString(Preference.KEY_TAG_1003), 50);
                 String ref3 = CardPrefix.calSpenLen(Preference.getInstance(context).getValueString(Preference.KEY_TAG_1004), 50);
-                String dateTime63 = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+//                String dateTime63 = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+                String dateTime63 = transTemp.get(uploadCreditPosition).getTransDate()+transTemp.get(uploadCreditPosition).getTransTime().replace(":","");
+                Log.d(TAG, "dateTimeOnline: " + dateTime63);
                 String random = CardPrefix.calSpenLen("", 2);
                 String terminalCERT = CardPrefix.calSpenLen("", 14);
                 String checkSUM = CardPrefix.calSpenLen("", 8);
@@ -4226,6 +4250,7 @@ public class CardManager {
         String fDate = new SimpleDateFormat("yyyyMMdd").format(cDate);
         transTemp.setTransDate(fDate);
         String tTime = new SimpleDateFormat("HH:mm:ss").format(cDate);
+        dateTimeOnline = new SimpleDateFormat("yyyyMMddHHmmss").format(cDate);
         transTemp.setTransTime(tTime);
         String amountAll = String.valueOf(Double.valueOf(AMOUNT) + amountFee);
         Log.d(TAG, "insertTransaction amountAll : " + amountAll + " AMOUNT : " + Float.valueOf(AMOUNT) + " amountFee : " + amountFee);
@@ -4739,6 +4764,7 @@ public class CardManager {
     private ResponseCodeListener responseCodeListener = null;
     private TestHostLister testHostLister = null;
     private TransResultAbortLister transResultAbortLister = null;
+    private CardNoConnectHost cardNoConnectHost = null;
 
     public void setCardHelperListener(CardHelperListener cardHelperListener) {
         this.cardHelperListener = cardHelperListener;
@@ -4770,6 +4796,9 @@ public class CardManager {
 
     public void setTransResultAbortLister(TransResultAbortLister transResultAbortLister) {
         this.transResultAbortLister = transResultAbortLister;
+    }
+    public void setCardNoConnectHost(CardNoConnectHost cardNoConnectHost) {
+        this.cardNoConnectHost = cardNoConnectHost;
     }
 
     public void removeCardHelperListener() {
@@ -4804,6 +4833,10 @@ public class CardManager {
         this.transResultAbortLister = null;
     }
 
+    public void removeCardNoConnectHost() {
+        this.cardNoConnectHost = null;
+    }
+
 
     public interface SettlementHelperLister {
         public void onSettlementSuccess();
@@ -4828,6 +4861,8 @@ public class CardManager {
         public void onSwapCardMag();
 
         public void onSwipeCardFail();
+
+        public void onFindICCard();
     }
 
     public interface InsertOrUpdateDatabase {
@@ -4872,6 +4907,11 @@ public class CardManager {
 
     public interface TransResultAbortLister {
         public void onTransResultAbort();
+    }
+
+    public interface CardNoConnectHost {
+        public void onProcessTransResultUnknow();
+        public void onProcessTransResultRefuse();
     }
 
 //endregion

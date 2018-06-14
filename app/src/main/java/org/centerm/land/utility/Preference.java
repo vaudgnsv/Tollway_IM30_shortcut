@@ -96,6 +96,8 @@ public class Preference {
     public static final String KEY_SETTLE_VOID_COUNT_POS = Preference.class.getName() + "key_settle_void_count_pos";
     public static final String KEY_SETTLE_VOID_TOTAL_POS = Preference.class.getName() + "key_settle_void_total_pos";
     public static final String KEY_SETTLE_BATCH_POS = Preference.class.getName() + "key_settle_batch_pos";
+    public static final String KEY_SETTLE_TAX_FEE_SALE_POS = Preference.class.getName() + "key_settle_tax_fee_sale_pos";
+    public static final String KEY_SETTLE_TAX_FEE_VOID_POS = Preference.class.getName() + "key_settle_tax_fee_void_pos";
 
     public static final String KEY_SETTLE_TYPE_EPS = Preference.class.getName() + "key_settle_type_eps";
     public static final String KEY_SETTLE_DATE_EPS = Preference.class.getName() + "key_settle_date_eps";
@@ -105,6 +107,8 @@ public class Preference {
     public static final String KEY_SETTLE_VOID_COUNT_EPS = Preference.class.getName() + "key_settle_void_count_eps";
     public static final String KEY_SETTLE_VOID_TOTAL_EPS = Preference.class.getName() + "key_settle_void_total_eps";
     public static final String KEY_SETTLE_BATCH_EPS = Preference.class.getName() + "key_settle_batch_eps";
+    public static final String KEY_SETTLE_TAX_FEE_SALE_EPS = Preference.class.getName() + "key_settle_tax_fee_sale_eps";
+    public static final String KEY_SETTLE_TAX_FEE_VOID_EPS = Preference.class.getName() + "key_settle_tax_fee_void_eps";
 
     public static final String KEY_SETTLE_TYPE_TMS = Preference.class.getName() + "key_settle_type_tms";
     public static final String KEY_SETTLE_DATE_TMS = Preference.class.getName() + "key_settle_date_tms";
