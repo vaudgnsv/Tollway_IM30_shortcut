@@ -20,35 +20,40 @@
             <TextView
                 android:id="@+id/cardNameLabel"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:text="CARD NAME"
-                android:fontFamily="@font/microsoft_sans_serif"
+                android:fontFamily="@font/robotomono"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textStyle="bold"/>
             <TextView
                 android:id="@+id/expDateLabel"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:text="EXP DATE"
-                android:fontFamily="@font/microsoft_sans_serif"
+                android:fontFamily="@font/robotomono"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textStyle="bold" />
             <TextView
                 android:id="@+id/transactionLabel"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:text="TRANSACTION"
-                android:fontFamily="@font/microsoft_sans_serif"
+                android:fontFamily="@font/robotomono"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/approvalCodeLabel"
-                android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:text="APPROVAL CODE"
-                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotomono"
+                android:text="APPROVAL CODE"
+                android:textColor="@android:color/black"
+                android:textSize="11sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -58,38 +63,44 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
+
             <TextView
                 android:id="@+id/cardNumberLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotomono"
+                android:text="XXXX XXXX XXXX XXXX"
                 android:textColor="@android:color/black"
                 android:textSize="10sp"
-                android:text="Card Number"
-                android:fontFamily="@font/microsoft_sans_serif"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:textStyle="bold" />
             <TextView
                 android:id="@+id/traceNoLabel"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:text="Trace No"
-                android:fontFamily="@font/microsoft_sans_serif"
+                android:fontFamily="@font/robotomono"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textStyle="bold" />
             <TextView
                 android:id="@+id/amountLabel"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:text="TRANSACTION"
-                android:fontFamily="@font/microsoft_sans_serif"
+                android:fontFamily="@font/robotomono"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/dateTimeLabel"
-                android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:text="APPROVAL CODE"
-                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/robotomono"
+                android:text="27/05/19,14:40:35"
+                android:textColor="@android:color/black"
+                android:textSize="11sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
 

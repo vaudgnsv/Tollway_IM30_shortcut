@@ -15,11 +15,11 @@
         android:paddingStart="8dp">
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/comCodeLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -46,18 +46,18 @@
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/ref1LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/timeburnerbold"
-                android:text="Ref1 : "
+                android:text="REF1 : "
                 android:textColor="@android:color/white"
                 android:textSize="22sp" />
 
@@ -70,25 +70,25 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/menu_service_white"
                 android:gravity="center"
-                android:inputType="number"
+                android:inputType="textEmailAddress"
                 android:minWidth="145dp"
                 android:padding="8dp"
                 android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/ref2LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/timeburnerbold"
-                android:text="Ref2 : "
+                android:text="REF2 : "
                 android:textColor="@android:color/white"
                 android:textSize="22sp" />
 
@@ -101,25 +101,25 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/menu_service_white"
                 android:gravity="center"
-                android:inputType="number"
+                android:inputType="textEmailAddress"
                 android:minWidth="145dp"
                 android:padding="8dp"
                 android:textSize="25sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/ref3LinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/timeburnerbold"
-                android:text="Ref3 : "
+                android:text="REF3 : "
                 android:textColor="@android:color/white"
                 android:textSize="22sp" />
 
@@ -132,7 +132,7 @@
                 android:layout_marginStart="8dp"
                 android:background="@drawable/menu_service_white"
                 android:gravity="center"
-                android:inputType="number"
+                android:inputType="textEmailAddress"
                 android:minWidth="145dp"
                 android:padding="8dp"
                 android:textSize="25sp" />

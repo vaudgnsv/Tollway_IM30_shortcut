@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:background="@drawable/mainlayout">
+
+    <include
+        android:id="@+id/contentToolbarNewCard"
+        layout="@layout/content_toolbar_new_card" />
+
+
+    <LinearLayout
+
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/krungthai_fast_bold"
+            android:gravity="center"
+            android:text="กรุณาแตะบัตร หรือเลือก\n สร้างคิวอาร์โค้ดเพื่อรับชำระเงิน"
+            android:textColor="@color/color_PreciousBlue_M60_K90"
+            android:textSize="25sp" />
+
+        <ImageView
+            android:id="@+id/img_qr"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:background="@drawable/pressed_menu"
+            android:elevation="5dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:scaleType="centerInside"
+            android:visibility="visible"
+            android:src="@drawable/icon_qr" />
+
+
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/textViewAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:gravity="center"
+                android:text="100.00 "
+                android:textColor="@color/color_PreciousBlue_M60_K90"
+                android:textSize="45sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:gravity="center"
+                android:text="  บาท"
+                android:textColor="@color/color_PreciousBlue_M60_K90"
+                android:textSize="45sp" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+    <Button
+        android:layout_gravity="bottom"
+        android:id="@+id/btn_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:background="@drawable/button_pressed_blue"
+        android:elevation="5dp"
+        android:fontFamily="@font/krungthai_fast_bold"
+        android:text="กลับสู่หน้าจอหลัก"
+        android:textAllCaps="true"
+        android:textColor="@color/color_White"
+        android:textSize="20sp" />
+
+
+</FrameLayout>

@@ -19,8 +19,8 @@
             <TextView
                 android:id="@+id/cardLabel"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:text="TAX"
+                android:textSize="9sp"
+                android:text="CardNo"
                 android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

@@ -1,0 +1,388 @@
+package org.centerm.Tollway.healthcare.baseavtivity;
+
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
+
+import com.centerm.centermposoversealib.tleservice.AidlTleService;
+import com.centerm.centermposoversealib.tleservice.TleParamMap;
+import com.centerm.smartpos.aidl.sys.AidlDeviceManager;
+
+import org.centerm.Tollway.MainApplication;
+import org.centerm.Tollway.activity.posinterface.PosInterfaceActivity;
+import org.centerm.Tollway.core.BlockCalculateUtil;
+import org.centerm.Tollway.core.ChangeFormat;
+import org.centerm.Tollway.core.CustomSocketListener;
+import org.centerm.Tollway.core.DataExchanger;
+import org.centerm.Tollway.utility.Preference;
+
+import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static org.centerm.Tollway.core.ChangeFormat.bcd2Str;
+
+
+public abstract class BaseHealthCardActivity extends BaseToolbarActivity {
+
+    private final String TAG = "BaseHealthCardActivity";
+
+    private CustomSocketListener customSocketListener;
+    private ExecutorService sFixedThreadPool;
+    private String PRIMARY_HOST;
+    private String PRIMARY_PORT;
+
+    private String SECONDARY_HOST;
+    private String SECONDARY_PORT;
+    private AidlTleService tleVersionOneHealthcare;
+    private String[] mBlockDataReceived;
+
+//    private PosInterfaceActivity posInterfaceActivity = MainApplication.getPosInterfaceActivity();      // 20180712
+    private PosInterfaceActivity posInterfaceActivity;
+
+//    private Context context = null;     // Paul_20180711
+
+    protected String getLength62(String slength62) {
+        StringBuilder length = new StringBuilder();
+        Log.d(TAG, "getLength62: " + slength62.length());
+        for (int i = slength62.length(); i < 4; i++) {
+            length.append("0");
+        }
+        Log.d(TAG, "getLength62: " + length + slength62);
+        return length + slength62;
+    }
+
+    private void sendStr(final String stringss) {
+        if (stringss == null || stringss.isEmpty()) {
+            //showMessage("The data to send is null or empty");
+            Log.d(TAG, "The data to send is null or empty");
+            return;
+        }
+
+        try {
+            //Log.d(TAG, "DATA TO SEND => "+stringss);
+            sFixedThreadPool = Executors.newFixedThreadPool(3);
+            sFixedThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        PRIMARY_HOST = Preference.getInstance(BaseHealthCardActivity.this).getValueString(Preference.KEY_PRIMARY_IP);
+                        PRIMARY_PORT = Preference.getInstance(BaseHealthCardActivity.this).getValueString(Preference.KEY_PRIMARY_PORT);
+                        SECONDARY_HOST = Preference.getInstance(BaseHealthCardActivity.this).getValueString(Preference.KEY_SECONDARY_IP);
+                        SECONDARY_PORT = Preference.getInstance(BaseHealthCardActivity.this).getValueString(Preference.KEY_SECONDARY_PORT);
+                        Log.d(TAG, "Host => " + PRIMARY_HOST + " [" + PRIMARY_PORT + "]");
+
+                        Log.d(TAG, "Message Length = " + stringss.length());
+                        Log.d(TAG, "Message % 2 = " + (stringss.length() % 2));
+                        //Log.d(TAG, "TRACK2 length = "+TRACK2.length());
+
+                        DataExchanger dataExchanger = new DataExchanger(1, PRIMARY_HOST, Integer.valueOf(PRIMARY_PORT), SECONDARY_HOST, Integer.valueOf(SECONDARY_PORT));
+                        Log.d(TAG, "pass to new DataExchanger");
+                        byte[] clientData = ChangeFormat.writeUTFSpecial(stringss);
+                        Log.d(TAG, "pass to ChangeFormat");
+                        dataExchanger.doExchange(clientData, customSocketListener);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            //showMessage(e.toString());
+            Log.d(TAG, e.toString());
+        }
+    }
+
+    protected void packageAndSend(String TPDU, String messageType, String[] mBlockData) {
+        //processCallback(PROCESS_REQUEST_INSERT_DB);
+        Log.d(TAG, "packageAndSend: " + mBlockData.toString());
+
+
+        String applicationData = BlockCalculateUtil.calculateApplicationData(mBlockData);
+        String dataToSend = "";
+        dataToSend = dataToSend + TPDU;
+        dataToSend = dataToSend + messageType;
+        dataToSend = dataToSend + applicationData;
+        dataToSend = dataToSend.trim();
+
+        Log.d(TAG, "Raw packageAndSend => " + dataToSend);
+System.out.printf("utility:: %s packageAndSend 0001\n",TAG);
+// Paul_20180711
+ /*
+        if(managerTle == null)
+        {
+            bindService();      // Paul_20180711
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+*/
+        dataToSend = OnUsEncryptionMsg(dataToSend);
+// Paul_20180522 End
+        if (dataToSend != null) {
+            Log.d(TAG, "Encrypted DATATOSEND => " + dataToSend);
+            sendStr(dataToSend);
+        } else {
+            Log.d(TAG, "Encrypted Data is return NULL!!!");
+            //sendStr(plainData);
+        }
+    }
+
+    private String OnUsEncryptionMsg(String InputISOMessage) {
+        String OutputISOMessage = null;
+
+        try {
+            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+            hashMap.put("ISOMESSAGE", InputISOMessage);
+            TleParamMap tleParamMap = new TleParamMap();
+            tleParamMap.setParamMap(hashMap);
+            System.out.printf("utility:: ######################################### OnUsEncryptionMsg 003 \n");
+            OutputISOMessage = tleVersionOneHealthcare.tleFuncton("OnUstleEncryption", tleParamMap);
+            System.out.printf("utility:: ######################################### OnUsEncryptionMsg 004 \n");
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        return OutputISOMessage;
+    }
+
+    protected void TestIso8583MessageCheckHC (String inputString) {
+        try {
+            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+            hashMap.put("INPUTSTRING", inputString);
+            TleParamMap tleParamMap = new TleParamMap();
+            tleParamMap.setParamMap(hashMap);
+            tleVersionOneHealthcare.tleFuncton("TestIso8583MsgCheck", tleParamMap);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String OnUsDecryptionMsg(String InputISOMessage) {
+        String OutputISOMessage = null;
+
+        try {
+            HashMap<String, Object> hashMap = new HashMap<String, Object>();
+            hashMap.put("ISOMESSAGE", InputISOMessage);
+            TleParamMap tleParamMap = new TleParamMap();
+            tleParamMap.setParamMap(hashMap);
+            System.out.printf("utility:: ######################################### OnUsDecryptionMsg 003 \n");
+            OutputISOMessage = tleVersionOneHealthcare.tleFuncton("OnUstleDecryption", tleParamMap);
+            System.out.printf("utility:: ######################################### OnUsDecryptionMsg 004 \n");
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        return OutputISOMessage;
+    }
+
+    private void connect() {
+        customSocketListener = new CustomSocketListener() {
+            @Override
+            public void ConnectTimeOut() {
+                posInterfaceActivity = MainApplication.getPosInterfaceActivity();
+                Log.d(TAG, "ConnectTimeOut: ");
+//                if(posInterfaceActivity.PosInterfaceExistFlg == 1)  // Paul_20180712
+//                {
+//                    posInterfaceActivity.TerToPosCancel();
+//                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        connectTimeOut();
+                    }
+                });
+                if(posInterfaceActivity.PosInterfaceExistFlg == 1)  // Paul_20180712
+                {
+                    posInterfaceActivity.TerToPosCancel();
+                }
+            }
+
+            @Override
+            public void TransactionTimeOut() {
+                posInterfaceActivity = MainApplication.getPosInterfaceActivity();
+                Log.d(TAG, "TransactionTimeOut: ");
+//                if(posInterfaceActivity.PosInterfaceExistFlg == 1)  // Paul_20180712
+//                {
+//                    posInterfaceActivity.TerToPosCancel();
+//                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        transactionTimeOut();
+                    }
+                });
+                if(posInterfaceActivity.PosInterfaceExistFlg == 1)  // Paul_20180712
+                {
+                    posInterfaceActivity.TerToPosCancel();
+                }
+            }
+
+            @Override
+            public void Received(final byte[] data) {
+                System.out.printf("utility:: %s received \n",TAG);
+                Log.d(TAG, "RECEIVED DATA:" + bcd2Str(data));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        received(dealWithTheResponse(bcd2Str(data)));
+                    }
+                });
+            }
+
+            @Override
+            public void Error(final String error) {
+                Log.d(TAG, "Error: ");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        error(error);
+                    }
+                });
+
+            }
+
+            @Override
+            public void Other() {
+                Log.d(TAG, "Other: ");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        other();
+                    }
+                });
+
+            }
+        };
+    }
+
+    private String[] dealWithTheResponse(String response) {
+        String raw_data;
+
+        Log.d(TAG, "Encrypted Response Data：" + response);
+
+        response = response.substring(4);
+        // Paul_20180522 Start
+
+        raw_data = OnUsDecryptionMsg(response); // send to decrypt no need length
+
+// Paul_20180522 End
+//        raw_data = decryptMsg(response); // send to decrypt no need length
+
+
+        //raw_data = raw_data.substring(4); // already cut length
+        mBlockDataReceived = BlockCalculateUtil.getReceivedDataBlock(raw_data);
+
+        Log.d(TAG, "Decrypted Response Data：" + raw_data);
+
+        for (int i = 0; i < mBlockDataReceived.length; i++) {
+            //System.out.println((i+1)+":"+mBlockDataReceived[i]);
+            Log.d(TAG, (i + 1) + ":" + mBlockDataReceived[i]);
+        }
+
+
+        String result = BlockCalculateUtil.checkResult(mBlockDataReceived[39 - 1]);
+        Log.d(TAG, "RETURN INFO OF 37:" + mBlockDataReceived[37 - 1]);
+        Log.d(TAG, "RETURN INFO OF 38:" + mBlockDataReceived[38 - 1]);
+        Log.d(TAG, "RETURN INFO OF 39:" + mBlockDataReceived[39 - 1]);
+        Log.d(TAG, "RETURN INFO OF 55:" + mBlockDataReceived[55 - 1]);
+        Log.d(TAG, "RETURN INFO OF 63:" + mBlockDataReceived[63 - 1]);
+
+        return mBlockDataReceived;
+    }
+
+    public void bindService() {
+/*
+        //  Must enter this few code to make
+        //  CompactUtil can call context without null
+        System.out.printf("utility:: BaseHealth bindService 001 \n");
+        CompactUtil.instance(context);
+        System.out.printf("utility:: BaseHealth bindService 002 \n");
+        Intent intentTle = new Intent();
+        intentTle.setPackage("com.centerm.smartpostestforandroidstudio");
+        intentTle.setAction("com.centerm.TleFunction.MANAGER_SERVICE");
+        context.bindService(intentTle, connTle, Context.BIND_AUTO_CREATE);
+*/
+
+        System.out.printf("utility:: BaseHealth bindService 001 \n");
+        Intent intentTle = new Intent();
+        intentTle.setPackage("com.centerm.smartpostestforandroidstudio");
+//        intentTle.setPackage("com.centerm.tle");
+        intentTle.setAction("com.centerm.TleFunction.MANAGER_SERVICE");
+        bindService(intentTle, connTle, Context.BIND_AUTO_CREATE);
+
+    }
+
+    private AidlDeviceManager managerTle;      // Paul_20180711
+    private ServiceConnection connTle = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            System.out.printf("utility:: onServiceConnected managerTle 0052 \n");
+            managerTle = AidlDeviceManager.Stub.asInterface(service);
+            Log.d(TAG, "Tle 服务绑定成功");
+            System.out.printf("utility:: onServiceConnected managerTle 0003 \n");
+            if (null != managerTle) {
+                System.out.printf("utility:: onServiceConnected managerTle 0004 \n");
+                tle_initialize(managerTle);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            System.out.printf("utility:: onServiceConnected managerTle 0051 \n");
+            managerTle = null;
+            Log.d(TAG, "Tle服务绑定失败");
+        }
+    };
+
+    private void tle_initialize(AidlDeviceManager deviceManager) {
+        try {
+System.out.printf("utility:: %s tle_initialize tleVersionOneHealthcare 001 \n",TAG);
+            tleVersionOneHealthcare = AidlTleService.Stub.asInterface(deviceManager.getDevice(999));
+            Log.d(TAG, "TLE Service is " + ((tleVersionOneHealthcare != null) ? "not null" : "null"));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void unbindService() {
+        unbindService(connTle);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bindService();
+        connect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+        unbindService();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        customSocketListener = null;
+    }
+
+    protected abstract void connectTimeOut();
+
+    protected abstract void transactionTimeOut();
+
+    protected abstract void received(String[] data);
+
+    protected abstract void error(String error);
+
+    protected abstract void other();
+
+ }

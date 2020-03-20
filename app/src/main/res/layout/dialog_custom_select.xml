@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_SkyBlue_C90">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:gravity="center"
+                android:text="ตรวจสอบชื่อและเลขบัตรบนสลิป"
+                android:textColor="@android:color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <include layout="@layout/content_background_blue_curve" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/closeImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/white"
+            android:src="@drawable/cancel2_128x128"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/closeImage"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_waitting_new"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ic_wait_active" />
+
+            <ImageView
+                android:id="@+id/waitingImage"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ic_wait" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/msgLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/krungthai_fast_regular"
+            android:text="พิมพ์ซ้ำ"
+            android:textColor="@color/color_SkyBlue_C90"
+            android:textSize="25sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/CancelBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/krungthai_fast_bold"
+            android:text="ไม่พิมพ์"
+            android:textColor="@color/color_White"
+            android:textSize="20sp"
+
+            android:elevation="5dp"
+            android:background="@drawable/button_pressed_red"
+            android:layout_margin="5dp"/>
+
+        <Button
+            android:id="@+id/okBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/krungthai_fast_bold"
+            android:text="พิมพ์"
+            android:textColor="@color/color_White"
+            android:textSize="20sp"
+
+            android:elevation="5dp"
+            android:background="@drawable/button_pressed_green"
+            android:layout_margin="5dp"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

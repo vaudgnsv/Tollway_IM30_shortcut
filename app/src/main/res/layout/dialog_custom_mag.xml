@@ -32,8 +32,7 @@
         android:layout_marginTop="8dp"
         android:textColor="@android:color/white"
         android:textSize="35sp"
-        android:text="Chip Malfunction
-กรุณารูดบัตร#"
+        android:text="กรุณารูดบัตร"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

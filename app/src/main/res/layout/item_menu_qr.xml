@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView android:foreground="?android:attr/selectableItemBackground"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/menuCardView"
-    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="4dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="160dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_margin="5dp"
+    android:background="@drawable/pressed_menu"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:gravity="center"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp">
 
     <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:minHeight="120dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
 
         <ImageView
-            android:layout_margin="8dp"
             android:id="@+id/iconQrImage"
-            android:layout_height="match_parent"
-            android:layout_weight="0.7"
-            android:layout_width="0dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:src="@drawable/img_waiting" />
 
         <TextView
-            android:gravity="center_vertical"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:layout_margin="8dp"
             android:id="@+id/nameMenuLabel"
-            android:layout_height="match_parent"
-            android:layout_weight="1.3"
-            android:layout_width="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/krungthai_fast_bold"
+            android:gravity="center"
+            android:text="@null"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

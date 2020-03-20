@@ -5,10 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/contentToolbar"
-        layout="@layout/content_toolbar" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,10 +18,10 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/printBtn"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="18sp"
             android:layout_marginStart="18sp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="18sp"
+            android:layout_marginBottom="10dp"
             android:background="@android:color/white"
             android:padding="4dp">
 
@@ -55,7 +51,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="70dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/logo_image_ktb_bw" />
+                            android:src="@drawable/logo_ktb" />
 
 
                     </LinearLayout>
@@ -82,37 +78,40 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:orientation="vertical">
 
                     <TextView
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
                         android:id="@+id/merchantName1Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                        android:text="Header Line1"
+                        android:text="TESTTTT"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/hender_Line" />
 
                     <TextView
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
                         android:id="@+id/merchantName2Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                        android:text="Header Line2"
+                        android:text=""
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/hender_Line" />
 
                     <TextView
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
                         android:id="@+id/merchantName3Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:text="Header Line3"
+                        android:text=""
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/hender_Line" />
                 </LinearLayout>
@@ -125,10 +124,11 @@
 
 
                     <TextView
-                        android:layout_weight="0.8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:layout_weight="0.8"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:text="Date/Time"
                         android:textAllCaps="true"
                         android:textColor="@android:color/black"
@@ -144,23 +144,25 @@
                         android:textSize="10sp" />
 
                     <TextView
-                        android:layout_weight="0.8"
                         android:id="@+id/dateLabel"
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:text="15/08/18"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
                     <TextView
 
-                        android:layout_weight="0.8"
-                        android:layout_marginStart="10dp"
                         android:id="@+id/timeLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="0.8"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="end"
                         android:text="09:54:33"
                         android:textColor="@android:color/black"
@@ -182,7 +184,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                             android:text="MID"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
@@ -204,7 +207,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2.4"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:text="111111212424123"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
@@ -226,7 +230,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                             android:text="TID"
                             android:textAllCaps="true"
                             android:textColor="@android:color/black"
@@ -248,7 +253,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2.4"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:text="3123123123"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
@@ -261,46 +267,18 @@
                     android:weightSum="3">
 
 
-                    <TextView
-                        android:layout_weight="0.55"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="Batch"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_weight="1"
-                        android:id="@+id/batchLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="000473"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
                     <LinearLayout
-                        android:layout_weight="2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:orientation="horizontal">
 
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                             android:text="HOST"
                             android:textColor="@android:color/black"
                             android:textSize="10sp" />
@@ -319,24 +297,46 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                             android:text="KTB ONUS"
                             android:textColor="@android:color/black"
                             android:textSize="10sp" />
                     </LinearLayout>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="2dp"
+                        android:text=":"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/batchLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
+                        android:text="000473"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.55"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
+                        android:text="Batch"
+                        android:textAllCaps="true"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
 
                 </LinearLayout>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="SUMMARY REPORT"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
 
 
                 <LinearLayout
@@ -357,7 +357,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="center"
                         android:text="COUNT"
                         android:textColor="@android:color/black"
@@ -368,13 +369,15 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="center"
                         android:text="Total"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -391,7 +394,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                             android:gravity="start"
                             android:text="SALES"
                             android:textColor="@android:color/black"
@@ -405,7 +409,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="center"
                         android:text="2"
                         android:textColor="@android:color/black"
@@ -417,7 +422,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="end"
                         android:text="300.00"
                         android:textColor="@android:color/black"
@@ -440,7 +446,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                             android:gravity="start"
                             android:text="VOID SALES"
                             android:textColor="@android:color/black"
@@ -454,7 +461,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@android:color/black"
@@ -466,21 +474,14 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="end"
                         android:text="0.00"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
                 </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:text="--------------------------------------------------------------------------------------------------------------------------------------------"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -497,9 +498,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                             android:gravity="start"
-                            android:text="CARD TOTALS"
+                            android:text="TOTALS"
                             android:textColor="@android:color/black"
                             android:textSize="10sp" />
 
@@ -511,7 +513,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@android:color/black"
@@ -523,7 +526,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+android:textStyle="bold"
                         android:gravity="end"
                         android:text="0.00"
                         android:textColor="@android:color/black"
@@ -531,11 +535,34 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:textStyle="bold"
+                    android:id="@+id/subjectSlipLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/robotomono"
+                    android:text="SUMMARY REPORT"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="--------------------------------------------------------------------------------------------------------------------------------------------"
+                    android:textColor="@android:color/black"
+                    android:textSize="10sp" />
+
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 
     </RelativeLayout>
+
+    <include
+        android:id="@+id/contentToolbar"
+        layout="@layout/content_toolbar" />
 
     <include layout="@layout/content_exit" />
 </RelativeLayout>

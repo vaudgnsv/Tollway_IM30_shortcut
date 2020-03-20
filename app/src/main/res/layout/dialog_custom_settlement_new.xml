@@ -1,0 +1,3032 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:id="@+id/linear_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_SkyBlue_C90">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:gravity="center"
+                android:text="เลือกรายการ"
+                android:textColor="@android:color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <include layout="@layout/content_background_blue_curve" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linear_title"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+
+            <CheckBox
+                android:id="@+id/checkbox_Settlement_All"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:onClick="onCheckboxClicked"
+                android:text="All"
+                android:textColor="@color/color_BusinessSilver_K60"
+                android:textSize="18sp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_BusinessSilver_K60">
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_checkbox_KTB_ON_US"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkbox_KTB_ON_US"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:onClick="onCheckboxClicked"
+                    android:text=""
+                    android:textColor="@color/color_BusinessSilver_K60"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_KTB_ON_US"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="KrungThai ON US"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/linear_KTB_ON_US"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Accquirer Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Accquirer_Name_on_us"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="KTB ONUS"
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchat Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_Name_on_us"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchant No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_No_on_us"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Terminal No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Terminal_No_on_us"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Batch No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Batch_No_on_us"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_BusinessSilver_K60">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="Total"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_count_ONUS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_total_ONUS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOID SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_count_ONUS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_total_ONUS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="TOTALS"
+                        android:textSize="16sp" />
+
+                        <TextView
+                        android:id="@+id/tv_totals_count_ONUS"
+                        android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                            android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_total_ONUS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                            android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btn_transfer_ON_US"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_pressed_blue"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/krungthai_fast_bold"
+
+                        android:text="โอนเงินเข้าบัญชี"
+                        android:textColor="@color/color_White"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_checkbox_BASE24_POS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkbox_BASE24_POS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:onClick="onCheckboxClicked"
+                    android:text=""
+                    android:textColor="@color/color_BusinessSilver_K60"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_BASE24_POS"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="BASE24 POS"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_BASE24_POS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Accquirer Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Accquirer_Name_POS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="BASE24 POS"
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchat Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_Name_POS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchant No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_No_POS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Terminal No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Terminal_No_POS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Batch No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Batch_No_POS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_BusinessSilver_K60">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="Total"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_count_POS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_total_POS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOID SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_count_POS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_total_POS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="TOTALS"
+                        android:textSize="16sp" />
+
+                        <TextView
+                        android:id="@+id/tv_totals_count_POS"
+                        android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                            android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_total_POS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                            android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btn_transfer_pos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_pressed_blue"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/krungthai_fast_bold"
+
+                        android:text="โอนเงินเข้าบัญชี"
+                        android:textColor="@color/color_White"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_checkbox_BASE24_EPS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkbox_BASE24_EPS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:onClick="onCheckboxClicked"
+                    android:text=""
+                    android:textColor="@color/color_BusinessSilver_K60"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_BASE24_EPS"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="WAY4"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_BASE24_EPS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Accquirer Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Accquirer_Name_EPS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="WAY4"
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchat Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_Name_EPS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchant No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_No_EPS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Terminal No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Terminal_No_EPS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Batch No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Batch_No_EPS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_BusinessSilver_K60">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="Total"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_count_EPS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_total_EPS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOID SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_count_EPS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_total_EPS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="TOTALS"
+                        android:textSize="16sp" />
+
+                        <TextView
+                        android:id="@+id/tv_totals_count_EPS"
+                        android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                            android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_total_EPS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <Button
+                        android:id="@+id/btn_transfer_EPS"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_pressed_blue"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/krungthai_fast_bold"
+
+                        android:text="โอนเงินเข้าบัญชี"
+                        android:textColor="@color/color_White"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_checkbox_Health_Care"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkbox_Health_Care"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:onClick="onCheckboxClicked"
+                    android:text=""
+                    android:textColor="@color/color_BusinessSilver_K60"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_HC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="Health Care"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_HC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Accquirer Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Accquirer_Name_HC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="Health Care"
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchat Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_Name_HC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchant No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_No_HC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Terminal No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Terminal_No_HC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Batch No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Batch_No_HC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_BusinessSilver_K60">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="Total"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_count_HC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_total_HC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOID SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_count_HC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_total_HC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="TOTALS"
+                        android:textSize="16sp" />
+
+                        <TextView
+                        android:id="@+id/tv_totals_count_HC"
+                        android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                            android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_total_HC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                            android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btn_transfer_HC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_pressed_blue"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/krungthai_fast_bold"
+
+                        android:text="โอนเงินเข้าบัญชี"
+                        android:textColor="@color/color_White"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp">
+
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_checkbox_Qr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkbox_Qr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:onClick="onCheckboxClicked"
+                    android:text=""
+                    android:textColor="@color/color_BusinessSilver_K60"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_qr"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="QR"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_qr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Accquirer Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Accquirer_Name_QR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="QR"
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchat Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_Name_QR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchant No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_No_QR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Terminal No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Terminal_No_QR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Batch No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Batch_No_QR"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_BusinessSilver_K60">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="Total"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_count_QR"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_total_QR"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOID SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_count_QR"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_total_QR"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="TOTALS"
+                        android:textSize="16sp" />
+
+                        <TextView
+                        android:id="@+id/tv_totals_count_QR"
+                        android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                            android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_total_QR"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                            android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btn_transfer_qr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_pressed_blue"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/krungthai_fast_bold"
+
+                        android:text="โอนเงินเข้าบัญชี"
+                        android:textColor="@color/color_White"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
+
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- Paul_20181023 ALI WEC Add -->
+            <LinearLayout
+                android:id="@+id/linear_checkbox_Ali"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkbox_Ali"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:onClick="onCheckboxClicked"
+                    android:text=""
+                    android:textColor="@color/color_BusinessSilver_K60"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_ali"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="ALIPAY"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_ali"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Accquirer Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Accquirer_Name_ALI"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="ALIPAY"
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchat Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_Name_ALI"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchant No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_No_ALI"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Terminal No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Terminal_No_ALI"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Batch No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Batch_No_ALI"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_BusinessSilver_K60">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="Total"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_count_ALI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_total_ALI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOID SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_count_ALI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_total_ALI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="TOTALS"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_count_ALI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_total_ALI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btn_transfer_ali"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_pressed_blue"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/krungthai_fast_bold"
+
+                        android:text="โอนเงินเข้าบัญชี"
+                        android:textColor="@color/color_White"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
+
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- Paul_20181023 WEC Add -->
+            <LinearLayout
+                android:id="@+id/linear_checkbox_Wec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/checkbox_Wec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:onClick="onCheckboxClicked"
+                    android:text=""
+                    android:textColor="@color/color_BusinessSilver_K60"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_wec"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="WECHAT PAY"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_wec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Accquirer Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Accquirer_Name_WEC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="WECHAT PAY"
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchat Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_Name_WEC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchant No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Merchant_No_WEC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Terminal No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Terminal_No_WEC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Batch No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Batch_No_WEC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_BusinessSilver_K60">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="COUNT"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="Total"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_count_WEC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_sale_total_WEC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOID SALES"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_count_WEC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_void_total_WEC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text=""
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="TOTALS"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_count_WEC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_totals_total_WEC"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="0.00"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btn_transfer_wec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_pressed_blue"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/krungthai_fast_bold"
+
+                        android:text="โอนเงินเข้าบัญชี"
+                        android:textColor="@color/color_White"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
+
+                </FrameLayout>
+            </LinearLayout>
+
+
+
+
+<!-- Paul_20181022 ALI no support
+            <LinearLayout
+                android:id="@+id/linear_checkbox_Ali"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <CheckBox
+                    android:id="@+id/checkbox_Ali"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:onClick="onCheckboxClicked"
+                    android:text=""
+                    android:textColor="@color/color_BusinessSilver_K60"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tv_ali"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="Alipay"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_ali"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Accquirer Name"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_Accquirer_Name_ALIPAY"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="Alipay"
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Merchat ID"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_merid_ali"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Store ID"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_storeid_ali"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Device ID"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_deviceid_ali"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Batch No."
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txt_batch_ali"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text=""
+                        android:textColor="@color/color_PreciousBlue_M40_K70"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/color_BusinessSilver_K60">
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="Trans Type/Time"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="right"
+                        android:text="Amount"
+                        android:textColor="@color/color_SkyBlue_C90"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="SALE"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/tv_SALE_time_ALIPAY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:text="00.00.00"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tv_SALE_amount_ALIPAY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                            android:textColor="@color/color_PreciousBlue_M40_K70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="REFUND"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/tv_REFUND_time_ALIPAY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:text="00.00.00"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tv_REFUND_amount_ALIPAY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                            android:textColor="@color/color_PreciousBlue_M40_K70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOIDED SALE"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/tv_VOIDEDSALE_time_ALIPAY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:text="00.00.00"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tv_VOIDEDSALE_amount_ALIPAY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                            android:textColor="@color/color_PreciousBlue_M40_K70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="VOIDED REFUND"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/tv_VOIDEDREFUND_time_ALIPAY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:text="00.00.00"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tv_VOIDEDREFUND_amount_ALIPAY"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/krungthai_fast_bold"
+                            android:gravity="right"
+                            android:text="0.00"
+                            android:textColor="@color/color_PreciousBlue_M40_K70"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btn_transfer_alipay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_pressed_blue"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/krungthai_fast_bold"
+
+                        android:text="โอนเงินเข้าบัญชี"
+                        android:textColor="@color/color_White"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
+
+                </FrameLayout>
+            </LinearLayout>
+-->
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <Button
+            android:id="@+id/btn_ok_settlement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_pressed_blue"
+            android:elevation="5dp"
+            android:fontFamily="@font/krungthai_fast_bold"
+
+            android:text="ตกลง"
+            android:textColor="@color/color_White"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

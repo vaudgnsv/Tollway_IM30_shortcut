@@ -4,20 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_White"
     tools:context=".activity.menuvoid.MenuActivity">
 
-    <include
-        android:id="@+id/contentToolbar"
-        layout="@layout/content_toolbar" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/menuRecyclerView"
-        android:layout_centerInParent="true"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
 
-    </android.support.v7.widget.RecyclerView>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/color_SkyBlue_C90">
 
-    <include layout="@layout/content_exit" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:gravity="center"
+                android:text="พิมพ์รายงาน"
+                android:textColor="@android:color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </FrameLayout>
 
+        <include layout="@layout/content_background_blue_curve" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/menuRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="8"
+            android:background="@color/color_White">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <!--<include layout="@layout/content_exit" />-->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:background="@color/color_clear">
+
+            <include layout="@layout/content_logo_below" />
+        </FrameLayout>
+    </LinearLayout>
 </RelativeLayout>

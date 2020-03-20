@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_White"
+    tools:context=".activity.CalculatePriceActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@color/color_SkyBlue_C90"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dialogTitleLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/color_clear"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:text="รายละเอียดบัตรประชาชน"
+                android:textColor="@color/color_White"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <include layout="@layout/content_background_blue_curve" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/numberLinearLayout_test"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_clear"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/traceNumberLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="@font/timeburnerbold"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="23sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:fontFamily="@font/krungthai_fast_regular"
+                    android:text="CITIZEN-ID"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/cardNumberLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="เลขบัตรประชาชน"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/priceLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="85dp"
+                    android:layout_marginEnd="18dp"
+                    android:layout_marginStart="18dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:gravity="right"
+                    android:maxLength="15"
+                    android:paddingBottom="13dp"
+                    android:paddingTop="8dp"
+                    android:textColor="@color/color_SkyBlue_C90"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:windowSoftInputMode="stateHidden" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/oneClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/twoClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="2"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/threeClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/fourClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="4"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/fiveClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="5"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/sixClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="6"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/sevenClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="7"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/eightClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="8"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/nineClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="9"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="#00000000"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/remove" />
+                </FrameLayout>
+
+
+                <FrameLayout
+                    android:id="@+id/zeroClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="13dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="30sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/deleteClickFrameLayout"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/calculate_background_clear"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_backspace_arrow" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_pressed_red"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="ยกเลิก"
+                    android:textColor="@color/color_White"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/saveBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_pressed_green"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="ตกลง"
+                    android:textColor="@color/color_White"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

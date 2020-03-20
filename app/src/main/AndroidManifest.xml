@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.centerm.land">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.centerm.Tollway">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,6 +12,8 @@
     <permission android:name="android.permission.SET_TIME" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
@@ -23,74 +26,53 @@
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    
-    <uses-permission android:name="android.permission.CPAYSDK_SYSTEM_MODULE"/>
+    <uses-permission android:name="android.permission.CPAYSDK_SYSTEM_MODULE" />
 
     <!-- PERMISSION FOR CENTERM Device -->
-    <!-- 密码键盘权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_PINPAD_MODULE" />
-    <!-- 刷卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_SWIPE_MODULE" />
-    <!-- POBC权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_PBOC_MODULE" />
-    <!-- 新PBOC权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_NEW_PBOC_MODULE" />
-    <!-- IC卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_IC_MODULE" />
-    <!-- 非接卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_RF_MODULE" />
-    <!-- 打印机权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_PRINTER_MODULE" />
-    <!-- 系统设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_SYSTEM_MODULE" />
-    <!-- 钱箱设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_CASHBOX_MODULE" />
-    <!-- 客显设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_CUSTOMER_DISPLAY_MODULE" />
-    <!-- M1卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_M1_MODULE" />
-    <!-- MODEM设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_MODEM_MODULE" />
-    <!-- PSAM卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_PSAM_MODULE" />
-    <!-- 串口设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_SERIAL_PORT_MODULE" />
-    <!-- 辅屏设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_OLED_MODULE" />
-    <!-- 身份证设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_ID_MODULE" />
-    <!-- LCD设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_LCD_MODULE" />
-    <!-- 安全模块权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_SAFE_MODULE" />
-    <!-- MEM4442卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_MEM4442_MODULE" />
-    <!-- MEM102卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_MEM102_MODULE" />
-    <!-- MEM1608卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_MEM1608_MODULE" />
-    <!-- MEMAT24C02卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_MEMAT24C02_MODULE" />
-    <!-- 版本获取权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_VERSION_MODULE" />
-    <!-- 语音播报 -->
     <uses-permission android:name="android.permission.CPAYSDK_VOICE_MODULE" />
-    <!-- 静默安装应用接口权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_SILENT_INSTALL" />
-    <!-- 静默卸载应用接口权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_SILENT_UNINSTALL" />
-    <!-- 扫码权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_QUICK_SCAN" />
-    <!-- MEM4428卡设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_MEM4428_MODULE" />
-    <!-- WIFI探针设备权限 -->
     <uses-permission android:name="android.permission.CPAYSDK_WIFI_PROBE_MODULE" />
     <uses-permission android:name="android.permission.CPAYSDK_SYSTEM_MODULE" />
-    <!-- 接收开机广播权限 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+
+    <!-- PERMISSION FOR A920 Device -->
+    <uses-permission android:name="com.pax.permission.MAGCARD"/>
+    <uses-permission android:name="com.pax.permission.PED"/>
+    <uses-permission android:name="com.pax.permission.ICC"/>
+    <uses-permission android:name="com.pax.permission.PICC"/>
+    <uses-permission android:name="com.pax.permission.PRINTER"/>
+
 
     <application
         android:name=".MainApplication"
+        android:largeHeap="true"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ktb_logo10"
@@ -101,7 +83,6 @@
         <activity android:name=".activity.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -109,31 +90,91 @@
         <activity android:name=".activity.MenuServiceActivity" />
         <activity android:name=".activity.MenuServiceListActivity" />
         <activity android:name=".activity.CalculatePriceActivity" />
-        <activity
-            android:name=".activity.menuvoid.VoidActivity"
-            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.menuvoid.VoidActivity" />
         <activity android:name=".activity.SlipTemplateActivity" />
         <activity
             android:name=".activity.SettingActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".activity.menuvoid.MenuActivity" />
+
+
+        <activity android:name=".activity.MenuPaymentActivity"/>
+        <activity android:name=".activity.PosLinkSendActivity" />
+        <activity android:name=".activity.PosReprintActivity" />
+        <activity android:name=".activity.GameActivity" />
+        <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.settlement.MenuSettlementActivity" />
         <activity android:name=".activity.settlement.SlipSettlementActivity" />
-        <activity android:name=".activity.qr.MenuQrActivity" />
-        <activity
-            android:name=".activity.qr.GenerateQrActivity"
-            android:windowSoftInputMode="stateAlwaysVisible" />
-        <activity android:name=".activity.qr.CheckQrActivity" />
         <activity android:name=".activity.MenuDetailReportActivity" />
         <activity android:name=".activity.ReprintActivity" />
-        <activity android:name=".activity.PrintPreviousActivity"></activity>
+        <activity android:name=".activity.PrintPreviousActivity" />
 
-        <receiver android:name=".service.BootBroadcastReceiver" >
+        <activity android:name=".activity.ConsumeActivity" />
+
+        <receiver android:name=".service.BootBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name=".service.OtherDetectCard"
+            android:exported="true"
+            android:enabled="true">
+        </service>
+
+        <activity android:name=".alipay.AliServiceActivity" />
+        <activity android:name=".alipay.AliSlipActivity" />
+        <activity android:name=".alipay.AliReprintActivity" />
+        <activity android:name=".alipay.ScanQrActivity" />
+        <activity
+            android:name=".alipay.CaptureExtends"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".alipay.AliPriceActivity" />
+        <activity android:name=".alipay.AliQrActivity" />
+        <activity android:name=".alipay.AliComfirmActivity" />
+        <activity android:name=".alipay.AliPwActivity" />
+        <activity android:name=".alipay.AliSettingActivity" />
+        <activity android:name=".alipay.AliSettlementActivity" />
+        <activity android:name=".alipay.AliSettleSlipActivity" />
+        <activity android:name=".alipay.AliVoidActivity" />
+        <activity
+            android:name=".activity.qr.InquiryQrActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".utility.DeviceListActivity"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog" />
+        <activity android:name=".activity.ContactlessConfrimActivity"></activity>
+        <activity android:name=".activity.menuvoid.MenuActivity" />
+        <activity android:name=".activity.qr.CheckQrActivity" />
+        <activity android:name=".activity.qr.GenerateQrActivity" />
+        <activity android:name=".activity.qr.MenuQrActivity" />
+        <activity android:name=".activity.qr.ReprintQrActivity" />
+        <activity android:name=".activity.qr.ReprintQRCheckActivity" />
+        <activity
+            android:name=".activity.ReprintAnyActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activity.ReprintAnyActivity2"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".healthcare.activity.CalculateHelthCareActivity" />
+        <activity android:name=".healthcare.activity.CalculateHelthCareActivityNew" />
+        <activity android:name=".healthcare.activity.HealthCareActivity" />
+        <activity android:name=".healthcare.activity.healthcarevoid.VoidHealthCareActivity" />
+        <activity android:name=".healthcare.activity.IDActivity" />
+        <activity android:name=".healthcare.activity.IDActivity2" />
+        <activity android:name=".healthcare.activity.MedicalTreatmentActivity" />
+        <activity android:name=".healthcare.activity.offline.CalculateHelthCareOfflineActivity" />
+        <activity android:name=".healthcare.activity.SlipTemplateHealthCareActivity" />
+        <activity android:name=".activity.SettingForUserActivity" />
+        <activity android:name=".helper.printConfig" />
+
+
+
     </application>
 
 </manifest>

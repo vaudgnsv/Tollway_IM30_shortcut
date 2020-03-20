@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.menuvoid.VoidActivity">
+
+    <include
+        android:id="@+id/contentToolbar"
+        layout="@layout/content_toolbar" />
+
+    <LinearLayout
+        android:layout_above="@+id/linearLayoutToolbarBottom"
+        android:layout_below="@+id/contentToolbar"
+        android:background="@color/color_background"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:padding="20dp"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:imeOptions="actionSearch"
+                android:padding="8dp"
+                android:hint="Slip (Trace) : "
+                android:id="@+id/invoiceEt"
+                android:layout_weight="1.7"
+                android:inputType="number"
+                android:minHeight="50dp"
+                android:background="@drawable/under_line_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/searchInvoiceImage"
+                android:layout_weight="0.3"
+                android:padding="8dp"
+                android:background="@drawable/search_background"
+                android:src="@drawable/search_icon"
+                android:layout_width="0dp"
+                android:layout_height="50dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="@dimen/void_layout_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#567dca"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="0.8">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Trace"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@android:color/black" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:background="@android:color/black" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1.8">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Card no."
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@android:color/black" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Amount"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@android:color/black" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="0.6">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Type"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@android:color/black" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="0.8">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Time"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@android:color/black" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/void_layout_width"
+            android:layout_height="0.5dp"
+            android:layout_gravity="center"
+            android:background="@android:color/black" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/white"
+            android:id="@+id/recyclerViewVoid"
+            android:layout_width="@dimen/void_layout_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+    <include layout="@layout/content_exit"/>
+</RelativeLayout>

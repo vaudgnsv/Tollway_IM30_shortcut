@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Land</string>
+    <string name="app_name">TOLLWAY</string>
+    <string name="app_version">V1</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -33,14 +34,38 @@
     <string name="slip_no_refund">** NO REFUND **</string>
     <string name="slip_print">พิมพ์ ใบเสร็จรับเงิน</string>
     <string name="slip_pattern_amount">* %1$s</string>
-    <string name="slip_pattern_amount_void"> - %1$s</string>
-    <string name="date_qr">DATE : %1$s</string>
-    <string name="time_qr">TIME : %1$s</string>
-    <string name="tid_qr">TID : %1$s</string>
-    <string name="biller_id_qr">Biller ID : %1$s</string>
-    <string name="trace_no_qr">Trace No : %1$s</string>
-    <string name="ref1_qr">REF1 : %1$s</string>
-    <string name="ref2_qr">REF2 : %1$s</string>
-    <string name="slip_text">โปรดตรวจสอบความถูกต้องในทันทีที่ได้รับเอกสารนี้ \n หากไม่ทักท้วงจะถือว่ารายการดังกล่าวข้างต้น \n ถูกต้องสมบูรณ์</string>
+    <string name="slip_pattern_amount_normal"> %1$s</string>
+    <string name="slip_pattern_amount_void">- %1$s</string>
+    <string name="slip_SETTLE_pattern_amount_void"> %1$s</string>
+
+    <string name="date_qr">%1$s</string>
+    <string name="time_qr">%1$s</string>
+    <string name="tid_qr">%1$s</string>
+    <string name="biller_id_qr">%1$s</string>
+    <string name="trace_no_qr">%1$s</string>
+    <string name="ref1_qr">%1$s</string>
+    <string name="ref2_qr">%1$s</string>
+    <string name="ref3_qr">%1$s</string>
+    <string name="slip_text">โปรดตรวจสอบความถูกต้องในทันทีที่ได้รับเอกสารนี้\nหากไม่ทักท้วงจะถือว่ารายการดังกล่าวข้างต้น\nถูกต้องสมบูรณ์</string>
     <string name="version_app">V.1.5</string>
+    <string name="todo">test</string>
+    <!--  DeviceListActivity -->
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+
+    <!-- Options Menu -->
+    <string name="secure_connect">Connect a device - Secure</string>
+    <string name="insecure_connect">Connect a device - Insecure</string>
+    <string name="discoverable">Make discoverable</string>
+
+    <string name="remove_card">Please Remove Card&#8230;</string>
+    <string name="see_phone">Please See Phone&#8230;</string>
+    <string name="detect_card_again">Failed to read card, please try again</string>
+    <string name="entry_card_password">Please input the bank card password</string>
+    <string name="without_password">Without a password, press the Enter key</string>
 </resources>

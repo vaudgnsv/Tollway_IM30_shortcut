@@ -28,6 +28,7 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:visibility="gone"
                 android:imeOptions="actionSearch"
                 android:padding="8dp"
                 android:hint="invoice 6 หลัก"
@@ -40,6 +41,7 @@
                 android:layout_height="wrap_content" />
 
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/searchInvoiceImage"
                 android:layout_weight="0.3"
                 android:padding="8dp"

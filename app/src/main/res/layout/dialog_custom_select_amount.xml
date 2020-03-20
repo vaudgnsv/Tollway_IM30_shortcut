@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mainlayout">
+
+
+    <include
+        android:id="@+id/contentToolbarNewCard"
+        layout="@layout/content_toolbar_new_card" />
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <GridView
+                android:id="@+id/gridView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:numColumns="2" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <Button
+        android:layout_gravity="bottom"
+        android:id="@+id/btn_gotoMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:background="@drawable/button_pressed_blue"
+        android:elevation="5dp"
+        android:fontFamily="@font/krungthai_fast_bold"
+        android:text="กลับสู่หน้าจอหลัก"
+        android:textAllCaps="true"
+        android:textColor="@color/color_White"
+        android:textSize="20sp" />
+
+</FrameLayout>

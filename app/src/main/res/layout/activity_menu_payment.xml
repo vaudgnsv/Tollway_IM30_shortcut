@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SettingForUserActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_SkyBlue_C90">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:gravity="center"
+                android:text="ชำระเงิน"
+                android:textColor="@android:color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutMenuList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@+id/linearLayoutToolbarBottom"
+            android:layout_below="@+id/contentToolbar"
+            android:layout_weight="8.3"
+            android:background="@color/color_White"
+            android:orientation="vertical">
+
+            <!--<ImageView-->
+            <!--android:id="@+id/mainLogo"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="150dp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:src="@drawable/ktb_logo5" />-->
+            <include layout="@layout/content_background_blue_curve" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewPayment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:fadeScrollbars="false"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:scrollbarSize="24dp"
+                android:scrollbarThumbVertical="@color/color_toolbar_re"
+                android:scrollbars="vertical">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutToolbarBottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.7"
+            android:background="@color/color_White">
+
+            <include layout="@layout/content_logo_below" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

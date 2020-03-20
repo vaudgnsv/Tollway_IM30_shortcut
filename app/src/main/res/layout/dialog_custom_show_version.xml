@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_White"
+    android:orientation="vertical"
+    tools:context=".healthcare.activity.MedicalTreatmentActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_SkyBlue_C90"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_insertIdCard_01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@color/color_clear"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:text="เวอร์ชั่น"
+                android:textColor="@color/color_White"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/tv_line"
+                android:layout_width="100dp"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/color_White" />
+
+            <TextView
+                android:id="@+id/tv_label_qr01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@color/color_clear"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:text="ซอฟต์แวร์เวอร์ชั่น"
+                android:textColor="@color/color_White"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+
+            <include layout="@layout/content_background_blue_curve" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:background="@color/color_clear">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/krungthai_fast_regular"
+                        android:text="SOFTWARE VERSION NO."
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tv_softVer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/krungthai_fast_bold"
+                        android:text="-"
+                        android:textColor="@color/color_BusinessSilver_K85"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_dialog_success"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/button_pressed_blue"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:padding="5dp"
+                    android:text="กลับสู่หน้าจอหลัก"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

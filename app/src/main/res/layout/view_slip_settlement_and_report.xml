@@ -5,537 +5,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/contentToolbar"
-        layout="@layout/content_toolbar" />
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/linearLayoutToolbarBottom"
         android:layout_below="@+id/contentToolbar"
         android:background="@color/color_background">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/slipNestedScrollView"
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/printBtn"
-        android:layout_marginEnd="18sp"
-        android:layout_marginStart="18sp"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/white"
-        android:padding="4dp">
-
-        <LinearLayout
-            android:id="@+id/settlementLinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/slipNestedScrollView"
+            android:layout_width="250dp"
+            android:layout_height="359dp"
+            android:layout_above="@+id/printBtn"
             android:layout_centerInParent="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingBottom="48dp">
+            android:layout_marginStart="18sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="18sp"
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/white"
+            android:padding="4dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/bankImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="70dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/logo_image_ktb_bw" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:visibility="gone"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/bank1Image"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/ktb_logo5"
-                        android:src="@drawable/ktb_logo5" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="4dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/merchantName1Label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:text="Header Line1"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/hender_Line" />
-
-                <TextView
-                    android:id="@+id/merchantName2Label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:text="Header Line2"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/hender_Line" />
-
-                <TextView
-                    android:id="@+id/merchantName3Label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
-                    android:text="Header Line3"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/hender_Line" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.8">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="Date/Time"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/dateLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:id="@+id/timeLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.2"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="end"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.6">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="MID"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/midLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="TID"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/tidLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.6">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="Batch"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/batchLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.8"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.6">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="HOST"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/hostLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-
-            </LinearLayout>
-
-
-            <TextView
-                android:layout_margin="2dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textStyle="bold"
-                android:fontFamily="@font/microsoft_sans_serif"
-                android:text="SETTLEMENT"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                </FrameLayout>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="center"
-                    android:text="COUNT"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="center"
-                    android:text="Total"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:gravity="start"
-                        android:text="SALES"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/saleCountLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="center"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:id="@+id/saleTotalLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="end"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:gravity="start"
-                        android:text="VOID SALES"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/voidSaleCountLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:id="@+id/voidSaleAmountLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="end"
-                    android:text="0.00"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="--------------------------------------------------------------------------------------------------------------------------------------------"
-                android:textSize="10sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:gravity="start"
-                        android:text="CARD TOTALS"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/cardCountLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:id="@+id/cardAmountLabel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:gravity="end"
-                    android:text="0.00"
-                    android:textColor="@android:color/black"
-                    android:textSize="10sp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/microsoft_sans_serif"
-                android:text="Settlement Successful"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:layout_marginTop="20dp"
-                android:id="@+id/summaryLinearLayout"
+                android:id="@+id/settlementLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -556,11 +47,11 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/bankTaxImage"
+                            android:id="@+id/bankImage"
                             android:layout_width="wrap_content"
                             android:layout_height="70dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/logo_image_ktb_bw" />
+                            android:src="@drawable/logo_ktb" />
 
 
                     </LinearLayout>
@@ -573,7 +64,7 @@
                         android:visibility="gone">
 
                         <ImageView
-                            android:id="@+id/bank1TaxImage"
+                            android:id="@+id/bank1Image"
                             android:layout_width="70dp"
                             android:layout_height="70dp"
                             android:layout_gravity="center"
@@ -587,198 +78,72 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/merchantName1TaxLabel"
+                        android:id="@+id/merchantName1Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:text="Header Line1"
+                        android:fontFamily="@font/robotomono"
+                        android:text=""
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/hender_Line" />
+                        android:textSize="@dimen/hender_Line"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/merchantName2TaxLabel"
+                        android:id="@+id/merchantName2Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:text="Header Line2"
+                        android:fontFamily="@font/robotomono"
+                        android:text=""
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/hender_Line" />
+                        android:textSize="@dimen/hender_Line"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/merchantName3TaxLabel"
+                        android:id="@+id/merchantName3Label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        android:text="Header Line3"
+                        android:fontFamily="@font/robotomono"
+                        android:text=""
                         android:textColor="@android:color/black"
-                        android:textSize="@dimen/hender_Line" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-
+                        android:textSize="@dimen/hender_Line"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.6">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/microsoft_sans_serif"
-                            android:text="TAX ID"
-                            android:textAllCaps="true"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="2dp"
-                            android:text=":"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                    </FrameLayout>
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:gravity="end"
-                        android:id="@+id/taxIdLabel"
-                        android:layout_width="0dp"
+                        android:id="@+id/dateLabel"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2.4"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="left"
+                        android:text="1234"
                         android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.6">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/microsoft_sans_serif"
-                            android:text="Batch"
-                            android:textAllCaps="true"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="2dp"
-                            android:text=":"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                    </FrameLayout>
-
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:layout_weight="2.4"
-                        android:gravity="end"
-                        android:id="@+id/batchTaxLabel"
-                        android:layout_width="0dp"
+                        android:id="@+id/timeLabel"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="right"
+                        android:text="1234"
                         android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-
-                    <TextView
-                        android:layout_weight="0.8"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="Date/Time"
-                        android:textAllCaps="true"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:layout_weight="0.8"
-                        android:id="@+id/dateTaxLabel"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-
-                        android:layout_weight="0.8"
-                        android:layout_marginStart="10dp"
-                        android:id="@+id/timeTaxLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:gravity="end"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </LinearLayout>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="SUMMARY TAX INVOICE"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -787,31 +152,56 @@
 
 
                     <TextView
+                        android:id="@+id/tidLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="HOST NAME : "
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="left"
+                        android:text="33333333"
                         android:textColor="@android:color/black"
-                        android:textSize="10sp" />
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/midLabel"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:layout_marginEnd="2dp"
-                        android:text=":"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="right"
+                        android:text="3333333"
                         android:textColor="@android:color/black"
-                        android:textSize="10sp" />
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/hostTaxLabel"
-                        android:layout_width="0dp"
+                        android:id="@+id/batchLabel"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:text="TAX"
+                        android:layout_gravity="left"
+                        android:fontFamily="@font/robotomono"
+                        android:text="99999999"
                         android:textColor="@android:color/black"
-                        android:textSize="10sp" />
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/hostLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="right"
+                        android:text="33333333"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
 
@@ -833,7 +223,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
                         android:gravity="center"
                         android:text="COUNT"
                         android:textColor="@android:color/black"
@@ -844,7 +234,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
                         android:gravity="center"
                         android:text="Total"
                         android:textColor="@android:color/black"
@@ -852,6 +242,7 @@
 
                 </LinearLayout>
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -867,33 +258,33 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
                             android:gravity="start"
-                            android:text="FEE"
+                            android:text="SALES"
                             android:textColor="@android:color/black"
                             android:textSize="10sp" />
 
                     </FrameLayout>
 
                     <TextView
-                        android:id="@+id/saleCountTaxLabel"
+                        android:id="@+id/saleCountLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
                     <TextView
-                        android:id="@+id/saleTotalTaxLabel"
+                        android:id="@+id/saleTotalLabel"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
                         android:gravity="end"
                         android:text="0.00"
                         android:textColor="@android:color/black"
@@ -916,105 +307,618 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:fontFamily="@font/microsoft_sans_serif"
+                            android:fontFamily="@font/robotomono"
                             android:gravity="start"
-                            android:text="VOID FEE"
+                            android:text="VOID SALES"
                             android:textColor="@android:color/black"
                             android:textSize="10sp" />
 
                     </FrameLayout>
 
                     <TextView
-                        android:id="@+id/voidSaleCountTaxLabel"
+                        android:id="@+id/voidSaleCountLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
                         android:gravity="center"
                         android:text="0"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
                     <TextView
-                        android:id="@+id/voidSaleAmountTaxLabel"
+                        android:id="@+id/voidSaleAmountLabel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
                         android:gravity="end"
                         android:text="0.00"
                         android:textColor="@android:color/black"
                         android:textSize="10sp" />
 
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="start"
+                            android:text="TOTALS"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/cardCountLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/cardAmountLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="end"
+                        android:text="0.00"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/summaryLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingBottom="48dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/bankTaxImage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="70dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/logo_ktb" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/bank1TaxImage"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ktb_logo5"
+                                android:src="@drawable/ktb_logo5" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/merchantName1TaxLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="5dp"
+                            android:text=""
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/hender_Line" />
+
+                        <TextView
+                            android:id="@+id/merchantName2TaxLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="5dp"
+                            android:text=""
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/hender_Line" />
+
+                        <TextView
+                            android:id="@+id/merchantName3TaxLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="5dp"
+                            android:text=""
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/hender_Line" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/marginTopFont"
+                            android:layout_weight="0.6">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/robotomono"
+                                android:text="TAX ID"
+                                android:textAllCaps="true"
+                                android:textColor="@android:color/black"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:layout_marginEnd="2dp"
+                                android:text=":"
+                                android:textColor="@android:color/black"
+                                android:textSize="10sp" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/taxIdLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/marginTopFont"
+                            android:layout_weight="2.4"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="end"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.6">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/robotomono"
+                                android:text="Batch"
+                                android:textAllCaps="true"
+                                android:textColor="@android:color/black"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:layout_marginEnd="2dp"
+                                android:text=":"
+                                android:textColor="@android:color/black"
+                                android:textSize="10sp" />
+
+                        </FrameLayout>
+
+
+                        <TextView
+                            android:id="@+id/batchTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2.4"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="end"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:fontFamily="@font/robotomono"
+                            android:text="Date/Time"
+                            android:textAllCaps="true"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="2dp"
+                            android:text=":"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/dateTaxLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.8"
+                            android:fontFamily="@font/robotomono"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+
+                            android:id="@+id/timeTaxLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="0.8"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="end"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/robotomono"
+                            android:text="HOST NAME : "
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="2dp"
+                            android:text=":"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/hostTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:text="TAX"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="center"
+                            android:text="COUNT"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="center"
+                            android:text="Total"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:fontFamily="@font/robotomono"
+                                android:gravity="start"
+                                android:text="FEE"
+                                android:textColor="@android:color/black"
+                                android:textSize="10sp" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/saleCountTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/saleTotalTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="end"
+                            android:text="0.00"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:fontFamily="@font/robotomono"
+                                android:gravity="start"
+                                android:text="VOID FEE"
+                                android:textColor="@android:color/black"
+                                android:textSize="10sp" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/voidSaleCountTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/voidSaleAmountTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="end"
+                            android:text="0.00"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:fontFamily="@font/robotomono"
+                                android:gravity="start"
+                                android:text="TOTALS"
+                                android:textColor="@android:color/black"
+                                android:textSize="10sp" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/cardCountTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:id="@+id/cardAmountTaxLabel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/robotomono"
+                            android:gravity="end"
+                            android:text="0.00"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:fontFamily="@font/robotomono"
+                        android:text="SUMMARY TAX INVOICE"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTopFont"
+                        android:maxLines="1"
+                        android:text="--------------------------------------------------------------------------------------------------------------------------------------------"
+                        android:textColor="@android:color/black"
+                        android:textSize="10sp" />
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/robotomono"
+                    android:text="SETTLEMENT"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="--------------------------------------------------------------------------------------------------------------------------------------------"
-                    android:textColor="@android:color/black"
                     android:textSize="10sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:fontFamily="@font/microsoft_sans_serif"
-                            android:gravity="start"
-                            android:text="CARD TOTALS"
-                            android:textColor="@android:color/black"
-                            android:textSize="10sp" />
-
-                    </FrameLayout>
-
-                    <TextView
-                        android:id="@+id/cardCountTaxLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:gravity="center"
-                        android:text="0"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:id="@+id/cardAmountTaxLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/microsoft_sans_serif"
-                        android:gravity="end"
-                        android:text="0.00"
-                        android:textColor="@android:color/black"
-                        android:textSize="10sp" />
-
-                </LinearLayout>
-
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/robotomono"
+                    android:text="Settlement Successful"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
-        </LinearLayout>
 
-
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     </RelativeLayout>
+
+    <include
+        android:id="@+id/contentToolbar"
+        layout="@layout/content_toolbar" />
+
     <include layout="@layout/content_exit" />
 </RelativeLayout>

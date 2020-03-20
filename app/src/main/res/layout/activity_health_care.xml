@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MenuServiceListActivity">
+
+    <include
+        android:id="@+id/contentToolbar"
+        layout="@layout/content_toolbar"/>
+
+    <LinearLayout
+        android:layout_below="@+id/contentToolbar"
+        android:layout_above="@+id/linearLayoutToolbarBottom"
+        android:background="@color/color_background"
+        android:id="@+id/linearLayoutMenuList"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ktb_logo5"
+            android:layout_width="match_parent"
+            android:layout_height="120dp" />
+
+        <FrameLayout
+            android:id="@+id/saleHealthCareFrameLayout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ใช้สิทธิ์รักษาพยาบาล"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/settlementHealthCareFrameLayout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="สรุปยอดประจำวัน"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/voidHealthCareFrameLayout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ยกเลิกรายการ"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/offlineHealthCareFrameLayout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ทํารายการออฟไลท์"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/idCardHealthCareFrameLayout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ตรวจสอบบัตรประชาชน "
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/testHostHealthCareFrameLayout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ทดสอบโฮซ์ท "
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
+        <FrameLayout
+            android:id="@+id/settingHealthCareFrameLayout"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pressed_menu"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="ตั้งค่าอื่นๆ"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayoutToolbarBottom"
+        android:layout_alignParentBottom="true"
+        android:background="#aadddddd"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <TextView
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Exit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>

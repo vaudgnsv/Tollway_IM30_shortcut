@@ -2,16 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:background="@color/color_clear">
 
     <ImageView
-        android:visibility="gone"
         android:id="@+id/closeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:background="@android:color/white"
-        android:src="@drawable/cancel2_128x128" />
+        android:src="@drawable/cancel2_128x128"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,31 +21,32 @@
         android:orientation="vertical">
 
         <ProgressBar
-            android:visibility="gone"
             android:id="@+id/progressBarStatus"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
         <TextView
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:textColor="@android:color/black"
             android:id="@+id/statusLabel"
-            android:gravity="center"
-            android:text="Settlement KTB OFFUS"
-            android:textSize="26sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/krungthai_fast_regular"
+            android:gravity="center"
+            android:text="โอนยอด"
+            android:textColor="@android:color/black"
+            android:textSize="26sp" />
 
         <Button
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:textSize="18sp"
-            android:textColor="@android:color/white"
-            android:text="ตกลง"
             android:id="@+id/okBtn"
-            android:background="@drawable/pressed_menu"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/pressed_menu"
+            android:fontFamily="@font/krungthai_fast_regular"
+            android:text="ตกลง"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

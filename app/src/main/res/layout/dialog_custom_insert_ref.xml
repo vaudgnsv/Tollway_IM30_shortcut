@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_White"
+        android:orientation="vertical"
+        android:weightSum="10">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_SkyBlue_C90"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_insertIdCard_01"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/color_clear"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="รายการขาย"
+                    android:textColor="@color/color_White"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/color_White" />
+
+                <TextView
+                    android:id="@+id/tv_insertIdCard_02"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/color_clear"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="ระบุหมายเลขอ้างอิง\nและกดตกลง"
+                    android:textColor="@color/color_White"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <include layout="@layout/content_background_blue_curve" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6.1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/comCodeLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="Com Code"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/comCodeBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:lines="1"
+                    android:imeOptions="actionDone"
+                    android:textColor="@color/color_PreciousBlue_M60_K90"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ref1LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/ref1Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:hint="หมายเลขอ้างอิง 1"
+                    android:inputType="textEmailAddress"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:lines="1"
+                    android:imeOptions="actionDone"
+                    android:textColor="@color/color_PreciousBlue_M60_K90"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ref2LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/ref2Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:hint="หมายเลขอ้างอิง 2"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:lines="1"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/color_PreciousBlue_M60_K90"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ref3LinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/ref3Box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:hint="หมายเลขอ้างอิง 3"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:lines="1"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/color_PreciousBlue_M60_K90"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/cancelBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_pressed_red"
+                android:elevation="5dp"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:text="ยกเลิก"
+                android:textColor="@color/color_White"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/okBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_pressed_blue"
+                android:elevation="5dp"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:text="ตกลง"
+                android:textColor="@color/color_White"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

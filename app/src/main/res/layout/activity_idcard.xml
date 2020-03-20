@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_White"
+    android:orientation="vertical"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="30dp"
+        android:layout_weight="4"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_SkyBlue_C90"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_insertIdCard_01"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/color_clear"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:text="ใช้สิทธิจ่ายตรงสิทธิตนเองและครอบครัว"
+                android:textColor="@color/color_White"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="2dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/color_White" />
+
+            <TextView
+                android:id="@+id/tv_insertIdCard_02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@color/color_clear"
+                android:fontFamily="@font/krungthai_fast_bold"
+                android:text="สอดบัตรประชาชน"
+                android:textColor="@color/color_White"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <include layout="@layout/content_background_blue_curve" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearFor7year01"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:background="@color/color_clear"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_family2" />
+
+        <TextView
+            android:id="@+id/tv_idcard_label01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/krungthai_fast_bold"
+            android:text="ทำรายการด้วยบัตรประชาชน" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3.5"
+        android:background="@color/color_clear"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="201dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/idcard" />
+
+        <ImageView
+            android:id="@+id/iVphoto"
+            android:layout_width="76dp"
+            android:layout_height="81dp"
+            android:layout_above="@id/imageView"
+            android:layout_marginLeft="250dp"
+            android:layout_marginTop="115dp"
+            android:background="@android:color/transparent" />
+
+        <TextView
+            android:id="@+id/tVnameTH"
+            android:layout_width="235dp"
+            android:layout_height="22dp"
+            android:layout_marginLeft="117dp"
+            android:layout_marginTop="60dp"
+            android:fontFamily="serif-monospace"
+            android:gravity="bottom"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVlastnameENG"
+            android:layout_width="187dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="165dp"
+            android:layout_marginTop="92dp"
+            android:fontFamily="serif"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVbirthTH"
+            android:layout_width="78dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="162dp"
+            android:layout_marginTop="105dp"
+            android:fontFamily="serif"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVbirthENG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="179dp"
+            android:layout_marginTop="120dp"
+            android:fontFamily="serif"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVfirstnameENG"
+            android:layout_width="201dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="79dp"
+            android:fontFamily="serif"
+            android:textColor="#a3a3a3"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVreligion"
+            android:layout_width="83dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="157dp"
+            android:layout_marginTop="135dp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/tVaddress"
+            android:layout_width="184dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="65dp"
+            android:layout_marginTop="149dp"
+            android:fontFamily="serif"
+            android:textColor="@android:color/black"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVissueTH"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="175dp"
+            android:fontFamily="serif"
+            android:textColor="@android:color/black"
+            android:textSize="8sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVissueENG"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="192dp"
+            android:fontFamily="serif"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="8sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVexpireTH"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="195dp"
+            android:layout_marginTop="175dp"
+            android:fontFamily="serif"
+            android:textColor="@android:color/black"
+            android:textSize="8sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tVexpireENG"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="195dp"
+            android:layout_marginTop="192dp"
+            android:fontFamily="serif"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="8sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/tVidcard"
+            android:layout_width="186dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/imageView"
+            android:layout_marginLeft="165dp"
+            android:layout_marginTop="40dp"
+            android:adjustViewBounds="true"
+            android:fontFamily="serif"
+            android:textColor="@android:color/black"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/linearForGeneral"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="110dp"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/ic_tap" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="เสียบบัตร"
+                    android:textColor="@color/color_SkyBlue_C90"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="110dp"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/ic_swipe" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="รูดบัตร"
+                    android:textColor="@color/color_SkyBlue_C90"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearForInserIdcard"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="110dp"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/ic_tap" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="เสียบบัตร"
+                    android:textColor="@color/color_SkyBlue_C90"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+            </FrameLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearFor7year02"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="110dp"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/ic_tap" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="เสียบบัตร"
+                    android:textColor="@color/color_SkyBlue_C90"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="110dp"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/ic_swipe" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:text="รูดบัตร"
+                    android:textColor="@color/color_SkyBlue_C90"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ic"
+            android:layout_width="262dp"
+            android:layout_height="262dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@drawable/ic"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/microsoft_sans_serif"
+            android:text="กรุณาตรวจสอบความถูกต้อง"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/nextBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="ขั้นตอนต่อไป"
+            android:visibility="invisible" />
+        <!--<Button-->
+        <!--android:id="@+id/btnGameTest"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:text="btnGameTest"/>-->
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cancelClickFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:layout_margin="5dp"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnCancelIdCard"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/button_pressed_red"
+            android:fontFamily="@font/krungthai_fast_bold"
+
+            android:text="ยกเลิก"
+            android:textColor="@color/color_White"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+</LinearLayout>

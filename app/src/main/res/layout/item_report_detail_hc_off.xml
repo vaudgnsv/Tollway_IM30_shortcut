@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:orientation="horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:padding="3dp"
+        android:id="@+id/reportLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/cardNameLabel"
+                android:textColor="@android:color/black"
+                android:textSize="10sp"
+                android:text="CARD NAME"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/expDateLabel"
+                android:textColor="@android:color/black"
+                android:textSize="10sp"
+                android:text="EXP DATE"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/transactionLabel"
+                android:textColor="@android:color/black"
+                android:textSize="10sp"
+                android:text="TRANSACTION"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/approvalCodeLabel"
+                android:textColor="@android:color/black"
+                android:textSize="10sp"
+                android:text="APPROVAL CODE"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="end"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/cardNumberLabel"
+                android:textColor="@android:color/black"
+                android:textSize="10sp"
+                android:text="Card Number"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/traceNoLabel"
+                android:textColor="@android:color/black"
+                android:textSize="10sp"
+                android:text="Trace No"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/amountLabel"
+                android:textColor="@android:color/black"
+                android:textSize="10sp"
+                android:text="TRANSACTION"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/dateTimeLabel"
+                android:textColor="@android:color/black"
+                android:textSize="10sp"
+                android:text="APPROVAL CODE"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <View
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/reportLinearLayout"
+        android:background="@android:color/black"
+        android:layout_width="120dp"
+        android:layout_height="1dp"/>
+</RelativeLayout>

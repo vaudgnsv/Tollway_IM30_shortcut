@@ -18,6 +18,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/merchantnametopic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
@@ -281,6 +282,85 @@
                         android:textSize="18sp" />
 
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:text="EDIT Parameter:"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                    <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/anyParaIdLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="1.7"
+                        android:background="@drawable/under_line_text_view"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:gravity="center"
+                        android:maxLength="100"
+                        android:minHeight="45dp"
+                        android:text="key_tag_APP_GHC_ENABLE"
+                        android:textColor="@android:color/black"
+                        android:inputType="textEmailAddress"
+                        android:textSize="16sp" />
+
+                    <Button
+                        android:id="@+id/anyParaIdBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:background="@drawable/pressed_btn_edit"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:text="แก้ไข"
+                        android:textSize="18sp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/valIdLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="1.7"
+                        android:background="@drawable/under_line_text_view"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:gravity="center"
+                        android:maxLength="100"
+                        android:minHeight="45dp"
+                        android:textColor="@android:color/black"
+                        android:inputType="textEmailAddress"
+                        android:textSize="16sp" />
+
+                    <Button
+                        android:id="@+id/valIdBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.3"
+                        android:background="@drawable/pressed_btn_edit"
+                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:text="แก้ไข"
+                        android:textSize="18sp" />
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
 

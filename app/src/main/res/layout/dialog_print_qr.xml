@@ -30,81 +30,193 @@
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp">
 
-                <TextView
-                    android:id="@+id/dateLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="@string/date_qr"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <TextView
+                    <TextView
+                        android:id="@+id/dateLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="left"
+                        android:text="@string/date_qr"
+                        android:textColor="@android:color/black"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
 
-                    android:id="@+id/timeLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="@string/time_qr"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    <TextView
 
-                <TextView
-                    android:id="@+id/tidLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="@string/tid_qr"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                        android:id="@+id/timeLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="right"
+                        android:text="@string/time_qr"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/billerIdLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="@string/biller_id_qr"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tidLabel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="left"
+                        android:text="@string/tid_qr"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/traceNoLabel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:layout_weight="0.5"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="right"
                         android:text="@string/trace_no_qr"
                         android:textColor="@android:color/black"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-                <TextView
-                    android:visibility="gone"
-                    android:id="@+id/ref1Label"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="@string/ref1_qr"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:visibility="gone"
-                    android:id="@+id/ref2Label"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="BILLER ID : "
+                        android:textColor="@android:color/black"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/billerIdLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="right"
+                        android:text="@string/biller_id_qr"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ref1RelativeLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_weight="2"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="@string/ref2_qr"
-                    android:textColor="@android:color/black"
-                    android:textSize="13sp" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="left"
+                        android:text="REF1 : "
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/ref1Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="right"
+                        android:text="@string/ref1_qr"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ref2RelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="left"
+                        android:text="REF2 : "
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/ref2Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="right"
+                        android:text="@string/ref3_qr"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ref3RelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="left"
+                        android:text="REF3 : "
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/ref3Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
+                        android:gravity="right"
+                        android:text="@string/ref2_qr"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -117,10 +229,10 @@
 
                 <ImageView
                     android:id="@+id/qrImage"
-                    android:layout_margin="4dp"
                     android:layout_width="230dp"
                     android:layout_height="230dp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp" />
 
 
                 <FrameLayout
@@ -128,38 +240,81 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:lines="1"
+                        android:textAllCaps="true"
                         android:id="@+id/merchantNameThaiLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
                         android:text="CRIMINAL COURT : "
                         android:textColor="@android:color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="15.5sp"/>
                 </FrameLayout>
+
                 <FrameLayout
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:textAllCaps="true"
                         android:id="@+id/merchantNameLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:fontFamily="@font/microsoft_sans_serif"
+                        android:fontFamily="@font/robotomono"
+                        android:textStyle="bold"
                         android:text="CRIMINAL COURT : "
                         android:textColor="@android:color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textSize="16sp"
+                        />
                 </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="left"
+                        android:text="AMT :"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/amtThbLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/robotomono"
+                        android:gravity="right"
+                        android:lines="1"
+                        android:text=" * 1,500,000,000.00"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/consolab"
+                    android:gravity="right"
+                    android:text=" BAHT"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
-
+                    android:layout_gravity="center"
+                    android:layout_margin="0dp">
+                    <!--
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -181,15 +336,9 @@
                         android:textColor="@android:color/black"
                         android:textSize="22sp"
                         android:textStyle="bold" />
-                </FrameLayout>
+                        -->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:fontFamily="@font/microsoft_sans_serif"
-                    android:text="BAHT"
-                    android:textColor="@android:color/black" />
+                </FrameLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -198,43 +347,55 @@
                     android:layout_marginStart="20dp"
                     android:background="@android:color/black" />
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_weight="0.5"
-                        android:src="@drawable/ktb_logo10" />
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1.5"
-                        android:orientation="vertical">
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                        <TextView
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="0.5"
+                            android:src="@drawable/ktb_logo10_print" />
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="รับชำระได้ทุกธนาคาร"
-                            android:textColor="@android:color/black" />
+                            android:layout_gravity="center"
+                            android:layout_weight="1.5"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="Thai QR acceptance"
-                            android:textColor="@android:color/black" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="รับชำระได้ทุกธนาคาร"
+                                android:textColor="@android:color/black" />
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="Thai QR acceptance"
+                                android:textColor="@android:color/black" />
+
+                        </LinearLayout>
                     </LinearLayout>
+                </FrameLayout>
 
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:fontFamily="@font/microsoft_sans_serif"
+                    android:text=""
+                    android:textColor="@android:color/black" />
 
 
             </LinearLayout>

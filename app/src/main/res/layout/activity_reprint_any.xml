@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_White"
+    android:orientation="vertical"
+    tools:context=".activity.menuvoid.VoidActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_SkyBlue_C90"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/krungthai_fast_bold"
+            android:text="พิมพ์ซ้ำรายการ"
+            android:textColor="@color/color_White"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/color_SkyBlue_C90">
+
+            </FrameLayout>
+
+            <include layout="@layout/content_background_blue_curve" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/menu_service"
+            android:elevation="5dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <ImageView
+                android:id="@+id/searchInvoiceImage"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="0.3"
+                android:padding="8dp"
+                android:src="@drawable/ic_search" />
+
+            <EditText
+                android:id="@+id/invoiceEt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7"
+                android:background="@color/color_clear"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:hint="ค้นหาโดยระบุ Trace No. "
+                android:imeOptions="actionSearch"
+                android:inputType="number"
+                android:minHeight="50dp"
+                android:padding="8dp" />
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <!--<View-->
+        <!--android:layout_width="@dimen/void_layout_width"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--android:layout_gravity="center" />-->
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewReprintAny"
+            android:layout_width="@dimen/void_layout_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:text="ดูรายการเพิ่มเติมกรุณาค้นหา" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <include layout="@layout/content_exit" />
+</LinearLayout>

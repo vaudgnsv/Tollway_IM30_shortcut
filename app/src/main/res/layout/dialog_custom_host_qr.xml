@@ -1,67 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:paddingBottom="20dp">
-
-    <ImageView
-        android:id="@+id/closeImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:background="@android:color/white"
-        android:src="@drawable/cancel2_128x128" />
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/closeImage"
-        android:layout_margin="30dp"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/tmsBtn"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/pressed_menu"
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:text="KTB On Us"
-            android:layout_marginBottom="8dp"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <Button
-            android:id="@+id/posBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/pressed_menu"
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:text="KTB Off us"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:gravity="center"
+                android:text="กรุณาเลือกโฮซ์ท"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/epsBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/pressed_menu"
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:text="BASE24 EPS"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#B1BCBE"
+                android:visibility="gone"
+                tools:ignore="Suspicious0dp">
 
-        <Button
-            android:id="@+id/qrBtn"
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/tmsBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/pressed_menu"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:text="Krungthai ON US"
+                android:textSize="18sp"
+
+                android:elevation="5dp"
+                android:padding="5dp"
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/posBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/pressed_menu"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:text="BASE24 POS"
+                android:textSize="18sp"
+
+                android:elevation="5dp"
+                android:padding="5dp"
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/epsBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/pressed_menu"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:text="WAY4"
+                android:textSize="18sp"
+
+                android:elevation="5dp"
+                android:padding="5dp"
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/ghcBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/pressed_menu"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:text="HealthCare"
+                android:textSize="18sp"
+
+                android:elevation="5dp"
+                android:padding="5dp"
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/qrBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/pressed_menu"
+                android:fontFamily="@font/krungthai_fast_regular"
+                android:text="QR"
+                android:textSize="18sp"
+
+                android:elevation="5dp"
+                android:padding="5dp"
+                android:layout_margin="5dp"/>
+
+            <Button
+                android:id="@+id/aliBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/pressed_menu"
+                android:elevation="5dp"
+                android:fontFamily="@font/krungthai_fast_regular"
+
+                android:padding="5dp"
+                android:text="ALIPAY"
+                android:textSize="18sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/wechatBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/pressed_menu"
+                android:elevation="5dp"
+                android:fontFamily="@font/krungthai_fast_regular"
+
+                android:padding="5dp"
+                android:text="WECHAT PAY"
+                android:textSize="18sp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="15dp"
+            android:background="#B1BCBE"
+            android:visibility="gone">
+
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/pressed_menu"
-            android:fontFamily="@font/microsoft_sans_serif"
-            android:text="Qr"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/closeImage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_pressed_red"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:padding="5dp"
+                    android:text="ยกเลิก"
+                    android:textColor="#ffffff" />
+
+                <FrameLayout
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:background="#B1BCBE"
+                    android:visibility="gone"
+                    tools:ignore="Suspicious0dp">
+
+                </FrameLayout>
+
+                <Button
+                    android:id="@+id/btn_ok"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_pressed_green"
+                    android:elevation="5dp"
+                    android:fontFamily="@font/krungthai_fast_bold"
+                    android:padding="5dp"
+                    android:text="ตกลง"
+                    android:textColor="#ffffff"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

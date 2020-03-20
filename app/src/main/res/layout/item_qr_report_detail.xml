@@ -41,36 +41,39 @@
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:gravity="right"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/traceQrLabel"
-                android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:text="Card Number"
-                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:text="Card Number"
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/amountQrLabel"
-                android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:text="Trace No"
-                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:text="Trace No"
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
+
             <TextView
                 android:id="@+id/dateTimeQrLabel"
-                android:textColor="@android:color/black"
-                android:textSize="10sp"
-                android:text="TRANSACTION"
-                android:fontFamily="@font/microsoft_sans_serif"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/microsoft_sans_serif"
+                android:text="TRANSACTION"
+                android:textColor="@android:color/black"
+                android:textSize="10sp" />
         </LinearLayout>
 
 

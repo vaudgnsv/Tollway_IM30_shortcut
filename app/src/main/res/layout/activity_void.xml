@@ -9,10 +9,12 @@
 
     <include
         android:id="@+id/contentToolbar"
-        layout="@layout/content_toolbar" />
+        layout="@layout/content_toolbar"
+        android:visibility="invisible" />
 
     <LinearLayout
         android:layout_above="@+id/linearLayoutToolbarBottom"
+        android:visibility="invisible"
         android:layout_below="@+id/contentToolbar"
         android:background="@color/color_background"
         android:orientation="vertical"
@@ -183,5 +185,8 @@
             android:layout_gravity="center" />
 
     </LinearLayout>
-    <include layout="@layout/content_exit"/>
+
+    <include
+        layout="@layout/content_exit"
+        android:visibility="invisible" />
 </RelativeLayout>

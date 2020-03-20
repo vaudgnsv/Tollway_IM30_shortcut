@@ -55,7 +55,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="70dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/logo_image_ktb_bw" />
+                            android:src="@drawable/logo_ktb" />
 
 
                     </LinearLayout>
@@ -92,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                        android:text="Header Line1"
+                        android:text=""
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/hender_Line" />
 
@@ -102,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                        android:text="Header Line2"
+                        android:text=""
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/hender_Line" />
 
@@ -112,7 +112,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
-                        android:text="Header Line3"
+                        android:text=""
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/hender_Line" />
                 </LinearLayout>
@@ -332,6 +332,7 @@
 
 
                 <TextView
+                    android:id="@+id/detailLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -476,7 +477,7 @@
 
                     <TextView
                         android:textSize="12sp"
-                        android:text="GRAND TOTALS"
+                        android:text="TOTALS"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1.3"

@@ -1,31 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#8d000000"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp"
-    android:layout_height="wrap_content">
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@color/color_White">
 
-    <ImageView
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/waitingImage"
-        android:background="@drawable/waiting_insert_card_animation"
-        android:layout_width="150dp"
-        android:layout_height="150dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/msgLabel"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/white"
-        android:textSize="35sp"
-        android:text="Please waiting ..."
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        <ImageView
+            android:id="@+id/waitingImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/waiting_insert_card_animation"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/img_waitting_new"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ic_wait_active" />
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/ic_wait" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/msgLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/krungthai_fast_regular"
+            android:text="กําลังทํารายการ"
+            android:textColor="@color/color_SkyBlue_C90"
+            android:textSize="25sp" />
+    </LinearLayout>
 
 </RelativeLayout>
