@@ -745,7 +745,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                     }
                 });
                 //END K.GAME เก็บไว้ใช้
-                doPrinting(getBitmap(slipSuccessLinearLayout));
+                //doPrinting(getBitmap(slipSuccessLinearLayout));
 
             }
         });
@@ -1448,7 +1448,14 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 break;
             case R.id.linearLayoutPrint:
                 System.out.printf("utility:: %s KKKKKKKK0006 \n", TAG);
-                String valueParameterEnable2 = Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1000);
+
+                Utility.customDialogAlert(GenerateQrActivity.this, "This terminal not support", new Utility.OnClickCloseImage() {
+                    @Override
+                    public void onClickImage(Dialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+              /*  String valueParameterEnable2 = Preference.getInstance(GenerateQrActivity.this).getValueString(Preference.KEY_TAG_1000);
                 if (amountBox.getText().toString().isEmpty()) {
 
 //                    if (typeInterface != null)  //sinn rs232 20180705
@@ -1508,7 +1515,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                             }
                         });
                     }
-                }/* else if (ref2LinearLayout.getVisibility() == View.VISIBLE && ref2Box.getText().toString().isEmpty()) {
+                }*//* else if (ref2LinearLayout.getVisibility() == View.VISIBLE && ref2Box.getText().toString().isEmpty()) {
                     if (posInterfaceActivity.PosInterfaceExistFlg == 1) {
                         Utility.customDialogAlertAuto(GenerateQrActivity.this, "กรุณากรอก Ref2");
                         TellToPosError("EN");
@@ -1533,7 +1540,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                                 dialog.dismiss();
                             }
                         });
-                } */ else if (tagAll.isEmpty()) {
+                } *//* else if (tagAll.isEmpty()) {
                     if (posInterfaceActivity.PosInterfaceExistFlg == 1) {
                         Utility.customDialogAlertAuto(GenerateQrActivity.this, "กรุณา Generator QR ก่อน");
                         TellToPosError("EN");
@@ -1562,7 +1569,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
 //                    linearLayoutPrint.setVisibility(View.INVISIBLE);//K.GAME 181011 New button print slip qr
 //                    linearLayoutPrint.setClickable(false);//K.GAME กดPrint QR แล้วปิดปุ่ม
                     selectQr();
-                }
+                }*/
                 break;
         }
     }
@@ -2407,7 +2414,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 Log.d(TAG, "onSuccess: ");
                 msgLabel.setText("กำลังพิมพ์");//K.GAME 180925 test หลังจาก generate จะให้ขึ้นว่า กำลังพิมพ์
                 dialogAlertLoading.show();
-                doPrinting_generate_qr(getBitmap(slipLinearLayout));//K.GAME 180925 New print slip QR
+                //doPrinting_generate_qr(getBitmap(slipLinearLayout));//K.GAME 180925 New print slip QR
             }
         });
     }
@@ -2527,7 +2534,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                     posInterfaceActivity.setOnDataRec(new PosInterfaceActivity.OnAckToPrint() {
                         @Override
                         public void success() {
-                            doPrinting(getBitmap(slipSuccessLinearLayout));
+                            //doPrinting(getBitmap(slipSuccessLinearLayout));
                             statusPrintFinish = 1;
                         }
                     });
@@ -2559,7 +2566,7 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                     });
                     //END K.GAME เก็บไว้ใช้
 //                    doPrinting(getBitmap(slipSuccessLinearLayout));
-                    doPrinting_game(getBitmap(slipSuccessLinearLayout));
+                    //doPrinting_game(getBitmap(slipSuccessLinearLayout));
                     //END K.GAME 180919
                     statusPrintFinish = 1;
                     //autoPrint();
@@ -2848,14 +2855,14 @@ public class GenerateQrActivity extends SettingToolbarActivity implements View.O
                 switch (GenerateQRorInquireFlg)      // Paul_20190216
                 {
                     case 1:
-                        doPrinting_generate_qr(bitmapOld);
+                        //doPrinting_generate_qr(bitmapOld);
                         break;
                     case 2:
-                        doPrinting_game(bitmapOld);
+                        //doPrinting_game(bitmapOld);
                         break;
                     case 0:
                     default:
-                        doPrinting(bitmapOld);
+                        //doPrinting(bitmapOld);
                         break;
                 }
 //                doPrinting(bitmapOld);
