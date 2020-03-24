@@ -214,10 +214,10 @@ public class ClssEntryPoint {
 
 
         if(ret != RetCode.EMV_OK) {
-            if(ret == RetCode.ICC_CMD_ERR) {
+            /*if(ret == RetCode.ICC_CMD_ERR) {
                 Log.d("kang", "ret:" + ret);
                 return RetCode.CLSS_TRY_AGAIN;
-            }
+            }*/
             Log.d("kang", "ret:" + ret);
             return ret;
         }

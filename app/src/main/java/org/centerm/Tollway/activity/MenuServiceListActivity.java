@@ -657,6 +657,7 @@ public class MenuServiceListActivity extends BaseHealthCardActivity {
                     cardManager.setFalseFallbackHappen();
                     System.out.printf("utility:: %s setMenuList 002 \n", TAG);
                     if (checkReversal("SALE")) {
+
                         System.out.printf("utility:: %s setMenuList 003 \n", TAG);
 //                                    if (!dialogSelectAmountForSale) {           // Paul_20181205 K.hong double click wrong
                         is_dialogInsertAmountShowing = true;
@@ -665,6 +666,8 @@ public class MenuServiceListActivity extends BaseHealthCardActivity {
 
 
 //                                    }//                                    startInsertCard();
+                    } else {
+                        myCardReaderHelper.getInstance().stopPolling();
                     }
                 }
 
@@ -6966,6 +6969,7 @@ public class MenuServiceListActivity extends BaseHealthCardActivity {
             public void onClick(View v) {
                 dialogAlert.dismiss();
                 cardManager.startTransaction(CardManager.SALE, amountInterface);
+                dismissDialogAll();
             }
         });
 

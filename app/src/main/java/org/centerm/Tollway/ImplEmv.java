@@ -963,48 +963,29 @@ public class ImplEmv {
     }
     public static ArrayList<Integer> getF55Taglist_int() {
         ArrayList<String> arr = new ArrayList<String>();
-        arr.add("9F26");
-        arr.add("9F27");
-        arr.add("9F10");
-        arr.add("9F37");
-        arr.add("9F36");
-        arr.add("95");
-        arr.add("9A");
-        arr.add("9C");
-        arr.add("9F02");
-        arr.add("5F2A");
-        arr.add("82");
-        arr.add("9F1A");
-        arr.add("9F03");
-        arr.add("9F33");
-        arr.add("9F34");
-        arr.add("9F35");
-        arr.add("9F1E");
-        arr.add("84");
-        arr.add("9F09");
-        arr.add("9F41");
-        arr.add("9F63");
-        /*arr.add("DF32");
-        arr.add("DF33");
-        arr.add("DF34");
-        */arr.add("4F");
-        //arr.add("DF31");
-        //arr.add("8A");
-        arr.add("5F28");
-        arr.add("9F74");
-        arr.add("9B");
-        arr.add("50");
-        arr.add("9F12");
-        //arr.add("9F4E");
-        arr.add("9F7B");
-        arr.add("9F77");
-        arr.add("8F");
-        arr.add("5A");
-        arr.add("5F34");
-        arr.add("57");
-        arr.add("91");
-        arr.add("71");
-        arr.add("72");
+        arr.add("82");      // Source from ICC
+        arr.add("84");      // Source from ICC ;UL Recommended
+        arr.add("95");      // Source from Terminal
+        arr.add("9A");      // Source from Terminal
+        arr.add("9C");      // Source from Terminal
+        arr.add("5F2A");    // Currency code
+        arr.add("5F30");    // Currency code
+        arr.add("5F34");    // Source from ICC
+        arr.add("9F02");    // Source from Terminal
+        arr.add("9F03");    // Source from Terminal
+        arr.add("9F09");    // Source from Terminal
+        arr.add("9F10");    // Source from ICC
+        arr.add("9F1A");    // Source from Terminal; Country code
+        arr.add("9F1E");    // Source from Terminal
+        arr.add("9F26");    // Source from ICC
+        arr.add("9F27");    // Source from ICC
+        arr.add("9F33");    // Source from Terminal
+        arr.add("9F34");    // Source from Terminal
+        arr.add("9F35");    // Source from Terminal
+        arr.add("9F36");    // Source from ICC
+        arr.add("9F37");    // Source from Terminal
+        arr.add("9F41");    // Source from Terminal
+        arr.add("9F53"); //MC
         ArrayList<Integer> arr2 = new ArrayList<Integer>();
         for(int i = 0; i < arr.size(); i++ ) {
             arr2.add(Integer.parseInt(arr.get(i), 16));

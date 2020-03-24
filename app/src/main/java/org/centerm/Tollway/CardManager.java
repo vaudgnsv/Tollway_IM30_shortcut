@@ -32,6 +32,7 @@ import org.centerm.Tollway.core.BlockCalculateUtil;
 import org.centerm.Tollway.core.ChangeFormat;
 import org.centerm.Tollway.core.CustomSocketListener;
 import org.centerm.Tollway.core.DataExchanger;
+import org.centerm.Tollway.database.BL;
 import org.centerm.Tollway.database.ReversalTemp;
 import org.centerm.Tollway.database.TCUpload;
 import org.centerm.Tollway.database.TransTemp;
@@ -99,6 +100,7 @@ import com.pax.jemv.clcommon.OnlineResult;
 import com.pax.jemv.clcommon.RetCode;
 import com.pax.jemv.clcommon.TransactionPath;
 import com.pax.jemv.dpas.api.ClssDPASApi;
+import com.pax.jemv.entrypoint.api.ClssEntryApi;
 import com.pax.jemv.jcb.api.ClssJCBApi;
 import com.pax.jemv.paypass.api.ClssPassApi;
 import com.pax.jemv.paywave.api.ClssWaveApi;
@@ -1104,33 +1106,60 @@ public class CardManager {
     }
 
     private void setTagOfList55() {
-        Log.d(TAG, "tagOf55List SALE Start: visa,upi");
-        tagOf55List = new ArrayList<String>();
-
-        tagOf55List.add("82");
-        tagOf55List.add("84");
-        tagOf55List.add("95");
-        tagOf55List.add("9A");
-        tagOf55List.add("9C");
-        tagOf55List.add("5F2A");
-        tagOf55List.add("5F34");
-        tagOf55List.add("9F02");
-        tagOf55List.add("9F03");
-        tagOf55List.add("9F09");
-
-        tagOf55List.add("9F10");
-        tagOf55List.add("9F1A");
-        tagOf55List.add("9F1E");
-        tagOf55List.add("9F26");
-        tagOf55List.add("9F27");
-        tagOf55List.add("9F33");
-        tagOf55List.add("9F34");
-        tagOf55List.add("9F35");
-        tagOf55List.add("9F36");
-        tagOf55List.add("9F37");
-        tagOf55List.add("9F41");
-        tagOf55List.add("9F63");
-        Log.d(TAG, "tagOf55List SALE End: ");
+        if (HOST_CARD.equals("EPS")) {
+            Log.d(TAG, "tagOf55List EPS Start: ");
+            tagOf55List = new ArrayList<String>();
+            tagOf55List.add("82");      // Source from ICC
+            tagOf55List.add("84");      // Source from ICC ;UL Recommended
+            tagOf55List.add("95");      // Source from Terminal
+            tagOf55List.add("9A");      // Source from Terminal
+            tagOf55List.add("9C");      // Source from Terminal
+            tagOf55List.add("5F2A");    // Currency code
+            tagOf55List.add("5F30");    // Currency code
+            tagOf55List.add("5F34");    // Source from ICC
+            tagOf55List.add("9F02");    // Source from Terminal
+            tagOf55List.add("9F03");    // Source from Terminal
+            tagOf55List.add("9F09");    // Source from Terminal
+            tagOf55List.add("9F10");    // Source from ICC
+            tagOf55List.add("9F1A");    // Source from Terminal; Country code
+            tagOf55List.add("9F1E");    // Source from Terminal
+            tagOf55List.add("9F26");    // Source from ICC
+            tagOf55List.add("9F27");    // Source from ICC
+            tagOf55List.add("9F33");    // Source from Terminal
+            tagOf55List.add("9F34");    // Source from Terminal
+            tagOf55List.add("9F35");    // Source from Terminal
+            tagOf55List.add("9F36");    // Source from ICC
+            tagOf55List.add("9F37");    // Source from Terminal
+            tagOf55List.add("9F41");    // Source from Terminal
+            tagOf55List.add("9F53"); //MC
+            Log.d(TAG, "tagOf55List EPS End: ");
+        } else {
+            tagOf55List = new ArrayList<String>();
+            //tagOf55List.add("5F24"); // Expiry
+            tagOf55List.add("82");      // Source from ICC
+            tagOf55List.add("84");      // Source from ICC ;UL Recommended
+            tagOf55List.add("95");      // Source from Terminal
+            tagOf55List.add("9A");      // Source from Terminal
+            tagOf55List.add("9C");      // Source from Terminal
+            tagOf55List.add("5F2A");    // Currency code
+            tagOf55List.add("5F30");    // Currency code
+            tagOf55List.add("5F34");    // Source from ICC
+            tagOf55List.add("9F02");    // Source from Terminal
+            tagOf55List.add("9F03");    // Source from Terminal
+            tagOf55List.add("9F09");    // Source from Terminal
+            tagOf55List.add("9F10");    // Source from ICC
+            tagOf55List.add("9F1A");    // Source from Terminal; Country code
+            tagOf55List.add("9F1E");    // Source from Terminal
+            tagOf55List.add("9F26");    // Source from ICC
+            tagOf55List.add("9F27");    // Source from ICC
+            tagOf55List.add("9F33");    // Source from Terminal
+            tagOf55List.add("9F34");    // Source from Terminal
+            tagOf55List.add("9F35");    // Source from Terminal
+            tagOf55List.add("9F36");    // Source from ICC
+            tagOf55List.add("9F37");    // Source from Terminal
+            tagOf55List.add("9F41");    // Source from Terminal
+            tagOf55List.add("9F53"); //MC
+        }
     }
 
     private void setTagOfList55_JCB() {
@@ -2069,32 +2098,71 @@ public class CardManager {
                 mBlockDataSend[22 - 1] = CL_POS_ENT_MODE;
 
                 int tsi_num = 0, tvr_num = 0;
+                String amount="";
+                byte[] arr={};
+                ByteArray byteArray = new ByteArray();
                 switch(ClssEntryPoint.getInstance().getOutParam().ucKernType) {
                     case KernType.KERNTYPE_MC:
                         ClssPassApi.Clss_GetTLVDataList_MC(new byte[] {0x57},(byte)2, 60, tk2);
                         tvr_num = ClssPassApi.Clss_GetTLVDataList_MC(new byte[] {(byte)0x95}, (byte)2, 2, tvr);
                         tsi_num = ClssPassApi.Clss_GetTLVDataList_MC(new byte[] {(byte)0x9B}, (byte)2, 5, tsi);
+                        amount = AMOUNT.replace(".", "");
+                        ClssPassApi.Clss_ReadVerInfo_MC(byteArray);
+                        arr = str2Bcd("9F03" + "0"  + amount.length() + amount +  "9F09" + "02" +
+                                 bcd2Str(byteArray.data) + "9F34" + "03" + ClssPayPass.getInstance().getCVMType());
+                        ClssPassApi.Clss_SetTLVDataList_MC(arr,3);
                         break;
                     case KernType.KERNTYPE_VIS:
                         ClssWaveApi.Clss_GetTLVData_Wave((short)0x57, tk2);
                         tvr_num = ClssWaveApi.Clss_GetTLVData_Wave( (short)0x95, tvr);
                         tsi_num = ClssWaveApi.Clss_GetTLVData_Wave( (short)0x9B, tsi);
-
+                        amount = AMOUNT.replace(".", "");
+                        ClssWaveApi.Clss_ReadVerInfo_Wave(byteArray);
+                        ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F03, str2Bcd(amount), 6);
+                        ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F09, byteArray.data, 2);
+                        ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F34, new byte[]{ClssWaveApi.Clss_GetCvmType_Wave()}, 3);
                         break;
                     case KernType.KERNTYPE_PBOC:
                         ClssPbocApi.Clss_GetTLVData_Pboc((short)0x57, tk2);
                         tvr_num = ClssPbocApi.Clss_GetTLVData_Pboc( (short)0x95, tvr);
                         tsi_num = ClssPbocApi.Clss_GetTLVData_Pboc( (short)0x9B, tsi);
+                        amount = AMOUNT.replace(".", "");
+                        CvmType cvmType = new CvmType();
+                        ClssPbocApi.Clss_GetCvmType_Pboc(cvmType);
+                        byteArray = new ByteArray();
+                        ClssPbocApi.Clss_ReadVerInfo_Pboc(byteArray);
+
+                        ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F03, str2Bcd(amount), 6);
+                        ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F09, byteArray.data, 2);
+                        ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F34, new byte[]{(byte)cvmType.type}, 3);
 
                         break;
                     case KernType.KERNTYPE_JCB:
                         ClssJCBApi.Clss_GetTLVDataList_JCB(new byte[] {0x57},(byte)2, 60, tk2);
                         tvr_num = ClssJCBApi.Clss_GetTLVDataList_JCB(new byte[] {(byte)0x95}, (byte)2, 2, tvr);
                         tsi_num = ClssJCBApi.Clss_GetTLVDataList_JCB(new byte[] {(byte)0x9B}, (byte)2, 5, tsi);
+                        byteArray = new ByteArray();
+                        ClssJCBApi.Clss_ReadVerInfo_JCB(byteArray);
+                        amount = AMOUNT.replace(".", "");
+
+                        arr = str2Bcd("9F03" + "0"  + amount.length() + amount +  "9F09" + "02" +
+                                bcd2Str(byteArray.data) + "9F34" + "03" + ClssJCBApi.Clss_CardAuth_JCB());
+
+                        ClssJCBApi.Clss_SetTLVDataList_JCB(arr, 3);
                         break;
                 }
                 Log.d("kang","tk2:" + bcd2Str(tk2.data));
                 tempSavedTrackData = "57" + Integer.toHexString(tk2.length) + bcd2str(tk2.data).substring(0, tk2.length * 2);
+                TRACK2 = BlockCalculateUtil.get35Data(tempSavedTrackData);
+                String track2 = TRACK2.substring(2);
+                String cardno = checkCardno(track2);
+                if(CheckBL(cardno)) {
+                    Log.d(TAG, "There is card no [" + cardno + "] in BL" );
+                    processCallback(PROCESS_TRANS_RESULT_ABORT);
+                    MenuServiceListActivity.getinstance().showerr("this card is enrolled at blacklist.");
+
+                    return;
+                }
                 if(tvr_num == RetCode.EMV_OK) {
                     TVR = "95" + "0" + Integer.toHexString(tvr.length) + bcd2str(tvr.data).substring(0, tvr.length * 2);
                 }
@@ -2124,15 +2192,8 @@ public class CardManager {
 
 
                 Log.d("kang", "before set tag55list,tempsavedtrackdata:" + tempSavedTrackData);
+                setTagOfList55(); //VISA
 
-                if (tempSavedTrackData.substring(4, 5).equals("4"))
-                    setTagOfList55(); //VISA
-                else if (tempSavedTrackData.substring(4, 5).equals("5"))
-                    setTagOfList55_CL();//MC
-                else if (tempSavedTrackData.substring(4, 5).equals("3"))
-                    setTagOfList55_JCB(); //JCB
-                else
-                    setTagOfList55(); //UPI
             }
 
             if(cardType == ICCARD) {
@@ -2511,7 +2572,7 @@ public class CardManager {
 
                         bo = new ByteArrayOutputStream();
                         try {
-                            for(int i = 0; i<arrayList.size(); i++) {
+                            for(int i = 0; i < arrayList.size(); i++) {
                                 int a = arrayList.get(i);
                                 byteArray = new ByteArray();
                                 byte[] data;
@@ -2660,7 +2721,7 @@ public class CardManager {
                         arrayList = ImplEmv.getF55Taglist_int();
                         bo = new ByteArrayOutputStream();
                         try {
-                            for(int i = 0; i<tagOf55List.size(); i++) {
+                            for(int i = 0; i < arrayList.size(); i++) {
                                 int a = arrayList.get(i);
                                 byte[] data;
                                 byteArray = new ByteArray();
@@ -7137,7 +7198,12 @@ public class CardManager {
                         return ret;
                     }
                     continue;
-                } else {
+                }
+                else if(ret == RetCode.ICC_CMD_ERR) {
+                    showErr(ret);
+                    return ret;
+                }
+                else {
                     showErr(ret);
                     Log.e(TAG, "entryProcess ret = " + ret);
                     return ret;
@@ -7614,6 +7680,7 @@ public class CardManager {
                 Log.e(TAG, "setConfigParam ret = " + ret);
                 return;
             }
+
             ret = entryPoint.preEntryProcess(transParam);
             if (ret != RetCode.EMV_OK) {
                 showErr(ret);
@@ -9113,5 +9180,16 @@ public class CardManager {
         onLineNow = false;  //S20181003  SINN void no need pboc read ICC
         TPDU = CardPrefix.getTPDU(context, "TMS");
         packageAndSend(TPDU, "0320", mBlockDataSend);
+    }
+
+    private boolean CheckBL(String Pan){
+        boolean is_BL = false;
+        Realm realm = Realm.getDefaultInstance();
+        BL bl = realm.where(BL.class).equalTo("PAN", Pan).findFirst();
+        if (bl != null) {
+            is_BL = true;
+        }
+        realm.close();
+        return is_BL;
     }
 }
