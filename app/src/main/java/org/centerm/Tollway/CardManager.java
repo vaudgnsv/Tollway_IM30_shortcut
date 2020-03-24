@@ -2111,6 +2111,7 @@ public class CardManager {
                         arr = str2Bcd("9F03" + "0"  + amount.length() + amount +  "9F09" + "02" +
                                  bcd2Str(byteArray.data) + "9F34" + "03" + ClssPayPass.getInstance().getCVMType());
                         ClssPassApi.Clss_SetTLVDataList_MC(arr,3);
+                        ClssPassApi.Clss_SetTLVDataList_MC(str2Bcd("9F3303E0F8C8"), 1);
                         break;
                     case KernType.KERNTYPE_VIS:
                         ClssWaveApi.Clss_GetTLVData_Wave((short)0x57, tk2);
@@ -2121,6 +2122,7 @@ public class CardManager {
                         ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F03, str2Bcd(amount), 6);
                         ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F09, byteArray.data, 2);
                         ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F34, new byte[]{ClssWaveApi.Clss_GetCvmType_Wave()}, 3);
+                        ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F33, str2Bcd("E0F8C8"), 3);
                         break;
                     case KernType.KERNTYPE_PBOC:
                         ClssPbocApi.Clss_GetTLVData_Pboc((short)0x57, tk2);
@@ -2135,7 +2137,7 @@ public class CardManager {
                         ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F03, str2Bcd(amount), 6);
                         ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F09, byteArray.data, 2);
                         ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F34, new byte[]{(byte)cvmType.type}, 3);
-
+                        ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F33, str2Bcd("E0F8C8"), 3);
                         break;
                     case KernType.KERNTYPE_JCB:
                         ClssJCBApi.Clss_GetTLVDataList_JCB(new byte[] {0x57},(byte)2, 60, tk2);
@@ -2149,6 +2151,7 @@ public class CardManager {
                                 bcd2Str(byteArray.data) + "9F34" + "03" + ClssJCBApi.Clss_CardAuth_JCB());
 
                         ClssJCBApi.Clss_SetTLVDataList_JCB(arr, 3);
+                        ClssJCBApi.Clss_SetTLVDataList_JCB(str2Bcd("9F3303E0F8C8"), 1);
                         break;
                 }
                 Log.d("kang","tk2:" + bcd2Str(tk2.data));
