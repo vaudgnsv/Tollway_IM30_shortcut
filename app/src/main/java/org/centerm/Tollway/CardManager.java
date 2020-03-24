@@ -2373,8 +2373,9 @@ public class CardManager {
                         }
                         System.out.println("9F06 : " + Tag9F06);
                         byteArray = new ByteArray();
-                        ClssPassApi.Clss_GetTLVDataList_MC(new byte[]{(byte)0x5F, 0x30}, (byte)2, 2, byteArray);
-                        Tag5F30 = "5F30" + Integer.toHexString(byteArray.length) + bcd2str(byteArray.data).substring(0, byteArray.length * 2);
+                        if(ClssPassApi.Clss_GetTLVDataList_MC(new byte[]{(byte)0x5F, 0x30}, (byte)2, 2, byteArray) == RetCode.EMV_OK) {
+                            Tag5F30 = "5F30" + Integer.toHexString(byteArray.length) + bcd2str(byteArray.data).substring(0, byteArray.length * 2);
+                        }
                         System.out.println("5F30 : " + Tag5F30);
                         byteArray = new ByteArray();
                         ClssPassApi.Clss_GetTLVDataList_MC(new byte[]{(byte)0x9F, 0x26}, (byte)2, 8, byteArray);
@@ -2551,7 +2552,7 @@ public class CardManager {
 
                         if((code = ClssWaveApi.Clss_GetTLVData_Wave((short) 0x5f30, byteArray)) != RetCode.EMV_OK) {
                             Log.d("kang", "fail/visa/5f30/code:" + code);
-                            Tag5F30 = "5F30020000";
+                            //Tag5F30 = "5F30020000";
                         } else {
                             Tag5F30 = "5F30" + Integer.toHexString(byteArray.length)+ bcd2str(byteArray.data).substring(0, byteArray.length * 2);
                         }
@@ -2708,8 +2709,8 @@ public class CardManager {
                             Tag9F06 = "9F06" + Integer.toHexString(byteArray.length) + bcd2str(byteArray.data).substring(0, byteArray.length * 2);
                         }
                         byteArray = new ByteArray();
-                        ClssPbocApi.Clss_GetTLVData_Pboc((short)0x5f30, byteArray);
-                        Tag5F30 = "5F30" + "0" + Integer.toHexString(byteArray.length)+ bcd2str(byteArray.data).substring(0, byteArray.length * 2);
+                        if((ClssPbocApi.Clss_GetTLVData_Pboc((short)0x5f30, byteArray) == RetCode.EMV_OK))
+                            Tag5F30 = "5F30" + "0" + Integer.toHexString(byteArray.length)+ bcd2str(byteArray.data).substring(0, byteArray.length * 2);
                         byteArray = new ByteArray();
                         ClssPbocApi.Clss_GetTLVData_Pboc((short)0x9f26, byteArray);
                         tcHex = "9F26" + "0" +  Integer.toHexString(byteArray.length)+ bcd2str(byteArray.data).substring(0, byteArray.length * 2);
@@ -2965,7 +2966,7 @@ public class CardManager {
                 Log.d(TAG, "----> CardInfoData ==> tcHex " + tcHex);
 
                 Log.d(TAG, "onRequestOnline: " + Tag5F30);
-                DE55 = DE55 + Tag9F06 + tcHex; //Jeff20181029
+                DE55 = DE55 + Tag9F06 + Tag5F30; //Jeff20181029
 
                 //check pin, online pin or offline pin
                 if(!CTQ.equals("")){
