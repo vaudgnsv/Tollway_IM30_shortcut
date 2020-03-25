@@ -2100,6 +2100,8 @@ public class CardManager {
                 int tsi_num = 0, tvr_num = 0;
                 String amount="";
                 byte[] arr={};
+                String version = "";
+                String aid = bcd2Str(ClssEntryPoint.getInstance().getOutParam().sAID);
                 ByteArray byteArray = new ByteArray();
                 switch(ClssEntryPoint.getInstance().getOutParam().ucKernType) {
                     case KernType.KERNTYPE_MC:
@@ -2107,9 +2109,15 @@ public class CardManager {
                         tvr_num = ClssPassApi.Clss_GetTLVDataList_MC(new byte[] {(byte)0x95}, (byte)2, 2, tvr);
                         tsi_num = ClssPassApi.Clss_GetTLVDataList_MC(new byte[] {(byte)0x9B}, (byte)2, 5, tsi);
                         amount = AMOUNT.replace(".", "");
-                        ClssPassApi.Clss_ReadVerInfo_MC(byteArray);
+
+                        for(EMV_APPLIST emv_applist : FileParse.getEmv_applists()) {
+                            if(aid.equals(bcd2Str(emv_applist.aid))) {
+                                version = bcd2Str(emv_applist.aid);
+                            }
+                        }
+
                         arr = str2Bcd("9F03" + "0"  + amount.length() + amount +  "9F09" + "02" +
-                                 bcd2Str(byteArray.data) + "9F34" + "03" + ClssPayPass.getInstance().getCVMType());
+                                version + "9F34" + "03" + ClssPayPass.getInstance().getCVMType());
                         ClssPassApi.Clss_SetTLVDataList_MC(arr,3);
                         ClssPassApi.Clss_SetTLVDataList_MC(str2Bcd("9F3303E0F8C8"), 1);
                         break;
@@ -2118,9 +2126,13 @@ public class CardManager {
                         tvr_num = ClssWaveApi.Clss_GetTLVData_Wave( (short)0x95, tvr);
                         tsi_num = ClssWaveApi.Clss_GetTLVData_Wave( (short)0x9B, tsi);
                         amount = AMOUNT.replace(".", "");
-                        ClssWaveApi.Clss_ReadVerInfo_Wave(byteArray);
+                        for(EMV_APPLIST emv_applist : FileParse.getEmv_applists()) {
+                            if(aid.equals(bcd2Str(emv_applist.aid))) {
+                                version = bcd2Str(emv_applist.aid);
+                            }
+                        }
                         ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F03, str2Bcd(amount), 6);
-                        ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F09, byteArray.data, 2);
+                        ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F09, str2Bcd(version), 2);
                         ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F34, new byte[]{ClssWaveApi.Clss_GetCvmType_Wave()}, 3);
                         ClssWaveApi.Clss_SetTLVData_Wave((short)0x9F33, str2Bcd("E0F8C8"), 3);
                         break;
@@ -2131,11 +2143,13 @@ public class CardManager {
                         amount = AMOUNT.replace(".", "");
                         CvmType cvmType = new CvmType();
                         ClssPbocApi.Clss_GetCvmType_Pboc(cvmType);
-                        byteArray = new ByteArray();
-                        ClssPbocApi.Clss_ReadVerInfo_Pboc(byteArray);
-
+                        for(EMV_APPLIST emv_applist : FileParse.getEmv_applists()) {
+                            if(aid.equals(bcd2Str(emv_applist.aid))) {
+                                version = bcd2Str(emv_applist.aid);
+                            }
+                        }
                         ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F03, str2Bcd(amount), 6);
-                        ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F09, byteArray.data, 2);
+                        ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F09, str2Bcd(version), 2);
                         ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F34, new byte[]{(byte)cvmType.type}, 3);
                         ClssPbocApi.Clss_SetTLVData_Pboc((short)0x9F33, str2Bcd("E0F8C8"), 3);
                         break;
@@ -2143,12 +2157,15 @@ public class CardManager {
                         ClssJCBApi.Clss_GetTLVDataList_JCB(new byte[] {0x57},(byte)2, 60, tk2);
                         tvr_num = ClssJCBApi.Clss_GetTLVDataList_JCB(new byte[] {(byte)0x95}, (byte)2, 2, tvr);
                         tsi_num = ClssJCBApi.Clss_GetTLVDataList_JCB(new byte[] {(byte)0x9B}, (byte)2, 5, tsi);
-                        byteArray = new ByteArray();
-                        ClssJCBApi.Clss_ReadVerInfo_JCB(byteArray);
+                        for(EMV_APPLIST emv_applist : FileParse.getEmv_applists()) {
+                            if(aid.equals(bcd2Str(emv_applist.aid))) {
+                                version = bcd2Str(emv_applist.aid);
+                            }
+                        }
                         amount = AMOUNT.replace(".", "");
 
                         arr = str2Bcd("9F03" + "0"  + amount.length() + amount +  "9F09" + "02" +
-                                bcd2Str(byteArray.data) + "9F34" + "03" + ClssJCBApi.Clss_CardAuth_JCB());
+                                version + "9F34" + "03" + ClssJCBApi.Clss_CardAuth_JCB());
 
                         ClssJCBApi.Clss_SetTLVDataList_JCB(arr, 3);
                         ClssJCBApi.Clss_SetTLVDataList_JCB(str2Bcd("9F3303E0F8C8"), 1);
